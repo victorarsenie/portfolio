@@ -1,69 +1,505 @@
 import Image from "next/image";
+import { useState } from "react";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+// TypeScript interfaces for component props
+interface Logo {
+	label: string;
+	src: string;
+	alt: string;
+}
+
+interface Project {
+	title: string;
+	images?: string[];
+	links?: { url: string; text: string; alt: string }[];
+	description: string;
+}
+
+interface Employment {
+	company: string;
+	duration: string;
+	description: string;
+	imageSrc: string;
+	website?: string;
+	projects?: Project[];
+}
+
+interface ContactFormData {
+	name: string;
+	email: string;
+	subject: string;
+	message: string;
+}
+
+// Skills navigation component
+function SkillsTabs() {
+	const [activeTab, setActiveTab] = useState("front-end");
+
+	const skillsData = [
+		{
+			id: "front-end",
+			title: "Front-end",
+			icon: "🖥️",
+			logos: [
+				{ label: "HTML5", src: "/images/logos/html5.png", alt: "html" },
+				{ label: "CSS3", src: "/images/logos/css3.png", alt: "css" },
+				{ label: "JavaScript", src: "/images/logos/javascript.png", alt: "javascript" },
+				{ label: "jQuery", src: "/images/logos/jquery.png", alt: "jquery" },
+				{ label: "Bootstrap", src: "/images/logos/bootstrap.png", alt: "bootstrap" },
+				{ label: "AJAX", src: "/images/logos/ajax.png", alt: "ajax" },
+				{ label: "JSON", src: "/images/logos/json.png", alt: "json" },
+				{ label: "XML", src: "/images/logos/xml.png", alt: "xml" },
+			],
+		},
+		{
+			id: "back-end",
+			title: "Back-end",
+			icon: "🗄️",
+			logos: [
+				{ label: "PHP", src: "/images/logos/php.png", alt: "php" },
+				{ label: "MySQL", src: "/images/logos/mysql.png", alt: "mysql" },
+				{ label: "CodeIgniter", src: "/images/logos/codeigniter.png", alt: "codeigniter" },
+			],
+		},
+		{
+			id: "version-control",
+			title: "Version control",
+			icon: "🔀",
+			logos: [
+				{ label: "SourceTree", src: "/images/logos/sourcetree.png", alt: "sourcetree" },
+				{ label: "TortoiseSVN", src: "/images/logos/tortoisesvn.png", alt: "tortoisesvn" },
+			],
+		},
+		{
+			id: "bug-tracking",
+			title: "Bug tracking",
+			icon: "🐛",
+			logos: [
+				{ label: "JIRA", src: "/images/logos/jira.png", alt: "jira" },
+			],
+		},
+		{
+			id: "design",
+			title: "Design",
+			icon: "🎨",
+			logos: [
+				{ label: "Photoshop", src: "/images/logos/photoshop.png", alt: "photoshop" },
+				{ label: "Illustrator", src: "/images/logos/illustrator.png", alt: "illustrator" },
+				{ label: "Acrobat DC", src: "/images/logos/acrobat-dc.png", alt: "acrobat-dc" },
+				{ label: "InDesign", src: "/images/logos/indesign.png", alt: "indesign" },
+			],
+		},
+	];
+
+	return (
+		<section id="skills" className="py-12 bg-gray-50">
+			<div className="container mx-auto px-4">
+				<h2 className="text-3xl font-bold mb-8">Skills</h2>
+
+				<div className="flex flex-col lg:flex-row gap-8">
+					<div className="lg:w-1/4">
+						<div className="flex flex-wrap gap-2">
+							{skillsData.map((skill) => (
+								<button
+									key={skill.id}
+									onClick={() => setActiveTab(skill.id)}
+									className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+										activeTab === skill.id
+											? "bg-blue-600 text-white"
+											: "bg-white text-gray-700 hover:bg-gray-100"
+									}`}
+								>
+									{skill.icon} {skill.title}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className="lg:w-3/4">
+						<div className="bg-white p-6 rounded-lg shadow-md">
+							{skillsData.map(
+								(skill) =>
+									skill.id === activeTab && (
+										<div key={skill.id} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+											{skill.logos.map((logo) => (
+												<div key={logo.label} className="flex flex-col items-center">
+													<Image
+														src={logo.src}
+														alt={logo.alt}
+														width={48}
+														height={48}
+														className="mb-2"
+													/>
+													<span className="text-xs text-center text-gray-600">
+														{logo.label}
+													</span>
+												</div>
+											))}
+										</div>
+									)
+							)}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
+
+// Employment card component
+function EmploymentCard({ employment }: { employment: Employment }) {
+	return (
+		<section className="mb-12">
+			<div className="flex flex-col md:flex-row gap-8 items-start">
+				<div className="md:w-1/2 relative">
+					<Image
+						src={employment.imageSrc}
+						alt={employment.company}
+						width={600}
+						height={400}
+						className="rounded-lg shadow-lg"
+					/>
+					{employment.website && (
+						<div className="absolute -bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+							<a
+								href={employment.website}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-600 font-bold hover:underline"
+							>
+								Visit {employment.company}
+							</a>
+						</div>
+					)}
+				</div>
+				<div className="md:w-1/2 md:ml-12">
+					<h3 className="text-xl font-bold mb-2">{employment.company}</h3>
+					<p className="text-sm text-gray-500 mb-4">{employment.duration}</p>
+					<p className="text-gray-700">{employment.description}</p>
+				</div>
+			</div>
+
+			{employment.projects && employment.projects.length > 0 && (
+				<div className="mt-8">
+					{employment.projects.map((project, index) => (
+						<article key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
+							{project.links && project.links.length > 0 && (
+								<div className="flex flex-col justify-center">
+									{project.links.map((link, i) => (
+										<a
+											key={i}
+											href={link.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="block mb-4"
+										>
+											<Image
+												src={link.url}
+												alt={link.alt}
+												width={400}
+												height={300}
+												className="rounded-lg shadow-md"
+											/>
+										</a>
+									))}
+								</div>
+							)}
+							<div>
+								<h4 className="text-lg font-bold mb-2">{project.title}</h4>
+								{project.description.split("\n\n").map((paragraph, i) => (
+									<p key={i} className="text-gray-700 mb-4">
+										{paragraph}
+									</p>
+								))}
+							</div>
+						</article>
+					))}
+				</div>
+			)}
+		</section>
+	);
+}
+
+// Contact form component
+function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Promise<void> }) {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = Object.fromEntries(new FormData(e.currentTarget));
+		await onSubmit(formData as unknown as ContactFormData);
+	};
+
+	return (
+		<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+			<div>
+				<input
+					type="text"
+					name="name"
+					placeholder="Name"
+					required
+					className="w-full p-3 border rounded-lg mb-4"
+				/>
+				<input
+					type="email"
+					name="email"
+					placeholder="Email"
+					required
+					className="w-full p-3 border rounded-lg mb-4"
+				/>
+				<input
+					type="text"
+					name="subject"
+					placeholder="Subject"
+					required
+					className="w-full p-3 border rounded-lg mb-4"
+				/>
+			</div>
+			<div>
+				<textarea
+					name="message"
+					placeholder="Message"
+					required
+					rows={10}
+					className="w-full p-3 border rounded-lg mb-4"
+				/>
+			</div>
+			<div className="col-span-2">
+				<button
+					type="submit"
+					className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+				>
+					Send Message
+				</button>
+			</div>
+		</form>
+	);
+}
+
+// Footer component
+function Footer() {
+	return (
+		<footer className="bg-gray-800 text-white py-12">
+			<div className="container mx-auto px-4 text-center">
+				<div className="flex justify-center gap-8 mb-8">
+					<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+						<Image src="/images/linkedin.png" alt="LinkedIn" width={48} height={48} />
+					</a>
+					<a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+						<Image src="/images/facebook.png" alt="Facebook" width={48} height={48} />
+					</a>
+				</div>
+				<p className="text-sm text-gray-400">
+					© {new Date().getFullYear()} Victor Arsenie. All rights reserved.
+				</p>
+			</div>
+		</footer>
+	);
+}
+
+// Page header component for all sections
+function PageHeader({ title, description }: { title: string; description?: string }) {
+	return (
+		<div className="text-center mb-12">
+			<h2 className="text-3xl font-bold">{title}</h2>
+			{description && <p className="text-lg text-gray-600 mt-4">{description}</p>}
+		</div>
+	);
+}
+
+// Navigation component
+function Navigation() {
+	const [scrolled, setScrolled] = useState(false);
+
+	return (
+		<nav className={`fixed top-0 left-0 right-0 z-50 py-4 ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}>
+			<div className="container mx-auto px-4">
+				<div className="flex justify-between items-center">
+					<div className="text-xl font-bold">
+						<span className="text-blue-600">Victor</span> Arsenie
+					</div>
+					<div className="hidden md:flex gap-8">
+						<a href="#about" className="text-gray-700 hover:text-blue-600">About</a>
+						<a href="#skills" className="text-gray-700 hover:text-blue-600">Skills</a>
+						<a href="#work" className="text-gray-700 hover:text-blue-600">Work</a>
+						<a href="#contact" className="text-gray-700 hover:text-blue-600">Contact</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	);
+}
+
+// Main page component
+export default function HomePage() {
+	const employmentData: Employment[] = [
+		{
+			company: "CWCS (CompuWeb Communications Services)",
+			duration: "August 2017 - February 2021",
+			description:
+				"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design. My tasks include maintaining and improving of the website, designing (promotional) banners and social media images, creating PDF datasheets and working on internal systems. For design and datasheets I've been using Photoshop, Illustrator and Adobe Acrobat DC, including working with isometric vectors. I am constantly working with the WHMCS billing and support system, which includes creating custom reports and add-ons, improving and adding new functionalities. I've also worked with APIs to make user-friendly systems for data manipulation with specific functionality for R1Soft, Cloudflare and Freshdesk.",
+			imageSrc: "/images/cwcs-employment.png",
+			website: "https://www.cwcs.co.uk/",
+			projects: [
+				{
+					title: "CWCS Website",
+					description:
+						"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design.",
+					links: [
+						{
+							url: "https://www.cwcs.co.uk/",
+							text: "Visit website",
+							alt: "CWCS website",
+						},
+					],
+				},
+			],
+		},
+		{
+			company: "Iceberg Digital",
+			duration: "March 2016 - May 2017",
+			description:
+				"I've been working with a great team of developers, designers and content creators who were also amazing colleagues. During this time, I have developed websites, created email signatures, magazine templates with TCPDF, CMS, SEO, managed databases for estate agents with thousands of properties imported daily from data providers and also did customer support, using Team Viewer for remote access. I have built custom CMS to meet the needs of the client; banner systems where the client can select what banner to show when, to use for promotional periods; valuation tools with the use of API's to get the address using the postcode and get the price range using the address and property details.",
+			imageSrc: "/images/iceberg-employment.png",
+			website: "http://www.iceberg-digital.co.uk/",
+			projects: [
+				{
+					title: "Neil King Residential (NKRES)",
+					description: `Fully responsive website based on a premium template with custom CMS to meet the client's needs.\n\nIt benefits of a custom search systems to help users search easily for the desired property and a custom banner system where the client can add an unlimited number of banners for different promotions, change the order and select the period of time for the banner to be live on the website.`,
+					links: [
+						{
+							url: "http://www.nkres.co.uk/",
+							text: "NKRES",
+							alt: "NKRES",
+						},
+					],
+				},
+				{
+					title: "Monthly Magazines",
+					description: `Magazine created by the client with the use of our system. The system involves importing the client's properties from data providers, usually as XML files.\n\nI have built the HTML and PDF template using the Indesign document created by the design team. Once applyed to the client's account, the client can simply go to the system, add pages, drag the properties to the desired pages and create the magazine with the push of a button. The can then be accessed live as a page turner and the client has the options of printing.`,
+					links: [
+						{
+							url: "http://www.digitalmag.co.uk/mag/bseenmagazine",
+							text: "magazine",
+							alt: "magazine",
+						},
+					],
+				},
+				{
+					title: "Online Property Valuation",
+					description: `With the use of API's I get the property address by sending the postcode and the property valuation by sending the address and details.\n\nThe valuation can be either shown after all the fields have been filled or sent to the user by email.`,
+					links: [
+						{
+							url: "http://outlook.mypropertyprices.com/",
+							text: "valuation",
+							alt: "valuation",
+						},
+					],
+				},
+				{
+					title: "Email Signatures",
+					description: `All signatures are made to fit the customers' needs and to work on any device.\n\nThe magazine image on the signature is automatically being updated when the client creates a new magazine.`,
+					links: [
+						{
+							url: "/images/morganalexandersig.gif",
+							text: "signature",
+							alt: "signature",
+						},
+					],
+				},
+			],
+		},
+		{
+			company: "KeyElement",
+			duration: "June 2015 - December 2015",
+			description:
+				"Working at Key Element I have been part of large and small projects, but mostly I had my own projects which consisted of building websites from scratch and integrating them with our bespoke CMS. During this time I have used HTML 5, CSS 3, JavaScript, JQuery, AJAX and JSON for the front-end. For the back-end I have used PHP and MySQL. I have also used Source Tree for version control and JIRA for bug tracking.",
+			imageSrc: "/images/keyelement-employment.png",
+			website: "http://www.keyelement.co.uk/",
+		},
+	];
+
+	const handleContactSubmit = async (formData: ContactFormData): Promise<void> => {
+		const subject = encodeURIComponent(formData.subject);
+		const name = encodeURIComponent(formData.name);
+		const email = encodeURIComponent(formData.email);
+		const message = encodeURIComponent(formData.message);
+
+		const mailtoLink = `mailto:contact@victorsenie.com?subject=${subject}&body=From: ${name} (${email})%0D%0A${message}`;
+		window.location.href = mailtoLink;
+	};
+
+	return (
+		<main className="min-h-screen bg-white">
+			<Navigation />
+
+			<section id="home" className="relative min-h-screen flex items-center justify-center bg-gray-900">
+				<div className="relative z-10 text-center text-white">
+					<h1 className="text-5xl md:text-7xl font-bold mb-6">Victor Arsenie</h1>
+					<h2 className="text-2xl md:text-3xl mb-8">Full-Stack Web Developer</h2>
+					<a
+						href="#about"
+						className="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+					>
+						Learn More
+					</a>
+				</div>
+			</section>
+
+			<section id="about" className="py-12 bg-white">
+				<div className="container mx-auto px-4">
+					<PageHeader
+						title="About me"
+						description="I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a 'mobile first' approach or add a bit of Wow factor and make them 'mobile friendly'."
+					/>
+					<p className="text-lg text-gray-700 mb-8">
+						I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary.
+					</p>
+					<p className="text-lg text-gray-700 mb-12">
+						I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100" screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.
+					</p>
+					<SkillsTabs />
+				</div>
+			</section>
+
+			<section id="work" className="py-12 bg-gray-50">
+				<div className="container mx-auto px-4">
+					<PageHeader
+						title="My work"
+						description="I enjoy equally working on front-end and back-end. I provide quality work, fully responsive websites, cross-browser compliant with extensive testing on all platforms and modular components easily maintainable. I have a good eye for detail and knowledge of design and usability."
+					/>
+					<h2 className="text-2xl font-bold mb-8">Employment</h2>
+					{employmentData.map((employment, index) => (
+						<EmploymentCard key={index} employment={employment} />
+					))}
+
+					<div className="mt-12 text-center">
+						<a href="/old_website/" target="_blank" className="text-blue-600 font-bold hover:underline">
+							Old website
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<section id="contact" className="py-12 bg-white">
+				<div className="container mx-auto px-4">
+					<PageHeader
+						title="Contact me"
+						description="If you have any queries, or just want to say hi, drop me a few lines and I'll get back to you in no time."
+					/>
+					<h2 className="text-2xl font-bold mb-8">Get in touch</h2>
+					<ContactForm onSubmit={handleContactSubmit} />
+					<div className="mt-12">
+						<Image
+							src="/images/eu.jpg"
+							alt="Victor Arsenie"
+							width={800}
+							height={600}
+							className="rounded-lg shadow-lg"
+						/>
+					</div>
+				</div>
+			</section>
+
+			<Footer />
+		</main>
+	);
 }
