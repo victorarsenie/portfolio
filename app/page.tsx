@@ -187,23 +187,24 @@ function EmploymentCard({ employment }: { employment: Employment }) {
 						<article key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
 							{project.links && project.links.length > 0 && (
 								<div className="flex flex-col justify-center">
-									{project.links.map((link, i) => (
-										<a
-											key={i}
-											href={link.url}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="block mb-4"
-										>
-											<Image
-												src={link.url}
-												alt={link.alt}
-												width={400}
-												height={300}
-												className="rounded-lg shadow-md"
-											/>
-										</a>
-									))}
+											{project.links.map((link, i) => (
+												<a
+													key={i}
+													href={link.url}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="block mb-4"
+												>
+													<img
+														src={link.url}
+														alt={link.alt}
+														width={400}
+														height={300}
+														className="rounded-lg shadow-md"
+														style={{ border: '0' }}
+													/>
+												</a>
+											))}
 								</div>
 							)}
 							<div>
