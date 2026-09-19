@@ -160,6 +160,7 @@ function EmploymentCard({ employment }: { employment: Employment }) {
 						width={600}
 						height={400}
 						className="rounded-lg shadow-lg"
+						unfilled={{ width: "auto", height: "auto" }}
 					/>
 					{employment.website && (
 						<div className="absolute -bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
@@ -313,17 +314,16 @@ function Navigation() {
 	const [scrolled, setScrolled] = useState(false);
 
 	return (
-		<nav className={`fixed top-0 left-0 right-0 z-50 py-4 ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}>
+		<nav className={`fixed top-0 left-0 right-0 z-50 py-4 ${scrolled ? "bg-black/70" : "bg-transparent"}`}>
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center">
-					<div className="text-xl font-bold">
-						<span className="text-blue-600">Victor</span> Arsenie
+					<div className="flex items-center">
+						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={120} height={40} />
 					</div>
-					<div className="hidden md:flex gap-8">
-						<a href="#about" className="text-gray-700 hover:text-blue-600">About</a>
-						<a href="#skills" className="text-gray-700 hover:text-blue-600">Skills</a>
-						<a href="#work" className="text-gray-700 hover:text-blue-600">Work</a>
-						<a href="#contact" className="text-gray-700 hover:text-blue-600">Contact</a>
+					<div className="hidden md:flex items-center gap-8">
+						<a href="#about" className="text-white hover:text-blue-400">About</a>
+						<a href="#work" className="text-white hover:text-blue-400">Work</a>
+						<a href="#contact" className="text-white hover:text-blue-400">Contact</a>
 					</div>
 				</div>
 			</div>
@@ -434,16 +434,25 @@ export default function HomePage() {
 		<main className="min-h-screen bg-white">
 			<Navigation />
 
-			<section id="home" className="relative min-h-screen flex items-center justify-center bg-gray-900">
+			<section id="home" className="relative min-h-screen flex items-center justify-center bg-stone-600">
+				<div className="absolute inset-0 bg-cover bg-center opacity-50">
+					<Image src="/images/bg.jpg" alt="Background" fill priority className="object-cover opacity-60 blur-2xl" />
+				</div>
 				<div className="relative z-10 text-center text-white">
-					<h1 className="text-5xl md:text-7xl font-bold mb-6">Victor Arsenie</h1>
-					<h2 className="text-2xl md:text-3xl mb-8">Full-Stack Web Developer</h2>
-					<a
-						href="#about"
-						className="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
-					>
-						Learn More
-					</a>
+					<h1 className="text-6xl md:text-8xl font-bold mb-4">Hi</h1>
+					<h2 className="text-4xl md:text-6xl font-bold mb-8">I'm Victor</h2>
+					<p className="text-xl md:text-2xl mb-16">a computer geek who likes to code</p>
+					<div className="flex justify-center">
+						<a href="#work">
+							<Image
+								src="/images/work-arrow.png"
+								alt="View Work"
+								width={140}
+								height={80}
+								className="transition-transform hover:scale-110"
+							/>
+						</a>
+					</div>
 				</div>
 			</section>
 
