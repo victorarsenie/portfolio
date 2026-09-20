@@ -22,6 +22,10 @@ export const metadata: Metadata = {
       { url: "/favicon.ico", sizes: "256x256", type: "image/x-icon" },
     ],
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
