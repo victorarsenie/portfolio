@@ -334,25 +334,23 @@ function Navigation() {
 
 	return (
 		<nav
-			className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrolled ? 'scrollNav' : 'navbar-default'}`}
-			style={{ border: 'none' }}
+			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : 'navbar-default'}`}
+			style={{ borderTop: 'none' }}
 		>
-			<div className="bg-transparent relative py-[15px] max-w-[1200px] mx-auto flex items-center justify-between">
+			<div className="relative max-w-[1200px] mx-auto flex items-center bg-transparent" style={{ paddingBottom: '13px' }}>
 				<a href="#home" className="navbar-brand">
 					<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={82} />
 				</a>
-				<ul className="navbar-nav flex absolute top-0 left-0 w-full py-8 justify-center items-center space-x-2 transition-all duration-500">
+				<ul className="flex absolute top-0 left-0 w-full justify-center items-center space-x-2 py-8 transition-all duration-500 list-none m-0" style={{ listStyle: 'none' }}>
 					{['about', 'work', 'contact'].map((section) => (
-						<li key={section} className="navbar-nav>li">
+						<li key={section}>
 							<a
 								href={`#${section}`}
-								className={`block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent ${
-									scrolled ? 'active' : ''
-								}`}
+								className={`block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent`}
 								style={{
 									color: scrolled ? '#fff' : '#fff',
 									padding: '15px 0',
-									fontSize: scrolled ? '0.85rem' : undefined,
+									fontFamily: "'Hype', serif",
 								}}
 							>
 								{section}
