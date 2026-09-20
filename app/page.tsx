@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // TypeScript interfaces for component props
 interface Logo {
@@ -281,25 +281,34 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 // Footer component
 function Footer() {
 	return (
-		<footer className="bg-gray-800 text-white py-12">
-			<div className="container mx-auto px-4 text-center">
-				<div className="flex justify-center gap-8 mb-8">
-					<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-						<Image src="/images/linkedin.png" alt="LinkedIn" width={48} height={48} />
-					</a>
-					<a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-						<Image src="/images/facebook.png" alt="Facebook" width={48} height={48} />
-					</a>
+		<footer className="bg-[#737373] text-white py-20">
+			<div className="container mx-auto relative">
+				<div className="flex flex-col md:flex-row items-center justify-between mb-8">
+					<div className="flex items-center">
+						<div className="footer-logo">
+							<img src="/images/logo.png" alt="Victor ARsenie" className="w-[70px] h-auto" />
+						</div>
+						<div className="footer-contact">
+							<a href="tel:+447761325270" className="text-white hover:text-blue-400 block mb-1">+44 7761 325 279</a>
+							<a href="mailto:victor.arsenie@yahoo.com" className="text-white hover:text-blue-400">victor.arsenie@yahoo.com</a>
+						</div>
+					</div>
+					<div className="flex gap-4">
+						<a href="https://www.facebook.com/arsenie.victoralexandru" target="_blank" rel="noopener noreferrer">
+							<img src="/images/social-sprite.png" alt="Facebook" className="w-10 h-10 cursor-pointer" />
+						</a>
+						<a href="https://www.linkedin.com/in/victor-arsenie-391a3bb7/" target="_blank" rel="noopener noreferrer">
+							<img src="/images/social-sprite.png" alt="LinkedIn" className="w-10 h-10 cursor-pointer" />
+						</a>
+					</div>
 				</div>
-				<p className="text-sm text-gray-400">
-					© {new Date().getFullYear()} Victor Arsenie. All rights reserved.
-				</p>
+				<div className="border-t border-white pt-10 mt-10 text-center">
+					<em>© Victor Alexandru Arsenie - {new Date().getFullYear()}</em>
+				</div>
 			</div>
 		</footer>
 	);
-}
-
-// Page header component for all sections
+}// Page header component for all sections
 function PageHeader({ title, description }: { title: string; description?: string }) {
 	return (
 		<div className="text-center mb-12">
@@ -313,18 +322,26 @@ function PageHeader({ title, description }: { title: string; description?: strin
 function Navigation() {
 	const [scrolled, setScrolled] = useState(false);
 
+	useEffect(() => {
+		const handleScroll = () => {
+			setScrolled(window.scrollY > 50);
+		};
+
+		window.addEventListener("scroll", handleScroll);
+
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
 	return (
-		<nav className={`fixed top-0 left-0 right-0 z-50 py-4 ${scrolled ? "bg-black/70" : "bg-transparent"}`}>
+		<nav className={`fixed top-0 left-0 right-0 z-50 py-2 ${scrolled ? "bg-black/70" : "bg-transparent"}`}>
 			<div className="container mx-auto px-4">
-				<div className="flex justify-between items-center">
-					<div className="flex items-center">
-						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={120} height={40} />
-					</div>
-					<div className="hidden md:flex items-center gap-8">
-						<a href="#about" className="text-white hover:text-blue-400">About</a>
-						<a href="#work" className="text-white hover:text-blue-400">Work</a>
-						<a href="#contact" className="text-white hover:text-blue-400">Contact</a>
-					</div>
+				<div className="flex items-center gap-4">
+					<Image src="/images/logo-text.png" alt="Victor Arsenie" width={120} height={40} />
+				</div>
+				<div className="hidden md:flex items-center gap-6">
+					<a href="#about" className="text-white hover:text-blue-400">About</a>
+					<a href="#work" className="text-white hover:text-blue-400">Work</a>
+					<a href="#contact" className="text-white hover:text-blue-400">Contact</a>
 				</div>
 			</div>
 		</nav>
@@ -435,8 +452,8 @@ export default function HomePage() {
 			<Navigation />
 
 			<section id="home" className="relative min-h-screen flex items-center justify-center bg-stone-600">
-				<div className="absolute inset-0 bg-cover bg-center opacity-50">
-					<Image src="/images/bg.jpg" alt="Background" fill priority className="object-cover opacity-60 blur-2xl" />
+				<div className="absolute inset-0 overflow-hidden" >
+					<Image src="/images/bg.jpg" alt="Background" fill className="object-cover" />
 				</div>
 				<div className="relative z-10 text-center text-white">
 					<h1 className="text-6xl md:text-8xl font-bold mb-4">Hi</h1>
@@ -492,7 +509,7 @@ export default function HomePage() {
 			</section>
 
 			<section id="contact" className="py-12 bg-white">
-				<div className="container mx-auto px-4">
+				<div className="container mx-auto px-4 flex justify-between items-center">
 					<PageHeader
 						title="Contact me"
 						description="If you have any queries, or just want to say hi, drop me a few lines and I'll get back to you in no time."
