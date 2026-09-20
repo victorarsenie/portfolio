@@ -15,15 +15,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Victor Arsenie - Full-Stack Web Developer",
   description: "Full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details.",
+  authors: [{ name: "Victor Alexandru" }],
+  icons: {
+    icon: [
+      { url: "/fav-logo.png", alt: "Logo" },
+      { url: "/favicon.ico", sizes: "256x256", type: "image/x-icon" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-screen antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex flex-col">{children}</body>
     </html>
   );
 }
