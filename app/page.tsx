@@ -332,25 +332,26 @@ function Navigation() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	return (
 		<nav
 			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : 'navbar-default'}`}
-			style={{ borderTop: 'none' }}
+			style={{ border: 'none' }}
 		>
-			<div className="relative max-w-[1200px] mx-auto flex items-center bg-transparent" style={{ paddingBottom: '13px' }}>
-				<a href="#home" className="navbar-brand">
-					<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={82} />
-				</a>
-				<ul className="flex absolute top-0 left-0 w-full justify-center items-center space-x-2 py-8 transition-all duration-500 list-none m-0" style={{ listStyle: 'none' }}>
+			<div className="relative max-w-[1200px] mx-auto flex flex-wrap items-center" style={{ paddingBottom: '13px' }}>
+				<div className="navbar-header">
+					<a href="#home" className="navbar-brand">
+						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={82} />
+					</a>
+				</div>
+				<ul className="navbar-nav flex w-full justify-center items-center m-0 list-none" style={{ listStyle: 'none' }}>
 					{['about', 'work', 'contact'].map((section) => (
 						<li key={section}>
 							<a
 								href={`#${section}`}
 								className={`block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent`}
 								style={{
+									fontFamily: "'Hype', serif",
 									color: scrolled ? '#fff' : '#fff',
 									padding: '15px 0',
-									fontFamily: "'Hype', serif",
 								}}
 							>
 								{section}
