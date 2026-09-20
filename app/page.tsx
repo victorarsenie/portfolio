@@ -312,7 +312,7 @@ function Footer() {
 function PageHeader({ title, description }: { title: string; description?: string }) {
 	return (
 		<div className="text-center mb-12">
-			<h2 className="text-3xl font-bold">{title}</h2>
+			<h1 className="text-3xl" style={{ fontFamily: "'Hype', serif", margin: 0, marginBottom: "40px", color: "#26adf4" }}>{title}</h1>
 			{description && <p className="text-lg text-gray-600 mt-4">{description}</p>}
 		</div>
 	);
@@ -333,22 +333,39 @@ function Navigation() {
 	}, []);
 
 	return (
-		<nav className={`fixed top-0 left-0 right-0 z-50 py-2 ${scrolled ? "bg-black/70" : "bg-transparent"}`}>
-			<div className="container mx-auto px-4">
-				<div className="flex items-center gap-4">
-					<Image src="/images/logo-text.png" alt="Victor Arsenie" width={120} height={40} />
-				</div>
-				<div className="hidden md:flex items-center gap-6">
-					<a href="#about" className="text-white hover:text-blue-400">About</a>
-					<a href="#work" className="text-white hover:text-blue-400">Work</a>
-					<a href="#contact" className="text-white hover:text-blue-400">Contact</a>
-				</div>
+		<nav
+			className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrolled ? 'scrollNav' : 'navbar-default'}`}
+			style={{ border: 'none' }}
+		>
+			<div className="bg-transparent relative py-[15px] max-w-[1200px] mx-auto flex items-center justify-between">
+				<a href="#home" className="navbar-brand">
+					<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={82} />
+				</a>
+				<ul className="navbar-nav flex absolute top-0 left-0 w-full py-8 justify-center items-center space-x-2 transition-all duration-500">
+					{['about', 'work', 'contact'].map((section) => (
+						<li key={section} className="navbar-nav>li">
+							<a
+								href={`#${section}`}
+								className={`block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent ${
+									scrolled ? 'active' : ''
+								}`}
+								style={{
+									color: scrolled ? '#fff' : '#fff',
+									padding: '15px 0',
+									fontSize: scrolled ? '0.85rem' : undefined,
+								}}
+							>
+								{section}
+							</a>
+						</li>
+					))}
+				</ul>
 			</div>
 		</nav>
 	);
 }
 
-// Main page component
+// Page header component for all sections
 export default function HomePage() {
 	const employmentData: Employment[] = [
 		{
@@ -455,11 +472,11 @@ export default function HomePage() {
 				<div className="absolute inset-0 overflow-hidden" >
 					<Image src="/images/bg.jpg" alt="Background" fill className="object-cover" />
 				</div>
-				<div className="relative z-10 text-center text-white">
-					<h1 className="text-6xl md:text-8xl font-bold mb-4">Hi</h1>
-					<h2 className="text-4xl md:text-6xl font-bold mb-8">I'm Victor</h2>
-					<p className="text-xl md:text-2xl mb-16">a computer geek who likes to code</p>
-					<div className="flex justify-center">
+				<div className="relative z-10 text-center text-white greeting">
+					<h1 id="greet_1">Hi</h1>
+					<h2 id="greet_2">I'm Victor</h2>
+					<p id="greet_3">a computer geek who likes to code</p>
+					<div className="flex justify-center" id="work-arrow">
 						<a href="#work">
 							<Image
 								src="/images/work-arrow.png"
