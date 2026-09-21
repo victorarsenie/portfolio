@@ -240,21 +240,21 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 					name="name"
 					placeholder="Name"
 					required
-					className="w-full p-3 border rounded-lg mb-4"
+					className="w-full p-3 border rounded-lg mb-4 text-base"
 				/>
 				<input
 					type="email"
 					name="email"
 					placeholder="Email"
 					required
-					className="w-full p-3 border rounded-lg mb-4"
+					className="w-full p-3 border rounded-lg mb-4 text-base"
 				/>
 				<input
 					type="text"
 					name="subject"
 					placeholder="Subject"
 					required
-					className="w-full p-3 border rounded-lg mb-4"
+					className="w-full p-3 border rounded-lg mb-4 text-base"
 				/>
 			</div>
 			<div>
@@ -263,7 +263,7 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 					placeholder="Message"
 					required
 					rows={10}
-					className="w-full p-3 border rounded-lg mb-4"
+					className="w-full p-3 border rounded-lg mb-4 text-base"
 				/>
 			</div>
 			<div className="col-span-2">
@@ -332,26 +332,25 @@ function Navigation() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-		<nav
+		return <nav
 			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : 'navbar-default'}`}
 			style={{ border: 'none' }}
 		>
-			<div className="relative max-w-[1200px] mx-auto flex flex-wrap items-center" style={{ paddingBottom: '13px' }}>
+			<div className="relative max-w-[1200px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
-						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={82} />
+						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} />
 					</a>
 				</div>
-				<ul className="navbar-nav flex w-full justify-center items-center m-0 list-none" style={{ listStyle: 'none' }}>
+				<ul className="navbar-nav flex list-none">
 					{['about', 'work', 'contact'].map((section) => (
 						<li key={section}>
 							<a
 								href={`#${section}`}
-								className={`block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent`}
+								className="block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent"
 								style={{
 									fontFamily: "'Hype', serif",
 									color: scrolled ? '#fff' : '#fff',
-									padding: '15px 0',
 								}}
 							>
 								{section}
@@ -360,8 +359,7 @@ function Navigation() {
 					))}
 				</ul>
 			</div>
-		</nav>
-	);
+    </nav>;
 }
 
 // Page header component for all sections

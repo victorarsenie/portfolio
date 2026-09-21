@@ -42,6 +42,11 @@ html, body {
   color: #171717;
 }
 
+body {
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+
 p {
   font-size: 18px;
 }
@@ -68,6 +73,15 @@ p {
   padding-bottom: 13px;
   background: rgba(255, 255, 255, 0.15);
   border: none;
+}
+
+.navbar-default .navbar-header {
+  padding-top: 15px;
+}
+
+.navbar-default .navbar-brand {
+  padding: 15px 0;
+  color: #fff;
 }
 
 /* Navigation links */
