@@ -160,7 +160,6 @@ function EmploymentCard({ employment }: { employment: Employment }) {
 						width={600}
 						height={400}
 						className="rounded-lg shadow-lg"
-						unfilled={{ width: "auto", height: "auto" }}
 					/>
 					{employment.website && (
 						<div className="absolute -bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
@@ -324,7 +323,10 @@ function Navigation() {
 
 	useEffect(() => {
 		const handleScroll = () => {
-			setScrolled(window.scrollY > 50);
+			const about = document.getElementById("about");
+			if (!about) return;
+			const aboutTop = about.getBoundingClientRect().top + window.scrollY;
+			setScrolled(window.scrollY > aboutTop - 90);
 		};
 
 		window.addEventListener("scroll", handleScroll);
@@ -333,7 +335,7 @@ function Navigation() {
 	}, []);
 
 		return <nav
-			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : 'navbar-default'}`}
+			className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
 			style={{ border: 'none' }}
 		>
 			<div className="relative max-w-[1200px] mx-auto flex items-center justify-between">

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -18,14 +18,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Victor Alexandru" }],
   icons: {
     icon: [
-      { url: "/fav-logo.png", alt: "Logo" },
+      { url: "/fav-logo.png" },
       { url: "/favicon.ico", sizes: "256x256", type: "image/x-icon" },
     ],
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
