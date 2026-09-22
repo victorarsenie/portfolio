@@ -70,23 +70,31 @@ p {
 /* Nav navbar default */
 .navbar-default {
   font-family: "Hype", serif;
-  padding: 6.5px 0;
+  padding: 0 0 13px;
   background: rgba(255, 255, 255, 0.15);
   border: none;
 }
 
 .navbar-default .navbar-header {
-  padding: 15px 0;
+  padding-top: 15px;
 }
 
 .navbar-default .navbar-brand {
+  display: block;
+  height: 50px;
   padding: 15px 0;
   color: #fff;
 }
 
 /* Navigation links */
+.navbar-default .navbar-nav {
+  margin-right: -15px;
+}
+
 .navbar-default .navbar-nav > li a {
   font-family: "Hype", serif;
+  font-size: 14px;
+  line-height: 20px;
   padding: 15px 0;
   color: #fff;
 }
@@ -100,7 +108,7 @@ p {
   color: #26adf4;
 }
 
-/* Scrolled navbar — bar shrinks vertically, logo stays centered (row is flex items-center) */
+/* Scrolled navbar — bar shrinks vertically, logo and links stay centered (row is flex items-center) */
 .scrolled {
   background: rgba(0, 0, 0, 0.7);
   padding: 8px 0;
@@ -108,11 +116,19 @@ p {
 }
 
 .scrolled .navbar-header {
-  padding: 4px 0;
+  padding: 2px 0;
+}
+
+.scrolled .navbar-brand {
+  display: block;
+  height: auto;
+  padding: 2px 0;
 }
 
 .scrolled .navbar-nav > li {
-  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
 }
 
 .scrolled .navbar-nav > li a {
@@ -137,6 +153,7 @@ p {
 #home #greet_1 {
   font-family: "Hype", serif;
   font-size: 84px;
+  line-height: 1.1;
   margin-top: 245px;
   text-align: center;
 }
@@ -144,6 +161,7 @@ p {
 #home #greet_2 {
   font-family: "Hype", serif;
   font-size: 58px;
+  line-height: 1.1;
   margin-top: 40px;
   text-align: center;
 }
@@ -154,4 +172,35 @@ p {
   line-height: 30px;
   margin-top: 40px;
   text-align: center;
+}
+
+#home #work-arrow {
+  margin-top: 80px;
+}
+
+@media (max-width: 1199px) {
+  #home #greet_1 {
+    margin-top: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  #home #greet_1 {
+    font-size: 64px;
+    margin-top: 120px;
+  }
+  #home #greet_2 {
+    font-size: 40px;
+    margin-top: 20px;
+  }
+  #home #greet_3 {
+    font-size: 18px;
+    margin-top: 20px;
+  }
+  #home #work-arrow {
+    margin-top: 35px;
+  }
+  #home #work-arrow img {
+    max-width: 150px;
+  }
 }

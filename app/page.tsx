@@ -338,24 +338,24 @@ function Navigation() {
 			className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
 			style={{ border: 'none' }}
 		>
-			<div className="relative max-w-[1200px] mx-auto flex items-center justify-between">
+			<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
 						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} />
 					</a>
 				</div>
 				<ul className="navbar-nav flex list-none">
-					{['about', 'work', 'contact'].map((section) => (
+					{[['about', 'About'], ['work', 'Work'], ['contact', 'Contact']].map(([section, label]) => (
 						<li key={section}>
 							<a
 								href={`#${section}`}
-								className="block uppercase transition-colors duration-200 no-underline border-b-2 border-transparent"
+								className="block transition-colors duration-200 no-underline"
 								style={{
 									fontFamily: "'Hype', serif",
 									color: scrolled ? '#fff' : '#fff',
 								}}
 							>
-								{section}
+								{label}
 							</a>
 						</li>
 					))}
@@ -467,7 +467,7 @@ export default function HomePage() {
 		<main className="min-h-screen bg-white">
 			<Navigation />
 
-			<section id="home" className="relative min-h-screen flex items-center justify-center bg-stone-600">
+			<section id="home" className="relative min-h-screen overflow-hidden bg-stone-600">
 				<div className="absolute inset-0 overflow-hidden" >
 					<Image src="/images/bg.jpg" alt="Background" fill className="object-cover" />
 				</div>
