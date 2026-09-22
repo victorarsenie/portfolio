@@ -489,18 +489,13 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section id="about" className="py-12 bg-white">
-				<div className="container mx-auto px-4">
-					<PageHeader
-						title="About me"
-						description="I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a 'mobile first' approach or add a bit of Wow factor and make them 'mobile friendly'."
-					/>
-					<p className="text-lg text-gray-700 mb-8">
-						I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary.
-					</p>
-					<p className="text-lg text-gray-700 mb-12">
-						I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100" screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.
-					</p>
+			<section id="about" className="pt-5 pb-20 bg-white">
+				<div className="max-w-[1170px] mx-auto px-[15px]">
+					<div className="page-header">
+						<h1>About me</h1>
+						<p className="lead">I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a 'mobile first' approach or add a bit of Wow factor and make them 'mobile friendly'.</p>
+						<p className="lead">I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary. I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100" screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.</p>
+					</div>
 					<SkillsTabs />
 				</div>
 			</section>

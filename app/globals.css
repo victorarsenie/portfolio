@@ -53,9 +53,9 @@ p {
 
 /* Page header styling to match original */
 .page-header {
-  font-family: "Hype", serif;
   margin-top: 80px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  padding-bottom: 9px;
   border-bottom: 1px solid #26ADF1;
   text-align: center;
 }
@@ -64,7 +64,20 @@ p {
   color: #26adf4;
   font-family: "Hype", serif;
   font-size: 32px;
-  margin: 0;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: center;
+  margin: 0 0 40px 0;
+}
+
+/* Lead paragraphs (about section) to match original Bootstrap .lead */
+.lead {
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 1.4;
+  text-align: justify;
+  margin-bottom: 20px;
+  color: #333333;
 }
 
 /* Nav navbar default */
