@@ -124,6 +124,7 @@ function SkillsTabs() {
 													alt={logo.alt}
 													width={100}
 													height={100}
+													style={{ width: "auto", height: "auto" }}
 												/>
 											))}
 										</div>
@@ -145,14 +146,15 @@ function SkillsTabs() {
 						<br />
 						{skill.logos ? (
 							skill.logos.map((logo) => (
-								<Image
-									key={logo.label}
-									src={logo.src}
-									alt={logo.alt}
-									width={100}
-									height={100}
-								/>
-							))
+<Image
+										key={logo.label}
+										src={logo.src}
+										alt={logo.alt}
+										width={100}
+										height={100}
+										style={{ width: "auto", height: "auto" }}
+									/>
+								))
 						) : (
 							<p>{skill.text}</p>
 						)}
@@ -168,12 +170,12 @@ function EmploymentRow({ entry }: { entry: WorkEntry }) {
 	return (
 		<>
 			<div className="col-sm-12 col-md-6">
-				<Image className="img" src={entry.photo} alt={entry.photoAlt} width={555} height={375} sizes="(min-width: 768px) 50vw, 100vw" />
+				<Image className="img" src={entry.photo} alt={entry.photoAlt} width={640} height={433} style={{ width: "auto", height: "auto" }} />
 			</div>
 			<div className="col-sm-12 col-md-6 half">
 				<div className="screenshot">
 					<a href={entry.siteUrl} target="_blank" rel="noopener noreferrer">
-						<Image src={entry.screenshot} alt={entry.screenshotAlt} width={585} height={396} sizes="(min-width: 768px) 50vw, 100vw" />
+						<Image src={entry.screenshot} alt={entry.screenshotAlt} width={640} height={433} style={{ width: "auto", height: "auto" }} />
 					</a>
 					<div className="screenshot-caption screenshot-caption_top">
 						<h3>{entry.title}</h3>
@@ -236,7 +238,7 @@ function WorkSection() {
 										</div>
 										<div className="col-md-6">
 											<a href={project.link} target="_blank" rel="noopener noreferrer">
-												<Image src={project.image} alt={project.imageAlt} width={555} height={416} sizes="(min-width: 768px) 50vw, 100vw" />
+												<Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} style={{ width: "auto", height: "auto" }} />
 											</a>
 										</div>
 										<div className="col-md-6">
@@ -339,7 +341,7 @@ function Footer() {
 				<div className="row">
 					<div className="col-md-6">
 						<div className="footer-logo">
-							<Image src="/images/logo.png" alt="Victor Arsenie" width={500} height={387} sizes="70px" className="w-[70px] h-auto" />
+							<Image src="/images/logo.png" alt="Victor Arsenie" width={500} height={387} sizes="70px" className="w-[70px] h-auto" style={{ width: "auto", height: "auto" }} />
 						</div>
 						<div className="footer-contact">
 							<p>
@@ -453,7 +455,7 @@ function Navigation() {
 			<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
-						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} />
+						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority style={{ width: "auto", height: "auto" }} />
 					</a>
 				</div>
 				<ul className="navbar-nav flex list-none">
@@ -484,6 +486,8 @@ function Navigation() {
 interface WorkProject {
 	heading: string;
 	image: string;
+	imageWidth: number;
+	imageHeight: number;
 	imageAlt: string;
 	link: string;
 	title: string;
@@ -528,6 +532,8 @@ const workData: WorkEntry[] = [
 			{
 				heading: "Websites",
 				image: "/images/nkres.png",
+				imageWidth: 640,
+				imageHeight: 416,
 				imageAlt: "NKRES",
 				link: "http://www.nkres.co.uk/",
 				title: "Neil King Residential",
@@ -539,6 +545,8 @@ const workData: WorkEntry[] = [
 			{
 				heading: "Magazines",
 				image: "/images/mag.png",
+				imageWidth: 580,
+				imageHeight: 522,
 				imageAlt: "magazine",
 				link: "http://www.digitalmag.co.uk/mag/bseenmagazine",
 				title: "One of hundreds of monthly magazines",
@@ -550,6 +558,8 @@ const workData: WorkEntry[] = [
 			{
 				heading: "Instant Online Valuations",
 				image: "/images/outlook.png",
+				imageWidth: 640,
+				imageHeight: 309,
 				imageAlt: "valuation",
 				link: "http://outlook.mypropertyprices.com/",
 				title: "Online property valuation for estate agents",
@@ -561,6 +571,8 @@ const workData: WorkEntry[] = [
 			{
 				heading: "Email Signatures",
 				image: "/images/morganalexandersig.gif",
+				imageWidth: 640,
+				imageHeight: 200,
 				imageAlt: "signature",
 				link: "/images/morganalexandersig.gif",
 				title: "One of hundreds of email signatures",
@@ -615,6 +627,8 @@ export default function HomePage() {
 								width={140}
 								height={80}
 								className="transition-transform hover:scale-110"
+								loading="eager"
+								style={{ width: "auto", height: "auto" }}
 							/>
 						</a>
 					</div>
@@ -625,7 +639,7 @@ export default function HomePage() {
 				<div className="max-w-[1170px] mx-auto px-[15px]">
 					<div className="page-header">
 						<h1>About me</h1>
-						<p className="lead"><a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer"><Image src="/images/cv.png" alt="Download my CV" width={66} height={87} className="inline float-left mr-[15px]" /></a> I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a ’mobile first’ approach or add a bit of Wow factor and make them ’mobile friendly’.</p>
+						<p className="lead"><a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer"><Image src="/images/cv.png" alt="Download my CV" width={66} height={87} className="inline float-left mr-[15px]" style={{ width: "auto", height: "auto" }} /></a> I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a ’mobile first’ approach or add a bit of Wow factor and make them ’mobile friendly’.</p>
 						<p className="lead">I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary. I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100” screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.</p>
 					</div>
 					<SkillsTabs />
@@ -653,7 +667,7 @@ export default function HomePage() {
 						<ContactForm onSubmit={handleContactSubmit} />
 					</div>
 					<div className="eu">
-						<Image src="/images/eu.jpg" alt="Victor Arsenie" width={1100} height={1100} sizes="150px" />
+						<Image src="/images/eu.jpg" alt="Victor Arsenie" width={1100} height={1100} sizes="150px" style={{ width: "auto", height: "auto" }} />
 					</div>
 				</div>
 			</section>
