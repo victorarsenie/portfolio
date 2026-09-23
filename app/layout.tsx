@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details.",
   authors: [{ name: "Victor Alexandru" }],
   icons: {
-    icon: [{ url: "/images/favicon.png", sizes: "64x64", type: "image/png" }],
+    icon: [{ url: "/images/fav-logo.png", sizes: "50x50", type: "image/png" }],
   },
 };
 
