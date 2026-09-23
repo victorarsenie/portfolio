@@ -481,3 +481,213 @@ p {
     visibility: visible;
   }
 }
+
+/* ---------- Work section (mirrors the original .section.work) ---------- */
+.section {
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+
+.work {
+  background-color: #737373;
+  color: #fff;
+}
+
+#work .lead {
+  color: #fff;
+}
+
+#work .row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+#work .row:before,
+#work .row:after {
+  display: table;
+  content: " ";
+}
+
+#work .row:after {
+  clear: both;
+}
+
+#work .col-md-6,
+#work .col-md-12 {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#work .col-md-12 {
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  #work .col-md-12 {
+    float: left;
+  }
+
+  #work .col-md-6 {
+    width: 50%;
+    float: left;
+  }
+}
+
+@media (max-width: 991px) {
+  #work .col-md-6 {
+    width: 100%;
+    float: none;
+  }
+}
+
+/* Employment rows */
+#work .half {
+  padding: 0;
+  overflow: hidden;
+  background-image: url(/images/screenbg.png);
+  background-size: cover;
+}
+
+#work .half img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  filter: grayscale(100%);
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+#work .half:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.035);
+}
+
+#work .img {
+  max-width: 100%;
+}
+
+/* Screenshot caption overlay */
+.screenshot {
+  position: relative;
+  overflow: hidden;
+}
+
+.screenshot a {
+  color: #26adf4;
+}
+
+.screenshot > * {
+  display: block;
+}
+
+.screenshot-caption {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  -webkit-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+}
+
+.screenshot:hover .screenshot-caption {
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease-out;
+}
+
+.screenshot-caption > * {
+  transition: opacity 1.5s ease;
+  opacity: 0;
+}
+
+.screenshot:hover .screenshot-caption > * {
+  opacity: 1;
+}
+
+.screenshot-caption h3 {
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 20px 0 10px;
+  line-height: 26.4px;
+}
+
+.screenshot-caption .lead {
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 29.4px;
+  color: #ffffff;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.screenshot-caption a {
+  color: #26adf4;
+  font-size: 14px;
+}
+
+@media (max-width: 991px) {
+  .screenshot-caption {
+    display: none;
+  }
+}
+
+/* Projects */
+.projects img {
+  width: 100%;
+}
+
+/* Bootstrap's default paragraph spacing inside the project text columns */
+#work .projects .col-md-6 p {
+  margin: 0 0 10px;
+}
+
+.projects h2 i {
+  color: #26adf4;
+}
+
+.work-bg {
+  background-color: #cccccc1c;
+}
+
+#work .work-bg p {
+  color: #fff;
+}
+
+/* Work headings — match the original section's heading styles */
+#work .employment h1,
+#work .projects h1 {
+  margin: 40px 0;
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  font-size: 36px;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 39.6px;
+}
+
+#work .projects h2 {
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  margin: 20px 0 10px;
+  line-height: 33px;
+  color: #ffffff;
+}
+
+#work .old-site {
+  color: #fff;
+  display: table;
+}
+
+@media (max-width: 1199px) {
+  .work {
+    padding: 30px 0;
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, type MouseEvent } from "react";
+import { Fragment, useState, useEffect, type MouseEvent } from "react";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 
 // TypeScript interfaces for component props
@@ -9,22 +9,6 @@ interface Logo {
 	label: string;
 	src: string;
 	alt: string;
-}
-
-interface Project {
-	title: string;
-	images?: string[];
-	links?: { url: string; text: string; alt: string }[];
-	description: string;
-}
-
-interface Employment {
-	company: string;
-	duration: string;
-	description: string;
-	imageSrc: string;
-	website?: string;
-	projects?: Project[];
 }
 
 interface ContactFormData {
@@ -184,77 +168,105 @@ function SkillsTabs() {
 	);
 }
 
-// Employment card component
-function EmploymentCard({ employment }: { employment: Employment }) {
+// Employment component renders the two-column row used in the work section.
+function EmploymentRow({ entry }: { entry: WorkEntry }) {
 	return (
-		<section className="mb-12">
-			<div className="flex flex-col md:flex-row gap-8 items-start">
-				<div className="md:w-1/2 relative">
-					<Image
-						src={employment.imageSrc}
-						alt={employment.company}
-						width={600}
-						height={400}
-						className="rounded-lg shadow-lg"
-					/>
-					{employment.website && (
-						<div className="absolute -bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
-							<a
-								href={employment.website}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-blue-600 font-bold hover:underline"
-							>
-								Visit {employment.company}
-							</a>
-						</div>
-					)}
-				</div>
-				<div className="md:w-1/2 md:ml-12">
-					<h3 className="text-xl font-bold mb-2">{employment.company}</h3>
-					<p className="text-sm text-gray-500 mb-4">{employment.duration}</p>
-					<p className="text-gray-700">{employment.description}</p>
+		<>
+			<div className="col-sm-12 col-md-6">
+				<img className="img" src={entry.photo} alt={entry.photoAlt} width={555} height={375} />
+			</div>
+			<div className="col-sm-12 col-md-6 half">
+				<div className="screenshot">
+					<a href={entry.siteUrl} target="_blank" rel="noopener noreferrer">
+						<img src={entry.screenshot} alt={entry.screenshotAlt} width={585} height={396} />
+					</a>
+					<div className="screenshot-caption screenshot-caption_top">
+						<h3>{entry.title}</h3>
+						<p className="lead">{entry.duration}</p>
+						<a href={entry.siteUrl} target="_blank" rel="noopener noreferrer">
+							Visit website
+						</a>
+					</div>
 				</div>
 			</div>
+		</>
+	);
+}
 
-			{employment.projects && employment.projects.length > 0 && (
-				<div className="mt-8">
-					{employment.projects.map((project, index) => (
-						<article key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
-							{project.links && project.links.length > 0 && (
-								<div className="flex flex-col justify-center">
-											{project.links.map((link, i) => (
-												<a
-													key={i}
-													href={link.url}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="block mb-4"
-												>
-													<img
-														src={link.url}
-														alt={link.alt}
-														width={400}
-														height={300}
-														className="rounded-lg shadow-md"
-														style={{ border: '0' }}
-													/>
-												</a>
-											))}
+// Work section component - mirrors the original site's live structure:
+// an "Employment" heading, one 2-column row + one projects block per job,
+// and a left-aligned "Old website" link at the bottom.
+function WorkSection() {
+	return (
+		<section id="work" className="section work">
+			<div className="max-w-[1170px] mx-auto px-[15px]">
+				<div className="page-header">
+					<h1>
+						<strong>My work</strong>
+					</h1>
+					<p className="lead">
+						I enjoy equally working on front-end and back-end. I provide quality work, fully responsive
+						websites, cross-browser compliant with extensive testing on all platforms and modular components
+						easily maintainable. I have a good eye for detail and knowledge of design and usability.
+					</p>
+				</div>
+
+				{workData.map((entry, index) => (
+					<Fragment key={entry.title}>
+						{index === 0 ? (
+							<div className="employment">
+								<h1>Employment</h1>
+								<div className="row">
+									<EmploymentRow entry={entry} />
 								</div>
-							)}
-							<div>
-								<h4 className="text-lg font-bold mb-2">{project.title}</h4>
-								{project.description.split("\n\n").map((paragraph, i) => (
-									<p key={i} className="text-gray-700 mb-4">
-										{paragraph}
-									</p>
+							</div>
+						) : (
+							<div className="row">
+								<EmploymentRow entry={entry} />
+							</div>
+						)}
+
+						<div className="projects">
+							<div className="row work-bg">
+								<div className="col-md-12">
+									<h2>
+										<i className="fa fa-at" aria-hidden="true"></i> {entry.title}
+									</h2>
+									<p className="lead">{entry.blurb}</p>
+								</div>
+								{entry.projects?.map((project) => (
+									<Fragment key={project.heading}>
+										<div className="col-md-12">
+											<h1>{project.heading}</h1>
+										</div>
+										<div className="col-md-6">
+											<a href={project.link} target="_blank" rel="noopener noreferrer">
+												<img src={project.image} alt={project.imageAlt} width={555} height={416} />
+											</a>
+										</div>
+										<div className="col-md-6">
+											<h2>{project.title}</h2>
+											{project.paragraphs.map((paragraph, i) => (
+												<p key={i}>{paragraph}</p>
+											))}
+										</div>
+									</Fragment>
 								))}
 							</div>
-						</article>
-					))}
-				</div>
-			)}
+						</div>
+
+						{/* Spacer between employment blocks, like the original site */}
+						{index < workData.length - 1 ? <><br /><br /><br /></> : null}
+					</Fragment>
+				))}
+
+				{/* Spacing between the last projects block and the Old website link */}
+				<br />
+				<br />
+				<a className="old-site" href="/old_website/" target="_blank" rel="noopener noreferrer">
+					<p className="lead">Old website</p>
+				</a>
+			</div>
 		</section>
 	);
 }
@@ -466,94 +478,112 @@ function Navigation() {
 	</>;
 }
 
+// Work section data — mirrors the original site's live work section.
+interface WorkProject {
+	heading: string;
+	image: string;
+	imageAlt: string;
+	link: string;
+	title: string;
+	paragraphs: string[];
+}
+
+interface WorkEntry {
+	photo: string;
+	photoAlt: string;
+	screenshot: string;
+	screenshotAlt: string;
+	siteUrl: string;
+	title: string;
+	duration: string;
+	blurb: string;
+	projects?: WorkProject[];
+}
+
+const workData: WorkEntry[] = [
+	{
+		photo: "/images/cwcs-employment.png",
+		photoAlt: "CWCS",
+		screenshot: "/images/cwcs.png",
+		screenshotAlt: "CWCS",
+		siteUrl: "https://www.cwcs.co.uk/",
+		title: "CWCS",
+		duration: "August 2017 - February 2021",
+		blurb:
+			"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design. My tasks include maintaining and improving of the website, designing (promotional) banners and social media images, creating PDF datasheets and working on internal systems. For design and datasheets I've been using Photoshop, Illustrator and Adobe Acrobat DC, including working with isometric vectors. I am constantly working with the WHMCS billing and support system, which includes creating custom reports and add-ons, improving and adding new functionalities. I've also worked with APIs to make user-friendly systems for data manipulation with specific functionality for R1Soft, Cloudflare and Freshdesk.",
+	},
+	{
+		photo: "/images/iceberg-employment.png",
+		photoAlt: "Iceberg Digital",
+		screenshot: "/images/iceberg.png",
+		screenshotAlt: "Iceberg",
+		siteUrl: "http://www.iceberg-digital.co.uk/",
+		title: "Iceberg Digital",
+		duration: "March 2016 - May 2017",
+		blurb:
+			"I've been working with a great team of developers, designers and content creators who were also amazing colleagues. During this time, I have developed websites, created email signatures, magazine templates with TCPDF, CMS, SEO, managed databases for estate agents with thousands of properties imported daily from data providers and also did customer support, using Team Viewer for remote access. I have built custom CMS to meet the needs of the client; banner systems where the client can select what banner to show when, to use for promotional periods; valuation tools with the use of API's to get the address using the postcode and get the price range using the address and property details. I have worked closely with the design team to produce the best outcome in the most efficient way.",
+		projects: [
+			{
+				heading: "Websites",
+				image: "/images/nkres.png",
+				imageAlt: "NKRES",
+				link: "http://www.nkres.co.uk/",
+				title: "Neil King Residential",
+				paragraphs: [
+					"Fully responsive website based on a premium template with custom CMS to meet the client's needs.",
+					"It benefits of a custom search systems to help users search easily for the desired property and a custom banner system where the client can add an unlimited number of banners for different promotions, change the order and select the period of time for the banner to be live on the website.",
+				],
+			},
+			{
+				heading: "Magazines",
+				image: "/images/mag.png",
+				imageAlt: "magazine",
+				link: "http://www.digitalmag.co.uk/mag/bseenmagazine",
+				title: "One of hundreds of monthly magazines",
+				paragraphs: [
+					"Magazine created by the client with the use of our system. The system involves importing the client's properties from data providers, usually as XML files",
+					"I have built the HTML and PDF template using the Indesign document created by the design team. Once applyed to the client's account, the client can simply go to the system, add pages, drag the properties to the desired pages and create the magazine with the push of a button. The can then be accessed live as a page turner and the client has the options of printing.",
+				],
+			},
+			{
+				heading: "Instant Online Valuations",
+				image: "/images/outlook.png",
+				imageAlt: "valuation",
+				link: "http://outlook.mypropertyprices.com/",
+				title: "Online property valuation for estate agents",
+				paragraphs: [
+					"With the use of API's I get the property address by sending the postcode and the property valuation by sending the address and details.",
+					"The valuation can be either shown after all the fields have been filled or sent to the user by email.",
+				],
+			},
+			{
+				heading: "Email Signatures",
+				image: "/images/morganalexandersig.gif",
+				imageAlt: "signature",
+				link: "/images/morganalexandersig.gif",
+				title: "One of hundreds of email signatures",
+				paragraphs: [
+					"All signatures are made to fit the customers' needs and to work on any device.",
+					"The magazine image on the signature is automatically being updated when the client creates a new magazine.",
+				],
+			},
+		],
+	},
+	{
+		photo: "/images/keyelement-employment.png",
+		photoAlt: "Keyelement",
+		screenshot: "/images/keyelement.png",
+		screenshotAlt: "Keyelement",
+		siteUrl: "http://www.keyelement.co.uk/",
+		title: "KeyElement",
+		duration: "June 2015 - December 2015",
+		blurb:
+			"Working at Key Element I have been part of large and small projects, but mostly I had my own projects which consisted of building websites from scratch and integrating them with our bespoke CMS. During this time I have used HTML 5, CSS 3, JavaScript, JQuery, AJAX and JSON for the front-end. For the back-end I have used PHP and MySQL. I have also used Source Tree for version control and JIRA for bug tracking.",
+	},
+];
+
 // Page header component for all sections
 export default function HomePage() {
-	const employmentData: Employment[] = [
-		{
-			company: "CWCS (CompuWeb Communications Services)",
-			duration: "August 2017 - February 2021",
-			description:
-				"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design. My tasks include maintaining and improving of the website, designing (promotional) banners and social media images, creating PDF datasheets and working on internal systems. For design and datasheets I've been using Photoshop, Illustrator and Adobe Acrobat DC, including working with isometric vectors. I am constantly working with the WHMCS billing and support system, which includes creating custom reports and add-ons, improving and adding new functionalities. I've also worked with APIs to make user-friendly systems for data manipulation with specific functionality for R1Soft, Cloudflare and Freshdesk.",
-			imageSrc: "/images/cwcs-employment.png",
-			website: "https://www.cwcs.co.uk/",
-			projects: [
-				{
-					title: "CWCS Website",
-					description:
-						"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design.",
-					links: [
-						{
-							url: "https://www.cwcs.co.uk/",
-							text: "Visit website",
-							alt: "CWCS website",
-						},
-					],
-				},
-			],
-		},
-		{
-			company: "Iceberg Digital",
-			duration: "March 2016 - May 2017",
-			description:
-				"I've been working with a great team of developers, designers and content creators who were also amazing colleagues. During this time, I have developed websites, created email signatures, magazine templates with TCPDF, CMS, SEO, managed databases for estate agents with thousands of properties imported daily from data providers and also did customer support, using Team Viewer for remote access. I have built custom CMS to meet the needs of the client; banner systems where the client can select what banner to show when, to use for promotional periods; valuation tools with the use of API's to get the address using the postcode and get the price range using the address and property details.",
-			imageSrc: "/images/iceberg-employment.png",
-			website: "http://www.iceberg-digital.co.uk/",
-			projects: [
-				{
-					title: "Neil King Residential (NKRES)",
-					description: `Fully responsive website based on a premium template with custom CMS to meet the client's needs.\n\nIt benefits of a custom search systems to help users search easily for the desired property and a custom banner system where the client can add an unlimited number of banners for different promotions, change the order and select the period of time for the banner to be live on the website.`,
-					links: [
-						{
-							url: "http://www.nkres.co.uk/",
-							text: "NKRES",
-							alt: "NKRES",
-						},
-					],
-				},
-				{
-					title: "Monthly Magazines",
-					description: `Magazine created by the client with the use of our system. The system involves importing the client's properties from data providers, usually as XML files.\n\nI have built the HTML and PDF template using the Indesign document created by the design team. Once applyed to the client's account, the client can simply go to the system, add pages, drag the properties to the desired pages and create the magazine with the push of a button. The can then be accessed live as a page turner and the client has the options of printing.`,
-					links: [
-						{
-							url: "http://www.digitalmag.co.uk/mag/bseenmagazine",
-							text: "magazine",
-							alt: "magazine",
-						},
-					],
-				},
-				{
-					title: "Online Property Valuation",
-					description: `With the use of API's I get the property address by sending the postcode and the property valuation by sending the address and details.\n\nThe valuation can be either shown after all the fields have been filled or sent to the user by email.`,
-					links: [
-						{
-							url: "http://outlook.mypropertyprices.com/",
-							text: "valuation",
-							alt: "valuation",
-						},
-					],
-				},
-				{
-					title: "Email Signatures",
-					description: `All signatures are made to fit the customers' needs and to work on any device.\n\nThe magazine image on the signature is automatically being updated when the client creates a new magazine.`,
-					links: [
-						{
-							url: "/images/morganalexandersig.gif",
-							text: "signature",
-							alt: "signature",
-						},
-					],
-				},
-			],
-		},
-		{
-			company: "KeyElement",
-			duration: "June 2015 - December 2015",
-			description:
-				"Working at Key Element I have been part of large and small projects, but mostly I had my own projects which consisted of building websites from scratch and integrating them with our bespoke CMS. During this time I have used HTML 5, CSS 3, JavaScript, JQuery, AJAX and JSON for the front-end. For the back-end I have used PHP and MySQL. I have also used Source Tree for version control and JIRA for bug tracking.",
-			imageSrc: "/images/keyelement-employment.png",
-			website: "http://www.keyelement.co.uk/",
-		},
-	];
 
 	const handleContactSubmit = async (formData: ContactFormData): Promise<void> => {
 		const subject = encodeURIComponent(formData.subject);
@@ -600,24 +630,7 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section id="work" className="py-12 bg-gray-50">
-				<div className="container mx-auto px-4">
-					<PageHeader
-						title="My work"
-						description="I enjoy equally working on front-end and back-end. I provide quality work, fully responsive websites, cross-browser compliant with extensive testing on all platforms and modular components easily maintainable. I have a good eye for detail and knowledge of design and usability."
-					/>
-					<h2 className="text-2xl font-bold mb-8">Employment</h2>
-					{employmentData.map((employment, index) => (
-						<EmploymentCard key={index} employment={employment} />
-					))}
-
-					<div className="mt-12 text-center">
-						<a href="/old_website/" target="_blank" className="text-blue-600 font-bold hover:underline">
-							Old website
-						</a>
-					</div>
-				</div>
-			</section>
+			<WorkSection />
 
 			<section id="contact" className="py-12 bg-white">
 				<div className="container mx-auto px-4 flex justify-between items-center">
