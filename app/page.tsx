@@ -469,10 +469,6 @@ function Navigation() {
 								href={`#${section}`}
 								onClick={(e) => handleAnchorClick(e, section)}
 								className="block transition-colors duration-200 no-underline"
-								style={{
-									fontFamily: "'Hype', serif",
-									color: scrolled ? '#fff' : '#fff',
-								}}
 							>
 								{label}
 							</a>
