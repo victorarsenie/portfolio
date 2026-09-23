@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 
 // TypeScript interfaces for component props
 interface Logo {
@@ -41,7 +42,7 @@ function SkillsTabs() {
 		{
 			id: "front-end",
 			title: "Front-end",
-			icon: "🖥️",
+			icon: "fa fa-laptop",
 			logos: [
 				{ label: "HTML5", src: "/images/logos/html5.png", alt: "html" },
 				{ label: "CSS3", src: "/images/logos/css3.png", alt: "css" },
@@ -56,7 +57,7 @@ function SkillsTabs() {
 		{
 			id: "back-end",
 			title: "Back-end",
-			icon: "🗄️",
+			icon: "fa fa-database",
 			logos: [
 				{ label: "PHP", src: "/images/logos/php.png", alt: "php" },
 				{ label: "MySQL", src: "/images/logos/mysql.png", alt: "mysql" },
@@ -66,7 +67,7 @@ function SkillsTabs() {
 		{
 			id: "version-control",
 			title: "Version control",
-			icon: "🔀",
+			icon: "fa fa-code-fork",
 			logos: [
 				{ label: "SourceTree", src: "/images/logos/sourcetree.png", alt: "sourcetree" },
 				{ label: "TortoiseSVN", src: "/images/logos/tortoisesvn.png", alt: "tortoisesvn" },
@@ -75,15 +76,13 @@ function SkillsTabs() {
 		{
 			id: "bug-tracking",
 			title: "Bug tracking",
-			icon: "🐛",
-			logos: [
-				{ label: "JIRA", src: "/images/logos/jira.png", alt: "jira" },
-			],
+			icon: "fa fa-code",
+			logos: [{ label: "JIRA", src: "/images/logos/jira.png", alt: "jira" }],
 		},
 		{
 			id: "design",
 			title: "Design",
-			icon: "🎨",
+			icon: "fa fa-paint-brush",
 			logos: [
 				{ label: "Photoshop", src: "/images/logos/photoshop.png", alt: "photoshop" },
 				{ label: "Illustrator", src: "/images/logos/illustrator.png", alt: "illustrator" },
@@ -91,60 +90,97 @@ function SkillsTabs() {
 				{ label: "InDesign", src: "/images/logos/indesign.png", alt: "indesign" },
 			],
 		},
+		{
+			id: "software",
+			title: "Software",
+			icon: "fa fa-windows",
+			text: "Windows (installing, troubleshooting, backup, maintenance), Adobe Acrobat Pro DC, Microsoft Visual Studio, Microsoft Office, Norton Partition Magic, memory diagnostic tools, data recovery tools",
+		},
+		{
+			id: "hardware",
+			title: "Hardware",
+			icon: "fa fa-desktop",
+			text: "PC components (building, troubleshooting), peripherals, audio-video, networking, electronics",
+		},
 	];
 
 	return (
-		<section id="skills" className="py-12 bg-gray-50">
-			<div className="container mx-auto px-4">
-				<h2 className="text-3xl font-bold mb-8">Skills</h2>
+		<>
+			<h1 className="skills-heading">
+				<strong>Skills</strong>
+			</h1>
 
-				<div className="flex flex-col lg:flex-row gap-8">
-					<div className="lg:w-1/4">
-						<div className="flex flex-wrap gap-2">
-							{skillsData.map((skill) => (
-								<button
-									key={skill.id}
-									onClick={() => setActiveTab(skill.id)}
-									className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-										activeTab === skill.id
-											? "bg-blue-600 text-white"
-											: "bg-white text-gray-700 hover:bg-gray-100"
-									}`}
+			<div className="skill-tabs">
+				<div className="w-1/4 tab-btn">
+					<ul className="tabs-left">
+						{skillsData.map((skill) => (
+							<li key={skill.id} className={activeTab === skill.id ? "active" : ""}>
+								<a
+									href={`#${skill.id}`}
+									onClick={(e) => {
+										e.preventDefault();
+										setActiveTab(skill.id);
+									}}
+									className="no-underline"
 								>
-									{skill.icon} {skill.title}
-								</button>
-							))}
-						</div>
-					</div>
+									<i className={skill.icon} aria-hidden="true"></i>&nbsp; {skill.title}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
 
-					<div className="lg:w-3/4">
-						<div className="bg-white p-6 rounded-lg shadow-md">
-							{skillsData.map(
-								(skill) =>
-									skill.id === activeTab && (
-										<div key={skill.id} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+				<div className="w-3/4 tab-panel">
+					<div className="tab-content">
+						{skillsData.map(
+							(skill) =>
+								skill.id === activeTab &&
+								(skill.logos ? (
+									<div key={skill.id} id={skill.id} className="tab-pane">
+										<div className="grid grid-cols-4 justify-items-center items-center">
 											{skill.logos.map((logo) => (
-												<div key={logo.label} className="flex flex-col items-center">
-													<Image
-														src={logo.src}
-														alt={logo.alt}
-														width={48}
-														height={48}
-														className="mb-2"
-													/>
-													<span className="text-xs text-center text-gray-600">
-														{logo.label}
-													</span>
-												</div>
+												<Image
+													key={logo.label}
+													src={logo.src}
+													alt={logo.alt}
+													width={100}
+													height={100}
+												/>
 											))}
 										</div>
-									)
-							)}
-						</div>
+									</div>
+								) : (
+									<div key={skill.id} id={skill.id} className="tab-pane">
+										<p>{skill.text}</p>
+									</div>
+								))
+						)}
 					</div>
 				</div>
 			</div>
-		</section>
+
+			<ul className="skill-tabs-mobile">
+				{skillsData.map((skill) => (
+					<li key={skill.id} className="skill-tabs-mobile-item">
+						{skill.title}
+						<br />
+						{skill.logos ? (
+							skill.logos.map((logo) => (
+								<Image
+									key={logo.label}
+									src={logo.src}
+									alt={logo.alt}
+									width={100}
+									height={100}
+								/>
+							))
+						) : (
+							<p>{skill.text}</p>
+						)}
+					</li>
+				))}
+			</ul>
+		</>
 	);
 }
 
@@ -468,9 +504,7 @@ export default function HomePage() {
 			<Navigation />
 
 			<section id="home" className="relative min-h-screen overflow-hidden bg-stone-600">
-				<div className="absolute inset-0 overflow-hidden" >
-					<Image src="/images/bg.jpg" alt="Background" fill className="object-cover" />
-				</div>
+				<ParallaxHeroBackground imageSrc="/images/bg.jpg" alt="Background" />
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1>
 					<h2 id="greet_2">I'm Victor</h2>

@@ -80,6 +80,171 @@ p {
   color: #333333;
 }
 
+/* About section: Skills heading (2nd child, like original #about h1:nth-child(2)) */
+#about .skills-heading {
+  margin: 50px 0 30px 0;
+  font-size: 36px;
+  font-weight: 500;
+  color: #333333;
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  text-align: justify;
+  line-height: 39.6px;
+}
+
+/* Skills tabs - match original .skill-tabs */
+.skill-tabs {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+.skill-tabs .tab-btn {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.skill-tabs .tabs-left {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 2px;
+  border-right: 1px solid #26adf4;
+  flex: 1 1 auto;
+}
+
+.skill-tabs .tabs-left > li {
+  float: none;
+  margin-bottom: 2px;
+  margin-right: -1px;
+  font-size: 24px;
+}
+
+.skill-tabs .tabs-left li a {
+  display: block;
+  padding: 10px 15px;
+  color: #26adf4;
+  border: 1px solid transparent;
+  border-radius: 4px 0 0 4px;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+}
+
+.skill-tabs .tabs-left li.active a,
+.skill-tabs .tabs-left li.active a:hover,
+.skill-tabs .tabs-left li.active a:focus {
+  border: 1px solid #26adf4;
+  border-right-color: transparent;
+  border-bottom-color: #26adf4;
+  color: #000;
+}
+
+.skill-tabs .tabs-left li a:hover {
+  border-color: #26adf4;
+  color: #fff;
+  background-color: #26adf4;
+}
+
+.skill-tabs .tab-panel {
+  border: 1px solid #26adf4;
+  border-left: rgba(255, 255, 255, 0);
+  align-items: stretch;
+  padding: 20px;
+}
+
+.skill-tabs .tab-pane {
+  text-align: center;
+}
+
+.skill-tabs .tab-pane p {
+  text-align: center;
+  font-size: 18px;
+  color: #333333;
+  margin: 0;
+}
+
+.skill-tabs .tab-content img {
+  width: 100px;
+  margin: 25px;
+}
+
+/* Mobile skill list - match original .skill-tabs-mobile */
+.skill-tabs-mobile {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skill-tabs-mobile li {
+  padding-left: 1.3em;
+  padding-top: 20px;
+  font-size: 24px;
+  color: #333333;
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+}
+
+.skill-tabs-mobile li:before {
+  content: "\f109";
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em;
+  margin-right: 0.3em;
+  width: 1.3em;
+  color: #26adf4;
+}
+
+.skill-tabs-mobile li:nth-child(2):before {
+  content: "\f1c0";
+}
+.skill-tabs-mobile li:nth-child(3):before {
+  content: "\f126";
+}
+.skill-tabs-mobile li:nth-child(4):before {
+  content: "\f121";
+}
+.skill-tabs-mobile li:nth-child(5):before {
+  content: "\f1fc";
+}
+.skill-tabs-mobile li:nth-child(6):before {
+  content: "\f17a";
+}
+.skill-tabs-mobile li:nth-child(7):before {
+  content: "\f108";
+}
+
+.skill-tabs-mobile li img {
+  width: 100px;
+  margin: 25px;
+}
+
+.skill-tabs-mobile li p {
+  font-size: 18px;
+  color: #333333;
+}
+
+/* Desktop shows skill-tabs, mobile shows skill-tabs-mobile */
+@media (min-width: 992px) {
+  .skill-tabs-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .skill-tabs {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .skill-tabs .tab-content img,
+  .skill-tabs-mobile li img {
+    width: 80px;
+    margin: 20px;
+  }
+}
+
 /* Nav navbar default */
 .navbar-default {
   font-family: "Hype", serif;
