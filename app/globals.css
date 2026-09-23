@@ -108,7 +108,6 @@ p {
   list-style: none;
   padding: 0;
   margin: 0;
-  padding-top: 2px;
   border-right: 1px solid #26adf4;
   flex: 1 1 auto;
 }
@@ -118,6 +117,10 @@ p {
   margin-bottom: 2px;
   margin-right: -1px;
   font-size: 24px;
+}
+
+.skill-tabs .tabs-left li:last-child {
+  margin-bottom: 0;
 }
 
 .skill-tabs .tabs-left li a {
@@ -139,6 +142,7 @@ p {
   border-right-color: transparent;
   border-bottom-color: #26adf4;
   color: #000;
+  background-color: #fff;
 }
 
 .skill-tabs .tabs-left li a:hover {
@@ -453,5 +457,27 @@ p {
   #home #work-arrow {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* Scroll to top button (matches original: fixed bottom-right, shown after scrolling past the hero) */
+@media (min-width: 768px) {
+  .scroll-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+    background: url(/images/scroll-top.png) center / cover no-repeat;
+    cursor: pointer;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  .scroll-top.show {
+    opacity: 1;
+    visibility: visible;
   }
 }

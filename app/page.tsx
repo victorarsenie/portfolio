@@ -377,10 +377,25 @@ function handleAnchorClick(e: MouseEvent<HTMLAnchorElement>, targetId: string) {
 	smoothScrollTo(targetId);
 }
 
+// Scroll back to the top, matching the original's "slow" (600ms) animation.
+function scrollToTop() {
+	const startY = window.scrollY;
+	const duration = 600;
+	const start = performance.now();
+	const swing = (p: number) => 0.5 - Math.cos(p * Math.PI) / 2;
+	const step = (now: number) => {
+		const t = Math.min(1, (now - start) / duration);
+		window.scrollTo(0, startY * (1 - swing(t)));
+		if (t < 1) requestAnimationFrame(step);
+	};
+	requestAnimationFrame(step);
+}
+
 // Navigation component
 function Navigation() {
 	const [scrolled, setScrolled] = useState(false);
 	const [activeSection, setActiveSection] = useState("");
+	const [showScrollTop, setShowScrollTop] = useState(false);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -390,6 +405,8 @@ function Navigation() {
 			setScrolled(window.scrollY > aboutTop - 90);
 
 			const scrollPosition = window.scrollY;
+			setShowScrollTop(scrollPosition > 600);
+
 			let current = "";
 			for (const section of ["about", "work", "contact"]) {
 				const el = document.getElementById(section);
@@ -410,10 +427,11 @@ function Navigation() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-		return <nav
-			className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
-			style={{ border: 'none' }}
-		>
+		return <>
+			<nav
+				className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
+				style={{ border: 'none' }}
+			>
 			<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
@@ -437,8 +455,15 @@ function Navigation() {
 						</li>
 					))}
 				</ul>
-			</div>
-    </nav>;
+</div>
+		</nav>
+		<div
+			className={`scroll-top ${showScrollTop ? 'show' : ''}`}
+			onClick={scrollToTop}
+			aria-label="Scroll to top"
+			role="button"
+		></div>
+	</>;
 }
 
 // Page header component for all sections
