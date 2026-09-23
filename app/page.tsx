@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type MouseEvent } from "react";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 
 // TypeScript interfaces for component props
@@ -353,9 +353,34 @@ function PageHeader({ title, description }: { title: string; description?: strin
 	);
 }
 
+// Matches the original jQuery smoothScroll: animate scroll to the section's
+// document offset over 500ms with the default "swing" easing.
+function smoothScrollTo(targetId: string) {
+	const target = document.getElementById(targetId);
+	if (!target) return;
+	const targetY = target.getBoundingClientRect().top + window.scrollY;
+	const startY = window.scrollY;
+	const diff = targetY - startY;
+	const duration = 500;
+	const start = performance.now();
+	const swing = (p: number) => 0.5 - Math.cos(p * Math.PI) / 2;
+	const step = (now: number) => {
+		const t = Math.min(1, (now - start) / duration);
+		window.scrollTo(0, startY + diff * swing(t));
+		if (t < 1) requestAnimationFrame(step);
+	};
+	requestAnimationFrame(step);
+}
+
+function handleAnchorClick(e: MouseEvent<HTMLAnchorElement>, targetId: string) {
+	e.preventDefault();
+	smoothScrollTo(targetId);
+}
+
 // Navigation component
 function Navigation() {
 	const [scrolled, setScrolled] = useState(false);
+	const [activeSection, setActiveSection] = useState("");
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -363,8 +388,23 @@ function Navigation() {
 			if (!about) return;
 			const aboutTop = about.getBoundingClientRect().top + window.scrollY;
 			setScrolled(window.scrollY > aboutTop - 90);
+
+			const scrollPosition = window.scrollY;
+			let current = "";
+			for (const section of ["about", "work", "contact"]) {
+				const el = document.getElementById(section);
+				if (!el) continue;
+				const top = el.getBoundingClientRect().top + scrollPosition;
+				const positionTop = top - 30;
+				if (positionTop <= scrollPosition && positionTop + el.offsetHeight > scrollPosition) {
+					current = section;
+					break;
+				}
+			}
+			setActiveSection(current);
 		};
 
+		handleScroll();
 		window.addEventListener("scroll", handleScroll);
 
 		return () => window.removeEventListener("scroll", handleScroll);
@@ -382,9 +422,10 @@ function Navigation() {
 				</div>
 				<ul className="navbar-nav flex list-none">
 					{[['about', 'About'], ['work', 'Work'], ['contact', 'Contact']].map(([section, label]) => (
-						<li key={section}>
+						<li key={section} className={activeSection === section ? 'active' : undefined}>
 							<a
 								href={`#${section}`}
+								onClick={(e) => handleAnchorClick(e, section)}
 								className="block transition-colors duration-200 no-underline"
 								style={{
 									fontFamily: "'Hype', serif",
@@ -510,7 +551,7 @@ export default function HomePage() {
 					<h2 id="greet_2">I'm Victor</h2>
 					<p id="greet_3">a computer geek who likes to code</p>
 					<div className="flex justify-center" id="work-arrow">
-						<a href="#work">
+						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")}>
 							<Image
 								src="/images/work-arrow.png"
 								alt="View Work"

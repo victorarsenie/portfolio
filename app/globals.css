@@ -286,6 +286,30 @@ p {
   color: #26adf4;
 }
 
+/* Active section link — matches original styling */
+/* Underline drawn with ::after, never changes link height or row alignment */
+.navbar-default .navbar-nav > li.active > a {
+  position: relative;
+  color: #fff;
+  background: none;
+}
+
+.navbar-default .navbar-nav > li.active > a:hover,
+.navbar-default .navbar-nav > li.active > a:focus {
+  color: #fff;
+}
+
+.navbar-default .navbar-nav > li.active > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: #26adf4;
+  transition: none;
+}
+
 /* Scrolled navbar — bar shrinks vertically, logo and links stay centered (row is flex items-center) */
 .scrolled {
   background: rgba(0, 0, 0, 0.7);
@@ -310,15 +334,18 @@ p {
 }
 
 .scrolled .navbar-nav > li a {
-  padding: 8px 0;
+  padding: 8px 0 15px;
 }
 
 .navbar-default,
 .navbar-default .navbar-header,
 .navbar-default .navbar-brand,
-.navbar-default .navbar-nav > li,
-.navbar-default .navbar-nav > li a {
+.navbar-default .navbar-nav > li {
   transition: all 0.5s ease;
+}
+
+.navbar-default .navbar-nav > li a {
+  transition: padding 0.5s ease, color 0.3s ease;
 }
 
 /* Greeting sections */
