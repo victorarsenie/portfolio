@@ -456,7 +456,7 @@ function Navigation() {
 <div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
-						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority style={{ width: "auto", height: "auto" }} />
+						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority />
 					</a>
 					<button
 						type="button"

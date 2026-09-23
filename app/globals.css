@@ -330,9 +330,14 @@ p {
   margin-bottom: 8px;
   background-color: transparent;
   background-image: none;
-  border: 1px solid transparent;
+  border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.navbar-default .navbar-brand img {
+  width: 208px;
+  height: 36px;
 }
 
 .navbar-toggle .icon-bar {
@@ -340,7 +345,7 @@ p {
   width: 22px;
   height: 2px;
   border-radius: 1px;
-  background-color: #fff;
+  background-color: #888;
 }
 
 .navbar-toggle .icon-bar + .icon-bar {
@@ -357,6 +362,10 @@ p {
     display: inline-block;
   }
 
+  .navbar-default > div {
+    flex-wrap: wrap;
+  }
+
   .navbar-default .navbar-header {
     padding-top: 15px;
     width: 100%;
@@ -367,17 +376,14 @@ p {
   }
 
   .navbar-collapse {
-    position: absolute;
-    top: 100%;
-    left: 15px;
-    right: 15px;
-    display: none;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
   }
 
   .navbar-collapse.open {
-    display: block;
-    background: rgba(0, 0, 0, 0.7);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    max-height: 260px;
   }
 
   .navbar-collapse .navbar-nav {
