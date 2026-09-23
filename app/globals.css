@@ -328,7 +328,7 @@ p {
   padding: 9px 10px;
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: transparent;
+  background-color: #fff;
   background-image: none;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -345,7 +345,7 @@ p {
   width: 22px;
   height: 2px;
   border-radius: 1px;
-  background-color: #888;
+  background-color: #000;
 }
 
 .navbar-toggle .icon-bar + .icon-bar {
@@ -354,7 +354,7 @@ p {
 
 .navbar-toggle:hover,
 .navbar-toggle:focus {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 767px) {
@@ -369,6 +369,10 @@ p {
   .navbar-default .navbar-header {
     padding-top: 15px;
     width: 100%;
+  }
+
+  .navbar-default .navbar-brand {
+    padding: 5px 0;
   }
 
   .scrolled .navbar-header {
