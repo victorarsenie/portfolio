@@ -158,8 +158,8 @@ export default function ParallaxHeroBackground({
 					alt={alt}
 					width={mediaW}
 					height={mediaH}
-					sizes="100vw"
 					priority
+					unoptimized
 					className="absolute top-0 left-0 object-cover"
 					style={{ maxWidth: "none", transform: "translate3d(0,0,0)" }}
 				/>

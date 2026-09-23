@@ -382,3 +382,49 @@ p {
     max-width: 150px;
   }
 }
+
+/* Greeting entrance — matches the original site's jQuery fade-in
+   (footer.php: $('#greet_1').delay(600).fadeIn(2500), etc.). Elements start
+   hidden and fade in one by one; work-arrow fades in last (5000ms). */
+#home #greet_1,
+#home #greet_2,
+#home #greet_3,
+#home #work-arrow {
+  opacity: 0;
+  animation: greeting-fade-in 2.5s ease forwards;
+}
+
+#home #greet_1 {
+  animation-delay: 0.6s;
+}
+
+#home #greet_2 {
+  animation-delay: 2s;
+}
+
+#home #greet_3 {
+  animation-delay: 3.5s;
+}
+
+#home #work-arrow {
+  animation-delay: 5s;
+}
+
+@keyframes greeting-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home #greet_1,
+  #home #greet_2,
+  #home #greet_3,
+  #home #work-arrow {
+    opacity: 1;
+    animation: none;
+  }
+}
