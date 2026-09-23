@@ -416,6 +416,7 @@ function Navigation() {
 	const [scrolled, setScrolled] = useState(false);
 	const [activeSection, setActiveSection] = useState("");
 	const [showScrollTop, setShowScrollTop] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -452,26 +453,43 @@ function Navigation() {
 				className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
 				style={{ border: 'none' }}
 			>
-			<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
+<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
 						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority style={{ width: "auto", height: "auto" }} />
 					</a>
+					<button
+						type="button"
+						className="navbar-toggle"
+						onClick={() => setMenuOpen((open) => !open)}
+						aria-label="Toggle navigation"
+						aria-expanded={menuOpen}
+						aria-controls="main-navbar-collapse"
+					>
+						<span className="icon-bar"></span>
+						<span className="icon-bar"></span>
+						<span className="icon-bar"></span>
+					</button>
 				</div>
-				<ul className="navbar-nav flex list-none">
-					{[['about', 'About'], ['work', 'Work'], ['contact', 'Contact']].map(([section, label]) => (
-						<li key={section} className={activeSection === section ? 'active' : undefined}>
-							<a
-								href={`#${section}`}
-								onClick={(e) => handleAnchorClick(e, section)}
-								className="block transition-colors duration-200 no-underline"
-							>
-								{label}
-							</a>
-						</li>
-					))}
-				</ul>
-</div>
+				<div className={`navbar-collapse ${menuOpen ? 'open' : ''}`} id="main-navbar-collapse">
+					<ul className="navbar-nav flex list-none">
+						{[['about', 'About'], ['work', 'Work'], ['contact', 'Contact']].map(([section, label]) => (
+							<li key={section} className={activeSection === section ? 'active' : undefined}>
+								<a
+									href={`#${section}`}
+									onClick={(e) => {
+										handleAnchorClick(e, section);
+										setMenuOpen(false);
+									}}
+									className="block transition-colors duration-200 no-underline"
+								>
+									{label}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
 		</nav>
 		<div
 			className={`scroll-top ${showScrollTop ? 'show' : ''}`}
