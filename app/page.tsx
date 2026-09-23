@@ -6,12 +6,6 @@ import Swal from "sweetalert2";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 
 // TypeScript interfaces for component props
-interface Logo {
-	label: string;
-	src: string;
-	alt: string;
-}
-
 interface ContactFormData {
 	name: string;
 	email: string;
@@ -174,12 +168,12 @@ function EmploymentRow({ entry }: { entry: WorkEntry }) {
 	return (
 		<>
 			<div className="col-sm-12 col-md-6">
-				<img className="img" src={entry.photo} alt={entry.photoAlt} width={555} height={375} />
+				<Image className="img" src={entry.photo} alt={entry.photoAlt} width={555} height={375} sizes="(min-width: 768px) 50vw, 100vw" />
 			</div>
 			<div className="col-sm-12 col-md-6 half">
 				<div className="screenshot">
 					<a href={entry.siteUrl} target="_blank" rel="noopener noreferrer">
-						<img src={entry.screenshot} alt={entry.screenshotAlt} width={585} height={396} />
+						<Image src={entry.screenshot} alt={entry.screenshotAlt} width={585} height={396} sizes="(min-width: 768px) 50vw, 100vw" />
 					</a>
 					<div className="screenshot-caption screenshot-caption_top">
 						<h3>{entry.title}</h3>
@@ -242,7 +236,7 @@ function WorkSection() {
 										</div>
 										<div className="col-md-6">
 											<a href={project.link} target="_blank" rel="noopener noreferrer">
-												<img src={project.image} alt={project.imageAlt} width={555} height={416} />
+												<Image src={project.image} alt={project.imageAlt} width={555} height={416} sizes="(min-width: 768px) 50vw, 100vw" />
 											</a>
 										</div>
 										<div className="col-md-6">
@@ -285,7 +279,7 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 		form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".form-field").forEach((field) => field.classList.remove("warning"));
 
 		if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
-			Swal.fire("Ooops! Not so fast!", "Please fill in the highlighted fields.", "warning");
+			Swal.fire({ title: "Ooops! Not so fast!", text: "Please fill in the highlighted fields.", icon: "warning", scrollbarPadding: false });
 
 			form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".form-field").forEach((field) => {
 				if (!field.value.trim()) field.classList.add("warning");
@@ -294,13 +288,13 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 		}
 
 		if (!isEmail(formData.email.trim())) {
-			Swal.fire("Email not valid!", "Please input a correct email address.", "warning");
+			Swal.fire({ title: "Email not valid!", text: "Please input a correct email address.", icon: "warning", scrollbarPadding: false });
 			form.querySelector<HTMLInputElement>("#email")?.classList.add("warning");
 			return;
 		}
 
 		await onSubmit(formData);
-		Swal.fire("Your message has been sent!", "Sit back and relax, you're in good hands now.", "success");
+		Swal.fire({ title: "Your message has been sent!", text: "Sit back and relax, you're in good hands now.", icon: "success", scrollbarPadding: false });
 	};
 
 	return (
@@ -345,7 +339,7 @@ function Footer() {
 				<div className="row">
 					<div className="col-md-6">
 						<div className="footer-logo">
-							<img src="/images/logo.png" alt="Victor Arsenie" className="w-[70px] h-auto" />
+							<Image src="/images/logo.png" alt="Victor Arsenie" width={500} height={387} sizes="70px" className="w-[70px] h-auto" />
 						</div>
 						<div className="footer-contact">
 							<p>
@@ -359,12 +353,12 @@ function Footer() {
 						</div>
 					</div>
 					<div className="col-md-6 social">
-						<a href="https://www.facebook.com/arsenie.victoralexandru" target="_blank" rel="noopener noreferrer">
-							<div id="facebook"></div>
-						</a>
-						<a href="https://www.linkedin.com/in/victor-arsenie-391a3bb7/" target="_blank" rel="noopener noreferrer">
-							<div id="linkedin"></div>
-						</a>
+<a href="https://www.facebook.com/arsenie.victoralexandru" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+						<div id="facebook"></div>
+					</a>
+					<a href="https://www.linkedin.com/in/victor-arsenie-391a3bb7/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+						<div id="linkedin"></div>
+					</a>
 					</div>
 				</div>
 				<div className="copy">
@@ -611,7 +605,7 @@ export default function HomePage() {
 				<ParallaxHeroBackground imageSrc="/images/bg.webp" alt="Background" />
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1>
-					<h2 id="greet_2">I'm Victor</h2>
+					<h2 id="greet_2">I’m Victor</h2>
 					<p id="greet_3">a computer geek who likes to code</p>
 					<div className="flex justify-center" id="work-arrow">
 						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")}>
@@ -631,8 +625,8 @@ export default function HomePage() {
 				<div className="max-w-[1170px] mx-auto px-[15px]">
 					<div className="page-header">
 						<h1>About me</h1>
-						<p className="lead"><a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer"><Image src="/images/cv.png" alt="Download my CV" width={66} height={87} className="inline float-left mr-[15px]" /></a> I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a 'mobile first' approach or add a bit of Wow factor and make them 'mobile friendly'.</p>
-						<p className="lead">I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary. I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100" screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.</p>
+						<p className="lead"><a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer"><Image src="/images/cv.png" alt="Download my CV" width={66} height={87} className="inline float-left mr-[15px]" /></a> I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a ’mobile first’ approach or add a bit of Wow factor and make them ’mobile friendly’.</p>
+						<p className="lead">I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and improve where necessary. I have always been the geek of the group and people came to me when they needed help. I love to travel and to drive, but not in London. I like computer games, VR and watching films on my 100” screen LED projector. My newest additions to my hobbies are VR and FPV quad copters.</p>
 					</div>
 					<SkillsTabs />
 				</div>
@@ -647,7 +641,7 @@ export default function HomePage() {
 							<strong>Contact me</strong>
 						</h1>
 						<p className="lead">
-							If you have any queries, or just want to say hi, drop me a few lines and I'll get back to you in no time.
+							If you have any queries, or just want to say hi, drop me a few lines and I’ll get back to you in no time.
 						</p>
 					</div>
 					<div className="row">
@@ -659,7 +653,7 @@ export default function HomePage() {
 						<ContactForm onSubmit={handleContactSubmit} />
 					</div>
 					<div className="eu">
-						<img src="/images/eu.jpg" alt="Victor Arsenie" />
+						<Image src="/images/eu.jpg" alt="Victor Arsenie" width={1100} height={1100} sizes="150px" />
 					</div>
 				</div>
 			</section>
