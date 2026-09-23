@@ -384,6 +384,7 @@ p {
 
   .navbar-collapse.open {
     max-height: 260px;
+    background: rgba(0, 0, 0, 0.7);
   }
 
   .navbar-collapse .navbar-nav {
