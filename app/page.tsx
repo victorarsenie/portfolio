@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Fragment, useState, useEffect, type MouseEvent } from "react";
+import Swal from "sweetalert2";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 
 // TypeScript interfaces for component props
@@ -271,97 +272,108 @@ function WorkSection() {
 	);
 }
 
-// Contact form component
+// Contact form component — mirrors the original's validation and SweetAlert
+// messages: highlight empty fields with .warning, then SweetAlert prompts.
 function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Promise<void> }) {
+	const isEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const formData = Object.fromEntries(new FormData(e.currentTarget));
-		await onSubmit(formData as unknown as ContactFormData);
+		const form = e.currentTarget;
+		const formData = Object.fromEntries(new FormData(form)) as unknown as ContactFormData;
+
+		form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".form-field").forEach((field) => field.classList.remove("warning"));
+
+		if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
+			Swal.fire("Ooops! Not so fast!", "Please fill in the highlighted fields.", "warning");
+
+			form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".form-field").forEach((field) => {
+				if (!field.value.trim()) field.classList.add("warning");
+			});
+			return;
+		}
+
+		if (!isEmail(formData.email.trim())) {
+			Swal.fire("Email not valid!", "Please input a correct email address.", "warning");
+			form.querySelector<HTMLInputElement>("#email")?.classList.add("warning");
+			return;
+		}
+
+		await onSubmit(formData);
+		Swal.fire("Your message has been sent!", "Sit back and relax, you're in good hands now.", "success");
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-			<div>
-				<input
-					type="text"
-					name="name"
-					placeholder="Name"
-					required
-					className="w-full p-3 border rounded-lg mb-4 text-base"
-				/>
-				<input
-					type="email"
-					name="email"
-					placeholder="Email"
-					required
-					className="w-full p-3 border rounded-lg mb-4 text-base"
-				/>
-				<input
-					type="text"
-					name="subject"
-					placeholder="Subject"
-					required
-					className="w-full p-3 border rounded-lg mb-4 text-base"
-				/>
+		<form
+			className="sweet"
+			method="post"
+			name="contactform"
+			id="contactform"
+			onSubmit={handleSubmit}
+			noValidate
+		>
+			<div className="col-md-6">
+				<p style={{ color: "red" }} id="errorMessage"></p>
+				<fieldset>
+					<input className="form-field" name="name" type="text" id="name" size={30} placeholder="Name" />
+					<input className="form-field" name="email" type="email" id="email" size={30} placeholder="Email" />
+					<input className="form-field" name="subject" type="text" id="subject" size={30} placeholder="Subject" />
+				</fieldset>
 			</div>
-			<div>
-				<textarea
-					name="message"
-					placeholder="Message"
-					required
-					rows={10}
-					className="w-full p-3 border rounded-lg mb-4 text-base"
-				/>
+			<div className="col-md-6">
+				<p></p>
+				<fieldset>
+					<textarea className="form-field" name="message" cols={40} rows={20} id="message" placeholder="Message"></textarea>
+				</fieldset>
 			</div>
-			<div className="col-span-2">
-				<button
-					type="submit"
-					className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
-				>
-					Send Message
-				</button>
+			<div className="col-md-12">
+				<fieldset>
+					<button name="submit" type="submit" className="btn btn-lg" id="submit" value="Submit">
+						<i className="fa fa-paper-plane-o" aria-hidden="true"></i>&nbsp; Send Message
+					</button>
+				</fieldset>
 			</div>
 		</form>
 	);
 }
 
-// Footer component
+// Footer component — mirrors the original footer structure and icons.
 function Footer() {
 	return (
-		<footer className="bg-[#737373] text-white py-20">
-			<div className="container mx-auto relative">
-				<div className="flex flex-col md:flex-row items-center justify-between mb-8">
-					<div className="flex items-center">
+		<footer className="bg-[#737373] text-white">
+			<div className="container max-w-[1170px] mx-auto px-[15px]">
+				<div className="row">
+					<div className="col-md-6">
 						<div className="footer-logo">
-							<img src="/images/logo.png" alt="Victor ARsenie" className="w-[70px] h-auto" />
+							<img src="/images/logo.png" alt="Victor Arsenie" className="w-[70px] h-auto" />
 						</div>
 						<div className="footer-contact">
-							<a href="tel:+447761325270" className="text-white hover:text-blue-400 block mb-1">+44 7761 325 279</a>
-							<a href="mailto:victor.arsenie@yahoo.com" className="text-white hover:text-blue-400">victor.arsenie@yahoo.com</a>
+							<p>
+								<i className="fa fa-phone-square" aria-hidden="true"></i>&nbsp;{" "}
+								<a className="phone" href="tel:+447761325270">+44 7761 325 279</a>
+							</p>
+							<p>
+								<i className="fa fa-envelope" aria-hidden="true"></i>&nbsp;{" "}
+								<a className="email" href="mailto:victor.arsenie@yahoo.com">victor.arsenie@yahoo.com</a>
+							</p>
 						</div>
 					</div>
-					<div className="flex gap-4">
+					<div className="col-md-6 social">
 						<a href="https://www.facebook.com/arsenie.victoralexandru" target="_blank" rel="noopener noreferrer">
-							<img src="/images/social-sprite.png" alt="Facebook" className="w-10 h-10 cursor-pointer" />
+							<div id="facebook"></div>
 						</a>
 						<a href="https://www.linkedin.com/in/victor-arsenie-391a3bb7/" target="_blank" rel="noopener noreferrer">
-							<img src="/images/social-sprite.png" alt="LinkedIn" className="w-10 h-10 cursor-pointer" />
+							<div id="linkedin"></div>
 						</a>
 					</div>
 				</div>
-				<div className="border-t border-white pt-10 mt-10 text-center">
-					<em>© Victor Alexandru Arsenie - {new Date().getFullYear()}</em>
+				<div className="copy">
+					<em>
+						<i className="fa fa-copyright" aria-hidden="true"></i> Victor Alexandru Arsenie - {new Date().getFullYear()}
+					</em>
 				</div>
 			</div>
 		</footer>
-	);
-}// Page header component for all sections
-function PageHeader({ title, description }: { title: string; description?: string }) {
-	return (
-		<div className="text-center mb-12">
-			<h1 className="text-3xl" style={{ fontFamily: "'Hype', serif", margin: 0, marginBottom: "40px", color: "#26adf4" }}>{title}</h1>
-			{description && <p className="text-lg text-gray-600 mt-4">{description}</p>}
-		</div>
 	);
 }
 
@@ -632,22 +644,26 @@ export default function HomePage() {
 
 			<WorkSection />
 
-			<section id="contact" className="py-12 bg-white">
-				<div className="container mx-auto px-4 flex justify-between items-center">
-					<PageHeader
-						title="Contact me"
-						description="If you have any queries, or just want to say hi, drop me a few lines and I'll get back to you in no time."
-					/>
-					<h2 className="text-2xl font-bold mb-8">Get in touch</h2>
-					<ContactForm onSubmit={handleContactSubmit} />
-					<div className="mt-12">
-						<Image
-							src="/images/eu.jpg"
-							alt="Victor Arsenie"
-							width={800}
-							height={600}
-							className="rounded-lg shadow-lg"
-						/>
+			<section className="section">
+				<div id="contact" className="container max-w-[1170px] mx-auto px-[15px]">
+					<div className="page-header">
+						<h1>
+							<strong>Contact me</strong>
+						</h1>
+						<p className="lead">
+							If you have any queries, or just want to say hi, drop me a few lines and I'll get back to you in no time.
+						</p>
+					</div>
+					<div className="row">
+						<div className="col-md-12">
+							<h2>Get in touch</h2>
+						</div>
+					</div>
+					<div className="row">
+						<ContactForm onSubmit={handleContactSubmit} />
+					</div>
+					<div className="eu">
+						<img src="/images/eu.jpg" alt="Victor Arsenie" />
 					</div>
 				</div>
 			</section>
