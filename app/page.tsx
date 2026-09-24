@@ -202,7 +202,7 @@ function EmploymentRow({ entry }: { entry: WorkEntry }) {
 function WorkSection() {
 	return (
 		<section id="work" className="section work">
-			<div className="max-w-[1170px] mx-auto px-[15px]">
+			<div className="bootstrap-container">
 				<div className="page-header">
 					<h1>
 						<strong>My work</strong>
@@ -673,7 +673,7 @@ export default function HomePage() {
 			<WorkSection />
 
 			<section className="section">
-				<div id="contact" className="container max-w-[1170px] mx-auto px-[15px]">
+				<div id="contact" className="bootstrap-container">
 					<div className="page-header">
 						<h1>
 							<strong>Contact me</strong>
