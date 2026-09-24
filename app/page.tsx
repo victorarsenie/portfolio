@@ -646,7 +646,7 @@ export default function HomePage() {
 					<h1 id="greet_1">Hi</h1>
 					<h2 id="greet_2">I’m Victor</h2>
 					<p id="greet_3">
-						<Typewriter text="a computer geek who likes to code" />
+						<Typewriter text="a computer geek who likes to code" delay={3600} />
 					</p>
 					<div className="flex justify-center" id="work-arrow">
 						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")}>

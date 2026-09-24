@@ -20,7 +20,7 @@ interface Particle {
 	opacity: number;
 }
 
-// Faint code-symbol particles drifting slowly upward over the hero photo.
+// Code-symbol particles drifting slowly upward over the hero photo.
 // Canvas-based so it stays cheap at scale; pauses when the hero is off-screen
 // or the tab is hidden; honours prefers-reduced-motion.
 export default function CodeParticles({ count = 0 }: CodeParticlesProps) {
@@ -51,7 +51,7 @@ export default function CodeParticles({ count = 0 }: CodeParticlesProps) {
 
 		const target = count > 0 ? count : Math.round(Math.min(70, Math.max(18, w / 24)));
 		const particles: Particle[] = Array.from({ length: target }, () => {
-			const size = 11 + Math.random() * 13;
+			const size = 12 + Math.random() * 14;
 			const accent = Math.random() < 0.15;
 			return {
 				x: Math.random() * w,
@@ -62,7 +62,7 @@ export default function CodeParticles({ count = 0 }: CodeParticlesProps) {
 				phase: Math.random() * Math.PI * 2,
 				glyph: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
 				accent,
-				opacity: accent ? 0.14 + Math.random() * 0.08 : 0.05 + Math.random() * 0.1,
+				opacity: accent ? 0.32 + Math.random() * 0.16 : 0.18 + Math.random() * 0.14,
 			};
 		});
 
