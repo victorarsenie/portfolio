@@ -581,6 +581,8 @@ p {
   line-height: 1.1;
   margin-top: 245px;
   text-align: center;
+  display: inline-block;
+  transform-origin: left bottom;
 }
 
 #home #greet_2 {
@@ -630,32 +632,74 @@ p {
   }
 }
 
-/* Greeting entrance — staggered fade-in for the hero text; elements start
-   hidden and fade in one by one, work-arrow last. */
+/* Greeting entrance — "Hi" drops in tilted like a dice roll and swings back
+   to normal, "I'm Victor" pops up with a springy settle, the tagline and work
+   arrow fade in. Animations run once and end visible. */
 #home #greet_1,
 #home #greet_2,
 #home #greet_3,
 #home #work-arrow {
   opacity: 0;
-  animation: greeting-fade-in 2s ease forwards;
+  animation-fill-mode: forwards;
 }
 
 #home #greet_1 {
+  animation-name: greeting-dice;
+  animation-duration: 1.2s;
   animation-delay: 0.3s;
 }
 
 #home #greet_2 {
-  animation-delay: 1.1s;
+  animation-name: greeting-pop;
+  animation-duration: 0.9s;
+  animation-delay: 1s;
 }
 
 #home #greet_3 {
-  animation-delay: 1.9s;
+  animation-name: greeting-fade-in;
   animation-duration: 0.4s;
+  animation-delay: 1.9s;
 }
 
 #home #work-arrow {
-  animation-delay: 4.5s;
+  animation-name: greeting-fade-in;
   animation-duration: 1s;
+  animation-delay: 4.5s;
+}
+
+@keyframes greeting-dice {
+  0% {
+    opacity: 0;
+    transform: translate(0, -140px) rotateZ(-90deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  48% {
+    transform: translate(0, -2px) rotateZ(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotateZ(0deg);
+  }
+}
+
+@keyframes greeting-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.07) translateY(-8px);
+  }
+  75% {
+    transform: scale(0.98) translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes greeting-fade-in {
