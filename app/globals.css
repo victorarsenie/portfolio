@@ -585,7 +585,7 @@ p {
 #home #greet_3,
 #home #work-arrow {
   opacity: 0;
-  animation: greeting-fade-in 1.6s ease forwards;
+  animation: greeting-fade-in 2s ease forwards;
 }
 
 #home #greet_1 {
