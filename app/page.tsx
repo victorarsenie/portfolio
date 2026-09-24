@@ -343,7 +343,7 @@ function ContactForm({ onSubmit }: { onSubmit: (formData: ContactFormData) => Pr
 function Footer() {
 	return (
 		<footer className="bg-[#737373] text-white">
-			<div className="container max-w-[1170px] mx-auto px-[15px]">
+			<div className="bootstrap-container">
 				<div className="row">
 					<div className="col-md-6">
 						<div className="footer-logo">
@@ -459,7 +459,7 @@ function Navigation() {
 				className={`navbar-default fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
 				style={{ border: 'none' }}
 			>
-<div className="relative max-w-[1170px] px-[15px] mx-auto flex items-center justify-between">
+<div className="relative bootstrap-container flex items-center justify-between">
 				<div className="navbar-header">
 					<a href="#home" className="navbar-brand">
 						<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority />
@@ -660,7 +660,7 @@ export default function HomePage() {
 			</section>
 
 			<section id="about" className="pt-5 pb-20 bg-white">
-				<div className="max-w-[1170px] mx-auto px-[15px]">
+				<div className="bootstrap-container">
 					<div className="page-header">
 						<h1>About me</h1>
 						<p className="lead"><a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer"><Image src="/images/cv.png" alt="Download my CV" width={66} height={87} className="inline float-left mr-[15px]" style={{ width: "auto", height: "auto" }} /></a> I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details. I can develop high quality websites from scratch, fully responsive with a ’mobile first’ approach or add a bit of Wow factor and make them ’mobile friendly’.</p>
