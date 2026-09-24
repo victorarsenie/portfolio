@@ -661,7 +661,7 @@ export default function HomePage() {
 			<Navigation />
 
 			<section id="home" className="relative min-h-screen overflow-hidden bg-stone-600">
-				<ParallaxHeroBackground imageSrc="/images/bg-code-grain2.webp" alt="Background" />
+				<ParallaxHeroBackground imageSrc="/images/bg-code-grain2.webp" mobileSrc="/images/bg-code-grain2-mobile.webp" alt="Background" />
 				<CodeParticles />
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1>

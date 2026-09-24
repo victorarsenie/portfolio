@@ -7,6 +7,7 @@ interface ParallaxHeroBackgroundProps {
 	speed?: number;
 	mediaW?: number;
 	mediaH?: number;
+	mobileSrc?: string;
 }
 
 // Exact port of the old portfolio's jquery.imageScroll hero effect
@@ -38,6 +39,7 @@ export default function ParallaxHeroBackground({
 	speed = 0.3,
 	mediaW = 1600,
 	mediaH = 900,
+	mobileSrc,
 }: ParallaxHeroBackgroundProps) {
 	const imgRef = useRef<HTMLImageElement>(null);
 	const holderRef = useRef<HTMLDivElement>(null);
@@ -125,7 +127,7 @@ export default function ParallaxHeroBackground({
 				scroller.style.display = "none";
 				img.style.transform = "";
 				img.style.visibility = "visible";
-				holder.style.backgroundImage = `url(${imageSrc})`;
+				holder.style.backgroundImage = `url(${mobileSrc || imageSrc})`;
 			}
 		};
 
@@ -143,7 +145,7 @@ export default function ParallaxHeroBackground({
 			window.removeEventListener("resize", onResize);
 			offChange();
 		};
-	}, [imageSrc, alt, speed, mediaW, mediaH]);
+	}, [imageSrc, alt, speed, mediaW, mediaH, mobileSrc]);
 
 	return (
 		<div
