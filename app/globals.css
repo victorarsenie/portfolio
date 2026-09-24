@@ -598,10 +598,12 @@ p {
 
 #home #greet_3 {
   animation-delay: 1.9s;
+  animation-duration: 0.4s;
 }
 
 #home #work-arrow {
-  animation-delay: 2.7s;
+  animation-delay: 4.5s;
+  animation-duration: 1s;
 }
 
 @keyframes greeting-fade-in {
