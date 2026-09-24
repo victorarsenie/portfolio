@@ -176,12 +176,12 @@ function EmploymentRow({ entry }: { entry: WorkEntry }) {
 	return (
 		<>
 			<div className="col-sm-12 col-md-6">
-				<Image className="img" src={entry.photo} alt={entry.photoAlt} width={640} height={433} style={{ width: "auto", height: "auto" }} />
+				<Image className="img" src={entry.photo} alt={entry.photoAlt} width={800} height={541} />
 			</div>
 			<div className="col-sm-12 col-md-6 half">
 				<div className="screenshot">
 					<a href={entry.siteUrl} target="_blank" rel="noopener noreferrer">
-						<Image src={entry.screenshot} alt={entry.screenshotAlt} width={640} height={433} style={{ width: "auto", height: "auto" }} />
+						<Image src={entry.screenshot} alt={entry.screenshotAlt} width={800} height={541} />
 					</a>
 					<div className="screenshot-caption screenshot-caption_top">
 						<h3>{entry.title}</h3>
@@ -244,7 +244,7 @@ function WorkSection() {
 										</div>
 										<div className="col-md-6">
 											<a href={project.link} target="_blank" rel="noopener noreferrer">
-												<Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} style={{ width: "auto", height: "auto" }} />
+												<Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} />
 											</a>
 										</div>
 										<div className="col-md-6">
