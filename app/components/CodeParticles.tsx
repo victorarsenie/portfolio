@@ -51,7 +51,7 @@ export default function CodeParticles({ count = 0 }: CodeParticlesProps) {
 
 		const target = count > 0 ? count : Math.round(Math.min(70, Math.max(18, w / 24)));
 		const particles: Particle[] = Array.from({ length: target }, () => {
-			const size = 12 + Math.random() * 14;
+			const size = 13 + Math.random() * 15;
 			const accent = Math.random() < 0.15;
 			return {
 				x: Math.random() * w,
@@ -62,7 +62,7 @@ export default function CodeParticles({ count = 0 }: CodeParticlesProps) {
 				phase: Math.random() * Math.PI * 2,
 				glyph: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
 				accent,
-				opacity: accent ? 0.32 + Math.random() * 0.16 : 0.18 + Math.random() * 0.14,
+				opacity: accent ? 0.45 + Math.random() * 0.15 : 0.28 + Math.random() * 0.17,
 			};
 		});
 
