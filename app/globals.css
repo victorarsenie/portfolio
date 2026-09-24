@@ -328,7 +328,7 @@ p {
   padding: 9px 10px;
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: #fff;
+  background-color: transparent;
   background-image: none;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -345,7 +345,7 @@ p {
   width: 22px;
   height: 2px;
   border-radius: 1px;
-  background-color: #000;
+  background-color: #888;
 }
 
 .navbar-toggle .icon-bar + .icon-bar {
@@ -353,8 +353,9 @@ p {
 }
 
 .navbar-toggle:hover,
-.navbar-toggle:focus {
-  background-color: rgba(0, 0, 0, 0.08);
+.navbar-toggle:focus,
+.navbar-toggle:active {
+  background-color: transparent;
 }
 
 @media (max-width: 767px) {
@@ -390,7 +391,7 @@ p {
     max-height: 260px;
     background: rgba(0, 0, 0, 0.7);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    margin: 0 -15px;
+    margin: 0;
     padding: 0 15px;
   }
 
@@ -422,7 +423,7 @@ p {
 
 /* Scrolled navbar — bar shrinks vertically, logo and links stay centered (row is flex items-center) */
 .scrolled {
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.7);
   padding: 8px 0;
   box-shadow: 0px 3px 30px 2px rgba(0, 0, 0, 0.74);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
