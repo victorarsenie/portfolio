@@ -346,6 +346,19 @@ p {
   height: 2px;
   border-radius: 1px;
   background-color: #888;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggle.open .icon-bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.navbar-toggle.open .icon-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-toggle.open .icon-bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .navbar-toggle .icon-bar + .icon-bar {

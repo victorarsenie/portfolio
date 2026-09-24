@@ -460,7 +460,7 @@ function Navigation() {
 					</a>
 					<button
 						type="button"
-						className="navbar-toggle"
+						className={`navbar-toggle ${menuOpen ? 'open' : ''}`}
 						onClick={() => setMenuOpen((open) => !open)}
 						aria-label="Toggle navigation"
 						aria-expanded={menuOpen}
