@@ -139,25 +139,31 @@ function SkillsTabs() {
 				</div>
 			</div>
 
-			<ul className="skill-tabs-mobile">
+<ul className="skill-tabs-mobile">
 				{skillsData.map((skill) => (
 					<li key={skill.id} className="skill-tabs-mobile-item">
-						{skill.title}
-						<br />
-						{skill.logos ? (
-							skill.logos.map((logo) => (
-<Image
-										key={logo.label}
-										src={logo.src}
-										alt={logo.alt}
-										width={100}
-										height={100}
-										style={{ width: "auto", height: "auto" }}
-									/>
-								))
-						) : (
-							<p>{skill.text}</p>
-						)}
+						<div className="skill-tabs-mobile-head">
+							<i className={skill.icon} aria-hidden="true"></i>
+							<span className="skill-tabs-mobile-title">{skill.title}</span>
+						</div>
+						<div className="skill-tabs-mobile-body">
+							{skill.logos ? (
+								<div className="skill-tabs-mobile-logos">
+									{skill.logos.map((logo) => (
+										<Image
+											key={logo.label}
+											src={logo.src}
+											alt={logo.alt}
+											width={100}
+											height={100}
+											className="skill-tabs-mobile-logo"
+										/>
+									))}
+								</div>
+							) : (
+								<p>{skill.text}</p>
+							)}
+						</div>
 					</li>
 				))}
 			</ul>

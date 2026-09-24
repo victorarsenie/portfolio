@@ -174,58 +174,62 @@ p {
   margin: 25px;
 }
 
-/* Mobile skill list - match original .skill-tabs-mobile */
+/* Mobile skill list - cards */
 .skill-tabs-mobile {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.skill-tabs-mobile li {
-  padding-left: 1.3em;
-  padding-top: 20px;
-  font-size: 24px;
+.skill-tabs-mobile-item {
+  background: #f4f8ff;
+  border: 1px solid #e2ecfa;
+  border-radius: 12px;
+  padding: 18px 16px;
+}
+
+.skill-tabs-mobile-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.skill-tabs-mobile-head i {
+  width: 26px;
+  text-align: center;
+  font-size: 22px;
+  color: #26adf4;
+}
+
+.skill-tabs-mobile-title {
+  font-size: 20px;
   color: #333333;
   font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
 }
 
-.skill-tabs-mobile li:before {
-  content: "\f109";
-  font-family: FontAwesome;
-  display: inline-block;
-  margin-left: -1.3em;
-  margin-right: 0.3em;
-  width: 1.3em;
-  color: #26adf4;
+.skill-tabs-mobile-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  justify-items: center;
+  align-items: center;
 }
 
-.skill-tabs-mobile li:nth-child(2):before {
-  content: "\f1c0";
-}
-.skill-tabs-mobile li:nth-child(3):before {
-  content: "\f126";
-}
-.skill-tabs-mobile li:nth-child(4):before {
-  content: "\f121";
-}
-.skill-tabs-mobile li:nth-child(5):before {
-  content: "\f1fc";
-}
-.skill-tabs-mobile li:nth-child(6):before {
-  content: "\f17a";
-}
-.skill-tabs-mobile li:nth-child(7):before {
-  content: "\f108";
+.skill-tabs-mobile-logos img {
+  width: 100%;
+  max-width: 64px;
+  height: auto;
 }
 
-.skill-tabs-mobile li img {
-  width: 100px;
-  margin: 25px;
-}
-
-.skill-tabs-mobile li p {
-  font-size: 18px;
-  color: #333333;
+.skill-tabs-mobile-body p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4a5568;
+  margin: 0;
 }
 
 /* Desktop shows skill-tabs, mobile shows skill-tabs-mobile */
@@ -242,8 +246,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  .skill-tabs .tab-content img,
-  .skill-tabs-mobile li img {
+  .skill-tabs .tab-content img {
     width: 80px;
     margin: 20px;
   }
