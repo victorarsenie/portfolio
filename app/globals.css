@@ -460,6 +460,35 @@ p {
   padding: 8px 0 15px;
 }
 
+@media (max-width: 767px) {
+  .scrolled {
+    top: -20px;
+    padding: 10px 0;
+  }
+
+  .scrolled .navbar-header {
+    padding: 15px 0 0;
+  }
+
+  .scrolled .navbar-brand {
+    height: 50px;
+    padding: 5px 0;
+  }
+
+  .scrolled .navbar-nav > li {
+    display: block;
+    padding: 15px 0 0;
+  }
+
+  .scrolled .navbar-nav > li a {
+    padding: 15px 0;
+  }
+
+  .scrolled .navbar-collapse.open {
+    background: transparent;
+  }
+}
+
 .navbar-default,
 .navbar-default .navbar-header,
 .navbar-default .navbar-brand,
