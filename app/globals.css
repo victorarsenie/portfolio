@@ -582,7 +582,7 @@ p {
   margin-top: 245px;
   text-align: center;
   display: inline-block;
-  transform-origin: left bottom;
+  transform-origin: 50% 50%;
 }
 
 #home #greet_2 {
@@ -645,7 +645,7 @@ p {
 
 #home #greet_1 {
   animation-name: greeting-dice;
-  animation-duration: 1.2s;
+  animation-duration: 1s;
   animation-delay: 0.3s;
 }
 
@@ -670,17 +670,34 @@ p {
 @keyframes greeting-dice {
   0% {
     opacity: 0;
-    transform: translate(0, -140px) rotateZ(-90deg);
+    transform: translate(-45px, -210px) translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
   }
   12% {
     opacity: 1;
+    transform: translate(-45px, -210px) translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.4);
   }
-  48% {
-    transform: translate(0, -2px) rotateZ(-90deg);
+  36% {
+    transform: translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
+  }
+  44% {
+    transform: translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
+    animation-timing-function: steps(3, jump-none);
+  }
+  56% {
+    transform: translate(50%, 50%) rotateZ(0deg) translate(-50%, -50%);
+    animation-timing-function: ease-out;
+  }
+  66% {
+    transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
+  }
+  74% {
+    transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
+    animation-timing-function: ease-out;
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotateZ(0deg);
+    transform: translate(50%, 50%) rotateZ(0deg) translate(-50%, -50%);
   }
 }
 
@@ -718,6 +735,30 @@ p {
   #home #work-arrow {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* Mobile hero — gentle slow-zoom on the cover background for depth without a
+   scroll-linked parallax. GPU-composited (transform only), reversible. */
+.mobile-kenburns {
+  animation: mobile-kenburns-zoom 26s ease-in-out infinite alternate;
+  transform-origin: center 38%;
+  will-change: transform;
+}
+
+@keyframes mobile-kenburns-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-kenburns {
+    animation: none;
+    will-change: auto;
   }
 }
 

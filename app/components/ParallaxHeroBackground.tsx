@@ -117,6 +117,7 @@ export default function ParallaxHeroBackground({
 			if (desktop.matches) {
 				scroller.style.display = "block";
 				holder.style.backgroundImage = "none";
+				holder.classList.remove("mobile-kenburns");
 				window.addEventListener("scroll", onScroll, { passive: true });
 				window.addEventListener("resize", onResize);
 				layout();
@@ -128,6 +129,7 @@ export default function ParallaxHeroBackground({
 				img.style.transform = "";
 				img.style.visibility = "visible";
 				holder.style.backgroundImage = `url(${mobileSrc || imageSrc})`;
+				holder.classList.add("mobile-kenburns");
 			}
 		};
 
