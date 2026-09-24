@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Fragment, useState, useEffect, type MouseEvent } from "react";
 import Swal from "sweetalert2";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
+import CodeParticles from "./components/CodeParticles";
+import Typewriter from "./components/Typewriter";
 
 // TypeScript interfaces for component props
 interface ContactFormData {
@@ -639,10 +641,13 @@ export default function HomePage() {
 
 			<section id="home" className="relative min-h-screen overflow-hidden bg-stone-600">
 				<ParallaxHeroBackground imageSrc="/images/bg.webp" alt="Background" />
+				<CodeParticles />
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1>
 					<h2 id="greet_2">I’m Victor</h2>
-					<p id="greet_3">a computer geek who likes to code</p>
+					<p id="greet_3">
+						<Typewriter text="a computer geek who likes to code" />
+					</p>
 					<div className="flex justify-center" id="work-arrow">
 						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")}>
 							<Image

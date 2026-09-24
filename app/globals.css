@@ -624,6 +624,32 @@ p {
   }
 }
 
+/* Typewriter caret for the hero tagline */
+.typewriter-caret {
+  display: inline-block;
+  margin-left: 3px;
+  color: #26adf4;
+  animation: caret-blink 1s steps(2, start) infinite;
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-caret {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Scroll to top button (matches original: fixed bottom-right, shown after scrolling past the hero) */
 @media (min-width: 768px) {
   .scroll-top {
