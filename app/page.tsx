@@ -17,9 +17,38 @@ interface ContactFormData {
 
 // Skills navigation component
 function SkillsTabs() {
-	const [activeTab, setActiveTab] = useState("front-end");
-
-	const skillsData = [
+	type SkillLogo = { label: string; src: string; alt: string };
+	type SkillCategory = { id: string; title: string; icon: string; logos?: SkillLogo[]; tools?: string[]; text?: string };
+	const skillsData: SkillCategory[] = [
+		{
+			id: "ai-coding",
+			title: "AI coding",
+			icon: "fa fa-microchip",
+			logos: [
+				{ label: "Qwen3", src: "/images/logos/qwen.png", alt: "qwen" },
+				{ label: "Gemma 4", src: "/images/logos/gemma.png", alt: "gemma" },
+				{ label: "gpt-oss-20b", src: "/images/logos/openai.png", alt: "openai" },
+				{ label: "Llama (llama.cpp)", src: "/images/logos/meta.png", alt: "meta" },
+				{ label: "Ollama (Hermes, Pi)", src: "/images/logos/ollama.png", alt: "ollama" },
+				{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
+				{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
+				{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+			],
+		},
+		{
+			id: "dev-tools",
+			title: "Dev tools",
+			icon: "fa fa-terminal",
+			logos: [
+				{ label: "VS Code", src: "/images/logos/vscode.png", alt: "vscode" },
+				{ label: "Notepad++", src: "/images/logos/notepadpp.png", alt: "notepadpp" },
+				{ label: "Sublime Text", src: "/images/logos/sublime.png", alt: "sublime" },
+				{ label: "Atom", src: "/images/logos/atom.png", alt: "atom" },
+				{ label: "npm", src: "/images/logos/npm.png", alt: "npm" },
+				{ label: "MySQL Workbench", src: "/images/logos/mysqlworkbench.png", alt: "mysqlworkbench" },
+				{ label: "phpMyAdmin", src: "/images/logos/phpmyadmin.png", alt: "phpmyadmin" },
+			],
+		},
 		{
 			id: "front-end",
 			title: "Front-end",
@@ -50,6 +79,7 @@ function SkillsTabs() {
 			title: "Version control",
 			icon: "fa fa-code-fork",
 			logos: [
+				{ label: "Git", src: "/images/logos/git.png", alt: "git" },
 				{ label: "SourceTree", src: "/images/logos/sourcetree.png", alt: "sourcetree" },
 				{ label: "TortoiseSVN", src: "/images/logos/tortoisesvn.png", alt: "tortoisesvn" },
 			],
@@ -83,7 +113,29 @@ function SkillsTabs() {
 			icon: "fa fa-desktop",
 			text: "PC components (building, troubleshooting), peripherals, audio-video, networking, electronics",
 		},
+];
+
+	const marqueeRails = [
+		skillsData
+			.filter((s) => s.id === "front-end" || s.id === "back-end" || s.id === "dev-tools")
+			.flatMap((s) => s.logos ?? []),
+		skillsData
+			.filter(
+				(s) =>
+					s.id === "version-control" ||
+					s.id === "bug-tracking" ||
+					s.id === "design" ||
+					s.id === "ai-coding"
+			)
+			.flatMap((s) => s.logos ?? []),
 	];
+
+	const chip = (logo: SkillLogo, keySuffix = "") => (
+		<span key={logo.label + keySuffix} className="skills-chip">
+			<Image src={logo.src} alt={logo.alt} width={100} height={100} />
+			{logo.label}
+		</span>
+	);
 
 	return (
 		<>
@@ -91,80 +143,49 @@ function SkillsTabs() {
 				<strong>Skills</strong>
 			</h1>
 
-			<div className="skill-tabs">
-				<div className="w-1/4 tab-btn">
-					<ul className="tabs-left">
-						{skillsData.map((skill) => (
-							<li key={skill.id} className={activeTab === skill.id ? "active" : ""}>
-								<a
-									href={`#${skill.id}`}
-									onClick={(e) => {
-										e.preventDefault();
-										setActiveTab(skill.id);
-									}}
-									className="no-underline"
-								>
-									<i className={skill.icon} aria-hidden="true"></i>&nbsp; {skill.title}
-								</a>
-							</li>
-						))}
-					</ul>
-				</div>
-
-				<div className="w-3/4 tab-panel">
-					<div className="tab-content">
-						{skillsData.map(
-							(skill) =>
-								skill.id === activeTab &&
-								(skill.logos ? (
-									<div key={skill.id} id={skill.id} className="tab-pane">
-										<div className="grid grid-cols-4 justify-items-center items-center">
-											{skill.logos.map((logo) => (
-												<Image
-													key={logo.label}
-													src={logo.src}
-													alt={logo.alt}
-													width={100}
-													height={100}
-													style={{ width: "auto", height: "auto" }}
-												/>
-											))}
-										</div>
-									</div>
-								) : (
-									<div key={skill.id} id={skill.id} className="tab-pane">
-										<p>{skill.text}</p>
-									</div>
-								))
-						)}
+			{marqueeRails.map((rail, i) => (
+				<div key={i} className={i === 1 ? "skills-marquee reverse" : "skills-marquee"}>
+					<div className="skills-marquee-track">
+						{rail.map((logo) => chip(logo))}
+						<div aria-hidden="true">{rail.map((logo) => chip(logo, "-b"))}</div>
 					</div>
 				</div>
-			</div>
+			))}
 
-<ul className="skill-tabs-mobile">
+			<ul className="skills-cards">
 				{skillsData.map((skill) => (
-					<li key={skill.id} className="skill-tabs-mobile-item">
-						<div className="skill-tabs-mobile-head">
-							<i className={skill.icon} aria-hidden="true"></i>
-							<span className="skill-tabs-mobile-title">{skill.title}</span>
+					<li key={skill.id} className="skill-card">
+						<div className="skill-card-head">
+							<span className="skill-card-icon">
+								<i className={skill.icon} aria-hidden="true"></i>
+							</span>
+							<span className="skill-card-title">{skill.title}</span>
+							{skill.logos || skill.tools ? (
+								<span className="skill-card-count">
+									{skill.logos
+										? skill.logos.length + (skill.logos.length === 1 ? " skill" : " skills")
+										: skill.tools
+											? skill.tools.length + (skill.tools.length === 1 ? " tool" : " tools")
+											: ""}
+								</span>
+							) : null}
 						</div>
-						<div className="skill-tabs-mobile-body">
-							{skill.logos ? (
-								<div className="skill-tabs-mobile-logos">
-									{skill.logos.map((logo) => (
-										<Image
-											key={logo.label}
-											src={logo.src}
-											alt={logo.alt}
-											width={100}
-											height={100}
-											className="skill-tabs-mobile-logo"
-										/>
-									))}
-								</div>
-							) : (
-								<p>{skill.text}</p>
-							)}
+						<div className="skill-card-body">
+							{skill.logos
+								? skill.logos.map((logo) => (
+										<span key={logo.label} className="skill-card-chip">
+											<Image src={logo.src} alt={logo.alt} width={100} height={100} />
+											{logo.label}
+										</span>
+									))
+								: skill.tools
+									? skill.tools.map((tool) => (
+											<span key={tool} className="skill-card-chip">
+												{tool}
+											</span>
+										))
+									: null}
+							{skill.text ? <p className="skill-card-text">{skill.text}</p> : null}
 						</div>
 					</li>
 				))}
