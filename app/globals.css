@@ -419,6 +419,16 @@ p {
   .scrolled .navbar-nav > li a {
     padding: 15px 0;
   }
+
+  .navbar-collapse .navbar-nav > li.active > a,
+  .navbar-collapse .navbar-nav > li.active > a:hover,
+  .navbar-collapse .navbar-nav > li.active > a:focus {
+    color: #26adf4;
+  }
+
+  .navbar-collapse .navbar-nav > li.active > a::after {
+    content: none;
+  }
 }
 
 /* Scrolled navbar — bar shrinks vertically, logo and links stay centered (row is flex items-center) */
