@@ -670,13 +670,13 @@ export default function HomePage() {
 						<Typewriter text="a computer geek who likes to code" delay={2000} />
 					</p>
 					<div className="flex justify-center" id="work-arrow">
-						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")}>
+						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")} aria-label="View Work">
 							<Image
-								src="/images/work-arrow.png"
-								alt="View Work"
-								width={140}
-								height={80}
-								className="transition-transform hover:scale-110"
+src="/images/cmd-hang.png"
+							alt="My Work"
+							width={260}
+							height={163}
+								className="work-hang-img"
 								loading="eager"
 								style={{ width: "auto", height: "auto" }}
 							/>

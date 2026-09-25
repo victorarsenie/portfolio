@@ -583,12 +583,14 @@ p {
   text-align: center;
   display: inline-block;
   transform-origin: 50% 50%;
+  text-shadow: 1px 0 0 #0c5c89, 2px 1px 0 #0c5c89, 3px 1px 0 #0c5c89, 4px 2px 0 #0b5380, 5px 2px 0 #0b5380, 6px 2px 0 #0a4a72, 8px 5px 12px rgba(0, 0, 0, 0.45), 14px 10px 32px rgba(0, 0, 0, 0.3), 0 0 14px rgba(38, 173, 244, 0.55), 0 0 34px rgba(120, 90, 255, 0.25);
 }
 
 #home #greet_2 {
   font-family: "Hype", serif;
   font-size: 58px;
   line-height: 1.1;
+  text-shadow: 1px 0 0 #0c5c89, 2px 1px 0 #0c5c89, 3px 1px 0 #0c5c89, 4px 2px 0 #0b5380, 5px 2px 0 #0b5380, 6px 2px 0 #0a4a72, 8px 5px 12px rgba(0, 0, 0, 0.45), 14px 10px 32px rgba(0, 0, 0, 0.3), 0 0 14px rgba(38, 173, 244, 0.55), 0 0 34px rgba(120, 90, 255, 0.25);
   margin-top: 40px;
   text-align: center;
 }
@@ -602,7 +604,42 @@ p {
 }
 
 #home #work-arrow {
-  margin-top: 80px;
+  margin-top: 28px;
+}
+
+#home #work-arrow img {
+  transform-origin: 50% 5.3%;
+}
+
+@keyframes work-hover-bounce {
+  0% {
+    transform: perspective(900px) rotateX(0deg);
+  }
+  15% {
+    transform: perspective(900px) rotateX(-7deg);
+  }
+  30% {
+    transform: perspective(900px) rotateX(6deg);
+  }
+  45% {
+    transform: perspective(900px) rotateX(-4deg);
+  }
+  60% {
+    transform: perspective(900px) rotateX(3deg);
+  }
+  75% {
+    transform: perspective(900px) rotateX(-1.5deg);
+  }
+  88% {
+    transform: perspective(900px) rotateX(1deg);
+  }
+  100% {
+    transform: perspective(900px) rotateX(0deg);
+  }
+}
+
+#home #work-arrow a:hover img {
+  animation: work-hover-bounce 1.2s ease-out 1;
 }
 
 @media (max-width: 1199px) {
@@ -625,10 +662,11 @@ p {
     margin-top: 20px;
   }
   #home #work-arrow {
-    margin-top: 35px;
+    margin-top: 14px;
   }
   #home #work-arrow img {
-    max-width: 150px;
+    max-width: 240px;
+    height: auto;
   }
 }
 
@@ -662,9 +700,45 @@ p {
 }
 
 #home #work-arrow {
-  animation-name: greeting-fade-in;
-  animation-duration: 1s;
-  animation-delay: 4.5s;
+  transform-origin: 50% 5.3%;
+  animation-name: work-flip;
+  animation-duration: 1.2s;
+  animation-delay: 3.7s;
+}
+
+/* Work cmd window — hangs by two strings from fixed points, appears edge-on
+   as a thin line along the strings, then swings down toward the viewer with
+   gravity, overshooting a few damped swings like a sign on strings. Pivot =
+   the string anchor line. */
+@keyframes work-flip {
+  0% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(-90deg);
+  }
+  6% {
+    transform: perspective(900px) rotateX(-90deg);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.3);
+  }
+  38% {
+    transform: perspective(900px) rotateX(13deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  }
+  52% {
+    transform: perspective(900px) rotateX(-7deg);
+  }
+  66% {
+    transform: perspective(900px) rotateX(4deg);
+  }
+  78% {
+    transform: perspective(900px) rotateX(-2deg);
+  }
+  88% {
+    transform: perspective(900px) rotateX(0.8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg);
+  }
 }
 
 @keyframes greeting-dice {
@@ -734,6 +808,9 @@ p {
   #home #greet_3,
   #home #work-arrow {
     opacity: 1;
+    animation: none;
+  }
+  #home #work-arrow img {
     animation: none;
   }
 }
