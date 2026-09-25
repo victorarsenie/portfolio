@@ -7,6 +7,7 @@ import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 import CodeParticles from "./components/CodeParticles";
 import Typewriter from "./components/Typewriter";
 import SkillCard from "./components/SkillCard";
+import HappyChip from "./components/HappyChip";
 
 // TypeScript interfaces for component props
 interface ContactFormData {
@@ -132,10 +133,10 @@ function SkillsTabs() {
 	];
 
 	const chip = (logo: SkillLogo, keySuffix = "") => (
-		<span key={logo.label + keySuffix} className="skills-chip">
+		<HappyChip key={logo.label + keySuffix}>
 			<Image src={logo.src} alt={logo.alt} width={100} height={100} />
 			{logo.label}
-		</span>
+		</HappyChip>
 	);
 
 	return (
