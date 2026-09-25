@@ -674,7 +674,7 @@ export default function HomePage() {
 					<div className="flex justify-center" id="work-arrow">
 						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")} aria-label="View Work">
 							<Image
-src="/images/cmd-hang.png"
+src="/images/cmd-hang-nails.png"
 							alt="My Work"
 							width={260}
 							height={163}
