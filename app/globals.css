@@ -683,7 +683,7 @@ p {
 
 #home #greet_1 {
   animation-name: greeting-dice;
-  animation-duration: 1s;
+  animation-duration: 1.2s;
   animation-delay: 0.3s;
 }
 
@@ -760,14 +760,22 @@ p {
   }
   56% {
     transform: translate(50%, 50%) rotateZ(0deg) translate(-50%, -50%);
-    animation-timing-function: ease-out;
   }
-  66% {
+  64% {
     transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
   }
-  74% {
+  70% {
     transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
     animation-timing-function: ease-out;
+  }
+  79% {
+    transform: translate(50%, 50%) rotateZ(-5deg) translate(-50%, -50%);
+  }
+  87% {
+    transform: translate(50%, 50%) rotateZ(2.5deg) translate(-50%, -50%);
+  }
+  94% {
+    transform: translate(50%, 50%) rotateZ(-1deg) translate(-50%, -50%);
   }
   100% {
     opacity: 1;
