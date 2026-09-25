@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
 import CodeParticles from "./components/CodeParticles";
 import Typewriter from "./components/Typewriter";
+import SkillCard from "./components/SkillCard";
 
 // TypeScript interfaces for component props
 interface ContactFormData {
@@ -154,7 +155,7 @@ function SkillsTabs() {
 
 			<ul className="skills-cards">
 				{skillsData.map((skill) => (
-					<li key={skill.id} className="skill-card">
+					<SkillCard key={skill.id}>
 						<div className="skill-card-head">
 							<span className="skill-card-icon">
 								<i className={skill.icon} aria-hidden="true"></i>
@@ -187,7 +188,7 @@ function SkillsTabs() {
 									: null}
 							{skill.text ? <p className="skill-card-text">{skill.text}</p> : null}
 						</div>
-					</li>
+					</SkillCard>
 				))}
 			</ul>
 		</>
