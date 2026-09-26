@@ -957,11 +957,10 @@ export default function HomePage() {
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1> <h2 id="greet_2">I’m Victor</h2>
 					<p id="greet_3">
-						<Typewriter text="I make disconnected systems talk" delay={2000} />
+						<Typewriter text="Full-stack developer. PHP → TypeScript." delay={2000} />
 					</p>
 					<p id="hero_role">
-						Full-stack developer <span aria-hidden="true">&amp;</span> systems integrator since 2015. WHMCS extensions, multi-API
-						orchestration and data pipelines that run themselves.
+						Legacy migrations that don't break production.
 					</p>
 					<p id="hero_now">
 						<span className="hero-now-dot" aria-hidden="true" /> Currently migrating legacy CodeIgniter to Next.js + TypeScript
