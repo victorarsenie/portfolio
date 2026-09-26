@@ -14,9 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Victor Arsenie - Full-Stack Web Developer",
-  description: "Full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention to details.",
+  title: "Victor Arsenie - Full-Stack Developer & Systems Integrator",
+  description:
+    "I make disconnected systems talk. Ten years of WHMCS extensions, multi-API orchestration and automated data pipelines - billing platforms, backup software, DNS and support desks wired together.",
   authors: [{ name: "Victor Alexandru" }],
+  keywords: [
+    "full-stack developer",
+    "systems integrator",
+    "API orchestration",
+    "WHMCS developer",
+    "PHP developer",
+    "data pipelines",
+    "Next.js",
+  ],
   icons: {
     icon: [{ url: "/images/fav-logo.png", sizes: "50x50", type: "image/png" }],
   },

@@ -17,39 +17,45 @@ interface ContactFormData {
 function SkillsTabs() {
 	type SkillLogo = { label: string; src: string; alt: string };
 	type SkillCategory = { id: string; title: string; icon: string; logos?: SkillLogo[]; tools?: string[]; text?: string };
+	// Grouped by what the work actually is — bridging systems — rather than by
+	// technology. Logos carry the recognisable tools, plain chips name the
+	// vendor APIs and practices that have no logo.
 	const skillsData: SkillCategory[] = [
 		{
-			id: "ai-coding",
-			title: "AI coding",
-			icon: "fa fa-microchip",
+			id: "api-orchestration",
+			title: "API orchestration",
+			icon: "fa fa-plug",
 			logos: [
-				{ label: "Qwen3", src: "/images/logos/qwen.png", alt: "qwen" },
-				{ label: "Gemma 4", src: "/images/logos/gemma.png", alt: "gemma" },
-				{ label: "gpt-oss-20b", src: "/images/logos/openai.png", alt: "openai" },
-				{ label: "Llama (llama.cpp)", src: "/images/logos/meta.png", alt: "meta" },
-				{ label: "Ollama (Hermes, Pi)", src: "/images/logos/ollama.png", alt: "ollama" },
-				{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
-				{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
-				{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+				{ label: "XML", src: "/images/logos/xml.png", alt: "xml" },
+				{ label: "JSON", src: "/images/logos/json.png", alt: "json" },
+				{ label: "AJAX", src: "/images/logos/ajax.png", alt: "ajax" },
 			],
+			tools: ["REST APIs", "Webhooks", "R1Soft", "Cloudflare", "Freshdesk"],
 		},
 		{
-			id: "dev-tools",
-			title: "Dev tools",
-			icon: "fa fa-terminal",
+			id: "platform-extension",
+			title: "Platform extension",
+			icon: "fa fa-cubes",
 			logos: [
-				{ label: "VS Code", src: "/images/logos/vscode.png", alt: "vscode" },
-				{ label: "Notepad++", src: "/images/logos/notepadpp.png", alt: "notepadpp" },
-				{ label: "Sublime Text", src: "/images/logos/sublime.png", alt: "sublime" },
-				{ label: "Atom", src: "/images/logos/atom.png", alt: "atom" },
-				{ label: "npm", src: "/images/logos/npm.png", alt: "npm" },
+				{ label: "PHP", src: "/images/logos/php.png", alt: "php" },
+				{ label: "CodeIgniter", src: "/images/logos/codeigniter.png", alt: "codeigniter" },
+			],
+			tools: ["WHMCS hooks", "Bespoke CMS", "TCPDF"],
+		},
+		{
+			id: "data-pipelines",
+			title: "Data pipelines",
+			icon: "fa fa-database",
+			logos: [
+				{ label: "MySQL", src: "/images/logos/mysql.png", alt: "mysql" },
 				{ label: "MySQL Workbench", src: "/images/logos/mysqlworkbench.png", alt: "mysqlworkbench" },
 				{ label: "phpMyAdmin", src: "/images/logos/phpmyadmin.png", alt: "phpmyadmin" },
 			],
+			tools: ["XML ingestion", "Schema mapping", "Cron scheduling", "Automated reporting"],
 		},
 		{
-			id: "front-end",
-			title: "Front-end",
+			id: "frontend-backend",
+			title: "Front-end / back-end",
 			icon: "fa fa-laptop",
 			logos: [
 				{ label: "HTML5", src: "/images/logos/html5.png", alt: "html" },
@@ -57,66 +63,38 @@ function SkillsTabs() {
 				{ label: "JavaScript", src: "/images/logos/javascript.png", alt: "javascript" },
 				{ label: "jQuery", src: "/images/logos/jquery.png", alt: "jquery" },
 				{ label: "Bootstrap", src: "/images/logos/bootstrap.png", alt: "bootstrap" },
-				{ label: "AJAX", src: "/images/logos/ajax.png", alt: "ajax" },
-				{ label: "JSON", src: "/images/logos/json.png", alt: "json" },
-				{ label: "XML", src: "/images/logos/xml.png", alt: "xml" },
+				{ label: "npm", src: "/images/logos/npm.png", alt: "npm" },
 			],
-		},
-		{
-			id: "back-end",
-			title: "Back-end",
-			icon: "fa fa-database",
-			logos: [
-				{ label: "PHP", src: "/images/logos/php.png", alt: "php" },
-				{ label: "MySQL", src: "/images/logos/mysql.png", alt: "mysql" },
-				{ label: "CodeIgniter", src: "/images/logos/codeigniter.png", alt: "codeigniter" },
-			],
-		},
-		{
-			id: "version-control",
-			title: "Version control",
-			icon: "fa fa-code-fork",
-			logos: [
-				{ label: "Git", src: "/images/logos/git.png", alt: "git" },
-				{ label: "SourceTree", src: "/images/logos/sourcetree.png", alt: "sourcetree" },
-				{ label: "TortoiseSVN", src: "/images/logos/tortoisesvn.png", alt: "tortoisesvn" },
-			],
-		},
-		{
-			id: "bug-tracking",
-			title: "Bug tracking",
-			icon: "fa fa-code",
-			logos: [{ label: "JIRA", src: "/images/logos/jira.png", alt: "jira" }],
-		},
-		{
-			id: "design",
-			title: "Design",
-			icon: "fa fa-paint-brush",
-			logos: [
-				{ label: "Photoshop", src: "/images/logos/photoshop.png", alt: "photoshop" },
-				{ label: "Illustrator", src: "/images/logos/illustrator.png", alt: "illustrator" },
-				{ label: "Acrobat DC", src: "/images/logos/acrobat-dc.png", alt: "acrobat-dc" },
-				{ label: "InDesign", src: "/images/logos/indesign.png", alt: "indesign" },
-			],
-		},
-		{
-			id: "software",
-			title: "Software",
-			icon: "fa fa-windows",
-			text: "Windows (installing, troubleshooting, backup, maintenance), Adobe Acrobat Pro DC, Microsoft Visual Studio, Microsoft Office, Norton Partition Magic, memory diagnostic tools, data recovery tools",
-		},
-		{
-			id: "hardware",
-			title: "Hardware",
-			icon: "fa fa-desktop",
-			text: "PC components (building, troubleshooting), peripherals, audio-video, networking, electronics",
+			tools: ["Next.js", "TypeScript"],
 		},
 	];
+	// Rails carry the supporting toolkit — the things that don't define the work
+	// but show how it's done day to day.
 	const marqueeRails = [
-		skillsData.filter((s) => s.id === "front-end" || s.id === "back-end" || s.id === "dev-tools").flatMap((s) => s.logos ?? []),
-		skillsData
-			.filter((s) => s.id === "version-control" || s.id === "bug-tracking" || s.id === "design" || s.id === "ai-coding")
-			.flatMap((s) => s.logos ?? []),
+		[
+			{ label: "Git", src: "/images/logos/git.png", alt: "git" },
+			{ label: "SourceTree", src: "/images/logos/sourcetree.png", alt: "sourcetree" },
+			{ label: "TortoiseSVN", src: "/images/logos/tortoisesvn.png", alt: "tortoisesvn" },
+			{ label: "JIRA", src: "/images/logos/jira.png", alt: "jira" },
+			{ label: "VS Code", src: "/images/logos/vscode.png", alt: "vscode" },
+			{ label: "Notepad++", src: "/images/logos/notepadpp.png", alt: "notepadpp" },
+			{ label: "Sublime Text", src: "/images/logos/sublime.png", alt: "sublime" },
+			{ label: "Atom", src: "/images/logos/atom.png", alt: "atom" },
+		],
+		[
+			{ label: "Photoshop", src: "/images/logos/photoshop.png", alt: "photoshop" },
+			{ label: "Illustrator", src: "/images/logos/illustrator.png", alt: "illustrator" },
+			{ label: "InDesign", src: "/images/logos/indesign.png", alt: "indesign" },
+			{ label: "Acrobat DC", src: "/images/logos/acrobat-dc.png", alt: "acrobat-dc" },
+			{ label: "Qwen3", src: "/images/logos/qwen.png", alt: "qwen" },
+			{ label: "Gemma 4", src: "/images/logos/gemma.png", alt: "gemma" },
+			{ label: "gpt-oss-20b", src: "/images/logos/openai.png", alt: "openai" },
+			{ label: "Llama (llama.cpp)", src: "/images/logos/meta.png", alt: "meta" },
+			{ label: "Ollama (Hermes, Pi)", src: "/images/logos/ollama.png", alt: "ollama" },
+			{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
+			{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
+			{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+		],
 	];
 	const chip = (logo: SkillLogo, keySuffix = "") => (
 		<HappyChip key={logo.label + keySuffix}>
@@ -125,9 +103,12 @@ function SkillsTabs() {
 	);
 	return (
 		<div className="skills-band">
-			<h1 className="skills-heading">
-				<strong>Skills</strong>
-			</h1>
+			<header className="skills-header">
+				<span className="skills-kicker">{"// 02 — core competencies"}</span>
+				<h1 className="skills-heading">
+					<strong>Skills</strong>
+				</h1>
+			</header>
 			{marqueeRails.map((rail, i) => (
 				<div key={i} className={i === 1 ? "skills-marquee reverse" : "skills-marquee"}>
 					<div className="skills-marquee-track">
@@ -143,36 +124,42 @@ function SkillsTabs() {
 								<i className={skill.icon} aria-hidden="true"></i>
 							</span>
 							<span className="skill-card-title">{skill.title}</span>
-							{skill.logos || skill.tools ? (
+						{skill.logos || skill.tools ? (() => {
+							const total = (skill.logos?.length ?? 0) + (skill.tools?.length ?? 0);
+							return (
 								<span className="skill-card-count">
-									{skill.logos
-										? skill.logos.length + (skill.logos.length === 1 ? " skill" : " skills")
-										: skill.tools
-											? skill.tools.length + (skill.tools.length === 1 ? " tool" : " tools")
-											: ""}
+									{total} {total === 1 ? "skill" : "skills"}
 								</span>
-							) : null}
+							);
+						})() : null}
 						</div>
 						<div className="skill-card-body">
-							{skill.logos
-								? skill.logos.map((logo) => (
-										<span key={logo.label} className="skill-card-chip">
-											<Image src={logo.src} alt={logo.alt} width={100} height={100} /> {logo.label}
-										</span>
-									))
-								: skill.tools
-									? skill.tools.map((tool) => (
-											<span key={tool} className="skill-card-chip">
-												{tool}
-											</span>
-										))
-									: null}
+							{skill.logos?.map((logo) => (
+								<span key={logo.label} className="skill-card-chip">
+									<Image src={logo.src} alt={logo.alt} width={100} height={100} /> {logo.label}
+								</span>
+							))}
+							{skill.tools?.map((tool) => (
+								<span key={tool} className="skill-card-chip plain">
+									{tool}
+								</span>
+							))}
 							{skill.text ? <p className="skill-card-text">{skill.text}</p> : null}
 						</div>
 					</SkillCard>
 				))}
 			</ul>
 		</div>
+	);
+}
+
+function SkillsSection() {
+	return (
+		<section id="skills" className="section skills">
+			<div className="bootstrap-container">
+				<SkillsTabs />
+			</div>
+		</section>
 	);
 } // Employment component renders the two-column row used in the work section.
 // Faux browser window wrapping a screenshot. Kept deliberately static — it is// positioned in a floating gallery and carries the site's window chrome.
@@ -299,7 +286,13 @@ function ProjectBento({ entry, index }: { entry: WorkEntry; index: number }) {
 							<span className="bento-proj-idx">
 								/{String(index + 1)}.{String(i + 1)}
 							</span>
-							<h4>{project.title}</h4> <p className="bento-snippet">{project.paragraphs[0]}</p>
+							<h4>{project.title}</h4> <p className="bento-snippet">{project.problem}</p>
+							<p className="bento-solution">{project.solution}</p>
+							<ul className="bento-stack">
+								{project.stack.map((tech) => (
+									<li key={tech}>{tech}</li>
+								))}
+							</ul>
 							<span className="bento-cta">
 								{project.heading} <i className="fa fa-arrow-right" aria-hidden="true" />
 							</span>
@@ -455,10 +448,10 @@ function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) =>
 					</span>
 				</div>
 				<header className="contact-header">
-					<span className="contact-kicker">{"// 02 — get in touch"}</span> <h1 className="contact-title">Contact me</h1>
+					<span className="contact-kicker">{"// 03 — get in touch"}</span> <h1 className="contact-title">Contact me</h1>
 					<p className="contact-lede">
-						If you have any queries, or just want to say hi, drop me a few lines and I&rsquo;ll get back to you in no time. Pick a command
-						to start from a template.
+						Have a system that needs connecting, or a pipeline that needs automating? Drop me a few lines and I&rsquo;ll get back to you
+						quickly. Pick a command to start from a template.
 					</p>
 					<div className="cmd-chips" role="group" aria-label="Pick a starting point for your message">
 						{CONTACT_COMMANDS.map((cmd) => (
@@ -597,6 +590,9 @@ function Footer() {
 					<em>
 						<i className="fa fa-copyright" aria-hidden="true"></i> Victor Alexandru Arsenie — {new Date().getFullYear()}
 					</em>
+					<span className="footer-built">
+						Built with Next.js + Tailwind. Migrated from CodeIgniter, which felt appropriate.
+					</span>
 				</div>
 			</div>
 		</footer>
@@ -651,7 +647,7 @@ function Navigation() {
 			const scrollPosition = window.scrollY;
 			setShowScrollTop(scrollPosition > 600);
 			let current = "";
-			for (const section of ["about", "work", "contact"]) {
+			for (const section of ["work", "about", "skills", "contact"]) {
 				const el = document.getElementById(section);
 				if (!el) continue;
 				const top = el.getBoundingClientRect().top + scrollPosition;
@@ -693,8 +689,9 @@ function Navigation() {
 					<div className={`navbar-collapse ${menuOpen ? "open" : ""}`} id="main-navbar-collapse">
 						<ul className="navbar-nav flex list-none">
 							{[
-								["about", "About"],
 								["work", "Work"],
+								["about", "About"],
+								["skills", "Skills"],
 								["contact", "Contact"],
 							].map(([section, label]) => (
 								<li key={section} className={activeSection === section ? "active" : undefined}>
@@ -725,6 +722,9 @@ interface WorkProject {
 	imageAlt: string;
 	link: string;
 	title: string;
+	problem: string;
+	solution: string;
+	stack: string[];
 	paragraphs: string[];
 }
 interface WorkEntry {
@@ -748,7 +748,7 @@ const workData: WorkEntry[] = [
 		title: "CWCS",
 		duration: "August 2017 - February 2021",
 		blurb:
-			"CompuWeb Communications Services is a managed hosting specialist with thousands of clients across the world. I work as the sole developer on everything related to frontend, backend and design. My tasks include maintaining and improving of the website, designing (promotional) banners and social media images, creating PDF datasheets and working on internal systems. For design and datasheets I've been using Photoshop, Illustrator and Adobe Acrobat DC, including working with isometric vectors. I am constantly working with the WHMCS billing and support system, which includes creating custom reports and add-ons, improving and adding new functionalities. I've also worked with APIs to make user-friendly systems for data manipulation with specific functionality for R1Soft, Cloudflare and Freshdesk.",
+			"Sole developer on a managed hosting provider serving thousands of clients worldwide — frontend, backend and design, plus WHMCS extensions and R1Soft, Cloudflare and Freshdesk integrations.",
 	},
 	{
 		photo: "/images/iceberg-employment.png",
@@ -759,16 +759,21 @@ const workData: WorkEntry[] = [
 		title: "Iceberg Digital",
 		duration: "March 2016 - May 2017",
 		blurb:
-			"I've been working with a great team of developers, designers and content creators who were also amazing colleagues. During this time, I have developed websites, created email signatures, magazine templates with TCPDF, CMS, SEO, managed databases for estate agents with thousands of properties imported daily from data providers and also did customer support, using Team Viewer for remote access. I have built custom CMS to meet the needs of the client; banner systems where the client can select what banner to show when, to use for promotional periods; valuation tools with the use of API's to get the address using the postcode and get the price range using the address and property details. I have worked closely with the design team to produce the best outcome in the most efficient way.",
+			"Built estate-agency CMS, property ingestion pipelines, automated magazine generation and valuation tooling for a digital agency — working closely with the design team on every build.",
 		projects: [
 			{
-				heading: "Websites",
+				heading: "Property ingestion",
 				image: "/images/nkres.png",
 				imageWidth: 640,
 				imageHeight: 416,
 				imageAlt: "NKRES",
 				link: "http://www.nkres.co.uk/",
-				title: "Neil King Residential",
+				title: "Custom CMS & property ingestion pipeline",
+				problem:
+					"Estate agents receive thousands of listings a night from external XML providers — each with its own schema, its own duplicates and its own idea of what a postcode looks like.",
+				solution:
+					"A bespoke CMS that ingests every feed on a schedule and reconciles them into one live database. Schema mismatches, duplicate detection and provider outages are handled in the pipeline, so staff never open a raw file.",
+				stack: ["PHP", "MySQL", "XML parsing", "Cron"],
 				paragraphs: [
 					"Fully responsive website based on a premium template with custom CMS to meet the client's needs.",
 					"It benefits of a custom search systems to help users search easily for the desired property and a custom banner system where the client can add an unlimited number of banners for different promotions, change the order and select the period of time for the banner to be live on the website.",
@@ -781,7 +786,12 @@ const workData: WorkEntry[] = [
 				imageHeight: 522,
 				imageAlt: "magazine",
 				link: "http://www.digitalmag.co.uk/mag/bseenmagazine",
-				title: "One of hundreds of monthly magazines",
+				title: "Automated magazine generation",
+				problem:
+					"Monthly client magazines were laid out by hand from live property data — a process that took hours per issue and could not keep up with the listings changing daily.",
+				solution:
+					"A drag-and-drop web interface that pulls the client's live properties into InDesign-derived templates. One click produces a print-ready PDF and a digital page-turner. Hundreds of magazines now go out this way.",
+				stack: ["PHP", "TCPDF", "HTML templates", "XML"],
 				paragraphs: [
 					"Magazine created by the client with the use of our system. The system involves importing the client's properties from data providers, usually as XML files",
 					"I have built the HTML and PDF template using the Indesign document created by the design team. Once applyed to the client's account, the client can simply go to the system, add pages, drag the properties to the desired pages and create the magazine with the push of a button. The can then be accessed live as a page turner and the client has the options of printing.",
@@ -794,7 +804,12 @@ const workData: WorkEntry[] = [
 				imageHeight: 309,
 				imageAlt: "valuation",
 				link: "http://outlook.mypropertyprices.com/",
-				title: "Online property valuation for estate agents",
+				title: "Multi-API valuation tool",
+				problem:
+					"Getting a valuation meant a phone call: postcode in one system, address in another, price range in a third. Staff relayed the answers by hand.",
+				solution:
+					"Two third-party APIs stitched into one flow. A postcode resolves to a full address, that address returns a price range, and the result is displayed live or emailed — no dashboard switching.",
+				stack: ["PHP", "REST APIs", "Email"],
 				paragraphs: [
 					"With the use of API's I get the property address by sending the postcode and the property valuation by sending the address and details.",
 					"The valuation can be either shown after all the fields have been filled or sent to the user by email.",
@@ -807,7 +822,12 @@ const workData: WorkEntry[] = [
 				imageHeight: 200,
 				imageAlt: "signature",
 				link: "/images/morganalexandersig.gif",
-				title: "One of hundreds of email signatures",
+				title: "Dynamic asset linking",
+				problem:
+					"Every client's email signature showed their latest magazine cover. When a new issue published, hundreds of signatures had to be regenerated by hand.",
+				solution:
+					"Two systems linked so one event triggers the other: publishing a magazine automatically updates the signature imagery across every client account. Manual asset management disappeared.",
+				stack: ["PHP", "Template variables", "Automated deploy"],
 				paragraphs: [
 					"All signatures are made to fit the customers' needs and to work on any device.",
 					"The magazine image on the signature is automatically being updated when the client creates a new magazine.",
@@ -824,7 +844,7 @@ const workData: WorkEntry[] = [
 		title: "KeyElement",
 		duration: "June 2015 - December 2015",
 		blurb:
-			"Working at Key Element I have been part of large and small projects, but mostly I had my own projects which consisted of building websites from scratch and integrating them with our bespoke CMS. During this time I have used HTML 5, CSS 3, JavaScript, JQuery, AJAX and JSON for the front-end. For the back-end I have used PHP and MySQL. I have also used Source Tree for version control and JIRA for bug tracking.",
+			"Built sites from scratch and integrated them with a bespoke CMS — HTML5, CSS3, JavaScript, jQuery, AJAX and JSON on the front, PHP and MySQL behind it.",
 	},
 ]; // Page header component for all sections
 export default function HomePage() {
@@ -845,7 +865,14 @@ export default function HomePage() {
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1> <h2 id="greet_2">I’m Victor</h2>
 					<p id="greet_3">
-						<Typewriter text="a computer geek who likes to code" delay={2000} />
+						<Typewriter text="I make disconnected systems talk" delay={2000} />
+					</p>
+					<p id="hero_role">
+						Full-stack developer <span aria-hidden="true">&amp;</span> systems integrator since 2015. WHMCS extensions, multi-API
+						orchestration and data pipelines that run themselves.
+					</p>
+					<p id="hero_now">
+						<span className="hero-now-dot" aria-hidden="true" /> Currently migrating legacy CodeIgniter to Next.js + TypeScript
 					</p>
 					<div className="flex justify-center" id="work-arrow">
 						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")} aria-label="View Work">
@@ -862,6 +889,7 @@ export default function HomePage() {
 					</div>
 				</div>
 			</section>
+			<WorkSection />
 			<section id="about" className="pt-5 pb-20 bg-white">
 				<div className="bootstrap-container">
 					<div className="page-header">
@@ -877,23 +905,26 @@ export default function HomePage() {
 									style={{ width: "auto", height: "auto" }}
 								/>
 							</a>
-							I am a full-stack web developer with a great passion for coding. I enjoy creating websites of all kinds, with high attention
-							to details. I can develop high quality websites from scratch, fully responsive with a ’mobile first’ approach or add a bit of
-							Wow factor and make them ’mobile friendly’.
+							I work in the space between systems — wiring up billing platforms, backup software, DNS and support desks so data in one
+							actually shows up in the others. Ten years of WHMCS add-ons and hooks, multi-API orchestration and automated data
+							pipelines.
 						</p>
 						<p className="lead">
-							I have always been passionate about computers and had the ability to learn fast on my own, being able to manage any problems I
-							encountered. I am always searching for ways to improve and increase efficiency. I love technology and I am always up to date
-							with what comes out. I have a strong attention to details and I am very determined to get anything I do to high standards and
-							improve where necessary. I have always been the geek of the group and people came to me when they needed help. I love to
-							travel and to drive, but not in London. I like computer games, VR and watching films on my 100” screen LED projector. My
-							newest additions to my hobbies are VR and FPV quad copters.
+							Most of that work is invisible once it works. A property feed that ingests thousands of listings a night without anyone
+							opening a spreadsheet. A magazine generated from live data instead of a designer. Support tickets that appear next to the
+							server they belong to. I spend my time on the plumbing — schema mismatches, duplicate records, providers down at 3am — so
+							nobody using it has to.
+						</p>
+						<p className="lead">
+							Photoshop, Illustrator and Acrobat for the design side; Git, Sourcetree and JIRA for the work around the code.
+						</p>
+						<p className="lead">
+							Currently migrating a decade of CodeIgniter to Next.js and TypeScript.
 						</p>
 					</div>
-					<SkillsTabs />
 				</div>
 			</section>
-			<WorkSection />
+			<SkillsSection />
 			<ContactConsole onSubmit={handleContactSubmit} />
 			<Footer />
 		</main>
