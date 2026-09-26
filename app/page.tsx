@@ -16,11 +16,48 @@ interface ContactFormData {
 } // Skills navigation component
 function SkillsTabs() {
 	type SkillLogo = { label: string; src: string; alt: string };
-	type SkillCategory = { id: string; title: string; icon: string; logos?: SkillLogo[]; tools?: string[]; text?: string };
+	type SkillCategory = {
+		id: string;
+		title: string;
+		icon: string;
+		logos?: SkillLogo[];
+		tools?: string[];
+		text?: string;
+		live?: boolean;
+	};
 	// Grouped by what the work actually is — bridging systems — rather than by
 	// technology. Logos carry the recognisable tools, plain chips name the
-	// vendor APIs and practices that have no logo.
+	// vendor APIs and practices that have no logo. The two cards that show he's
+	// active right now lead; the accumulated competencies follow.
 	const skillsData: SkillCategory[] = [
+		{
+			id: "currently-building",
+			title: "Currently building",
+			icon: "fa fa-refresh",
+			logos: [
+				{ label: "CodeIgniter", src: "/images/logos/codeigniter.png", alt: "codeigniter" },
+				{ label: "JavaScript", src: "/images/logos/javascript.png", alt: "javascript" },
+				{ label: "npm", src: "/images/logos/npm.png", alt: "npm" },
+			],
+			tools: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS"],
+			live: true,
+		},
+		{
+			id: "ai-coding",
+			title: "AI-assisted coding",
+			icon: "fa fa-microchip",
+			logos: [
+				{ label: "Qwen3", src: "/images/logos/qwen.png", alt: "qwen" },
+				{ label: "Gemma 4", src: "/images/logos/gemma.png", alt: "gemma" },
+				{ label: "gpt-oss-20b", src: "/images/logos/openai.png", alt: "openai" },
+				{ label: "Llama (llama.cpp)", src: "/images/logos/meta.png", alt: "meta" },
+				{ label: "Ollama (Hermes, Pi)", src: "/images/logos/ollama.png", alt: "ollama" },
+				{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
+				{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
+				{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+			],
+			text: "Local models on my own hardware for refactoring, review and boilerplate — private, offline and free to re-run.",
+		},
 		{
 			id: "api-orchestration",
 			title: "API orchestration",
@@ -68,8 +105,9 @@ function SkillsTabs() {
 			tools: ["Next.js", "TypeScript"],
 		},
 	];
-	// Rails carry the supporting toolkit — the things that don't define the work
-	// but show how it's done day to day.
+	// Rails carry the supporting toolkit — the tools that don't define the work
+	// but show how it's done day to day. Kept separate from the cards above so
+	// the same logo never appears twice on the page.
 	const marqueeRails = [
 		[
 			{ label: "Git", src: "/images/logos/git.png", alt: "git" },
@@ -86,14 +124,8 @@ function SkillsTabs() {
 			{ label: "Illustrator", src: "/images/logos/illustrator.png", alt: "illustrator" },
 			{ label: "InDesign", src: "/images/logos/indesign.png", alt: "indesign" },
 			{ label: "Acrobat DC", src: "/images/logos/acrobat-dc.png", alt: "acrobat-dc" },
-			{ label: "Qwen3", src: "/images/logos/qwen.png", alt: "qwen" },
-			{ label: "Gemma 4", src: "/images/logos/gemma.png", alt: "gemma" },
-			{ label: "gpt-oss-20b", src: "/images/logos/openai.png", alt: "openai" },
-			{ label: "Llama (llama.cpp)", src: "/images/logos/meta.png", alt: "meta" },
-			{ label: "Ollama (Hermes, Pi)", src: "/images/logos/ollama.png", alt: "ollama" },
-			{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
-			{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
-			{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+			{ label: "MySQL Workbench", src: "/images/logos/mysqlworkbench.png", alt: "mysqlworkbench" },
+			{ label: "phpMyAdmin", src: "/images/logos/phpmyadmin.png", alt: "phpmyadmin" },
 		],
 	];
 	const chip = (logo: SkillLogo, keySuffix = "") => (
@@ -124,6 +156,11 @@ function SkillsTabs() {
 								<i className={skill.icon} aria-hidden="true"></i>
 							</span>
 							<span className="skill-card-title">{skill.title}</span>
+							{skill.live ? (
+								<span className="skill-card-live">
+									<span className="skill-card-live-dot" aria-hidden="true" /> live
+								</span>
+							) : null}
 						{skill.logos || skill.tools ? (() => {
 							const total = (skill.logos?.length ?? 0) + (skill.tools?.length ?? 0);
 							return (

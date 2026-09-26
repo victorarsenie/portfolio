@@ -410,6 +410,57 @@ p {
   white-space: nowrap;
 }
 
+/* "live" badge — signals this card describes work in progress right now */
+.skill-card-live {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7ee787;
+  background: rgba(126, 231, 135, 0.09);
+  border: 1px solid rgba(126, 231, 135, 0.28);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.skill-card-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7ee787;
+  box-shadow: 0 0 0 0 rgba(126, 231, 135, 0.5);
+  animation: skill-live-pulse 2.4s ease-out infinite;
+}
+
+@keyframes skill-live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(126, 231, 135, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(126, 231, 135, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(126, 231, 135, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card-live-dot {
+    animation: none;
+  }
+}
+
+/* The count badge follows the live badge when both are present */
+.skill-card-live + .skill-card-count {
+  margin-left: 8px;
+}
+
 .skill-card-body {
   display: flex;
   flex: 1;
