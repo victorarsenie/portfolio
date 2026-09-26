@@ -957,7 +957,11 @@ export default function HomePage() {
 				<div className="relative z-10 text-center text-white greeting">
 					<h1 id="greet_1">Hi</h1> <h2 id="greet_2">I’m Victor</h2>
 					<p id="greet_3">
-						<Typewriter text="Full-stack developer. PHP → TypeScript. Legacy migrations that don't break production." delay={2000} />
+						<Typewriter text="Full-stack developer & systems integrator" delay={2000} />
+					</p>
+					<p id="hero_terminal" aria-hidden="true">
+						<span className="hero-terminal-prompt">$</span>
+						<Typewriter text="codeigniter --migrate nextjs" delay={5000} speed={80} />
 					</p>
 					<p id="hero_now">
 						<span className="hero-now-dot" aria-hidden="true" /> Currently migrating legacy CodeIgniter to Next.js + TypeScript
