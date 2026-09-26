@@ -157,7 +157,7 @@ p {
    The accent is the same cyan used for links and focus rings. */
 .section.skills {
   background: #0c0c0e;
-  padding: 72px 0 76px;
+  padding: 0 0 76px;
   overflow: hidden;
 }
 
@@ -170,6 +170,8 @@ p {
 }
 
 .skills-header {
+  padding-top: 70px;
+  padding-bottom: 10px;
   margin-bottom: 30px;
 }
 
@@ -1272,7 +1274,8 @@ p {
 /* Work header */
 /* Console title bar — flat cmd colours, no gradients or shadows */
 .work-cmdbar,
-.contact-cmdbar {
+.contact-cmdbar,
+.skills-cmdbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1285,7 +1288,8 @@ p {
 }
 
 .work-cmdbar-title,
-.contact-cmdbar-title {
+.contact-cmdbar-title,
+.skills-cmdbar-title {
   font-size: 12px;
   letter-spacing: 0.02em;
   color: #cccccc;
@@ -1296,7 +1300,8 @@ p {
 }
 
 .work-cmdbar-btns,
-.contact-cmdbar-btns {
+.contact-cmdbar-btns,
+.skills-cmdbar-btns {
   display: flex;
   align-items: stretch;
   align-self: stretch;
@@ -1304,7 +1309,8 @@ p {
 }
 
 .work-cmdbar-btns i,
-.contact-cmdbar-btns i {
+.contact-cmdbar-btns i,
+.skills-cmdbar-btns i {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1319,31 +1325,36 @@ p {
 }
 
 .work-cmdbar-btns i:hover,
-.contact-cmdbar-btns i:hover {
+.contact-cmdbar-btns i:hover,
+.skills-cmdbar-btns i:hover {
   background: #3a3a3a;
 }
 
 .work-cmdbar-btns .btn-min::after,
-.contact-cmdbar-btns .btn-min::after {
+.contact-cmdbar-btns .btn-min::after,
+.skills-cmdbar-btns .btn-min::after {
   content: "\2013";
   transform: translateY(-3px);
   font-size: 15px;
 }
 
 .work-cmdbar-btns .btn-max::after,
-.contact-cmdbar-btns .btn-max::after {
+.contact-cmdbar-btns .btn-max::after,
+.skills-cmdbar-btns .btn-max::after {
   content: "\25A1";
   font-size: 12px;
 }
 
 .work-cmdbar-btns .btn-close::after,
-.contact-cmdbar-btns .btn-close::after {
+.contact-cmdbar-btns .btn-close::after,
+.skills-cmdbar-btns .btn-close::after {
   content: "\2715";
   font-size: 11px;
 }
 
 .work-cmdbar-btns .btn-close:hover,
-.contact-cmdbar-btns .btn-close:hover {
+.contact-cmdbar-btns .btn-close:hover,
+.skills-cmdbar-btns .btn-close:hover {
   background: #c42b1c;
   color: #ffffff;
 }
@@ -2100,6 +2111,67 @@ p {
   font-family: "Menlo", "Consolas", monospace;
   font-size: 12px;
   color: #6b6b74;
+}
+
+/* Shown only when the mailto hand-off doesn't get picked up by a mail client */
+.tx-fallback {
+  margin-top: 4px;
+  padding: 16px 18px;
+  border: 1px solid rgba(214, 158, 46, 0.45);
+  border-left: 3px solid #d69e2e;
+  border-radius: 6px;
+  background: rgba(214, 158, 46, 0.07);
+}
+
+.tx-fallback-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #b58119;
+  margin-bottom: 8px;
+}
+
+.tx-fallback-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #57565e;
+  margin-bottom: 14px;
+}
+
+.tx-fallback-body a {
+  color: #1d4ed8;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.tx-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #1d4ed8;
+  border: 1px solid #1d4ed8;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.tx-copy:hover {
+  background: #1a41bb;
+  border-color: #1a41bb;
+}
+
+.tx-copy:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
 }
 
 /* Transmission preview */

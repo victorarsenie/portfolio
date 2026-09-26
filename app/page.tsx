@@ -7,7 +7,11 @@ import CodeParticles from "./components/CodeParticles";
 import Typewriter from "./components/Typewriter";
 import SkillCard from "./components/SkillCard";
 import TiltCard from "./components/TiltCard";
-import HappyChip from "./components/HappyChip"; // TypeScript interfaces for component props
+import HappyChip from "./components/HappyChip";
+
+const CONTACT_EMAIL = "contact@victorsenie.com";
+
+// TypeScript interfaces for component props
 interface ContactFormData {
 	name: string;
 	email: string;
@@ -194,6 +198,12 @@ function SkillsSection() {
 	return (
 		<section id="skills" className="section skills">
 			<div className="bootstrap-container">
+				<div className="skills-cmdbar" aria-hidden="true">
+					<span className="skills-cmdbar-title">C:\skills\core-competencies</span>
+					<span className="skills-cmdbar-btns">
+						<i className="btn-min" /> <i className="btn-max" /> <i className="btn-close" />
+					</span>
+				</div>
 				<SkillsTabs />
 			</div>
 		</section>
@@ -426,6 +436,8 @@ function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) =>
 	});
 	const [dirty, setDirty] = useState<{ subject: boolean; message: boolean }>({ subject: false, message: false });
 	const [sent, setSent] = useState(false);
+	const [handoffFailed, setHandoffFailed] = useState(false);
+	const [copied, setCopied] = useState(false);
 	const fields = useRef<Partial<Record<ContactField, HTMLElement | null>>>({});
 	const isEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 	const selectCommand = (next: ContactCommand) => {
@@ -437,12 +449,15 @@ function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) =>
 		setCommand(next);
 		setValues(merged);
 		setSent(false);
+		setHandoffFailed(false);
+		setCopied(false);
 		const empty = CONTACT_FIELDS.find((field) => !merged[field].trim());
 		if (empty) fields.current[empty]?.focus();
 	};
 	const update = (field: ContactField, value: string) => {
 		setValues((prev) => ({ ...prev, [field]: value }));
 		setSent(false);
+		setHandoffFailed(false);
 		if (field === "subject" || field === "message") setDirty((prev) => ({ ...prev, [field]: true }));
 	};
 	const mark = (form: HTMLFormElement, bad: boolean) => {
@@ -466,12 +481,36 @@ function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) =>
 		}
 		await onSubmit({ name: values.name, email: values.email, subject: values.subject, message: values.message });
 		setSent(true);
-		Swal.fire({
-			title: "Your message has been sent!",
-			text: "Sit back and relax, you're in good hands now.",
-			icon: "success",
-			scrollbarPadding: false,
-		});
+		// A mailto hand-off either hands the window to a mail client (which flips
+		// document visibility) or silently does nothing. No false "sent!" claim —
+		// if we're still visible a moment later, no client took it, so offer a
+		// copyable fallback rather than letting the message disappear.
+		window.setTimeout(() => {
+			if (document.visibilityState === "visible") {
+				setSent(false);
+				setHandoffFailed(true);
+			}
+		}, 1500);
+	};
+	const copyMessage = async () => {
+		const text = `${values.subject}\n\n${values.message}\n\n— ${values.name} (${values.email})`;
+		try {
+			await navigator.clipboard.writeText(text);
+		} catch {
+			// navigator.clipboard needs a secure context; this site is served over
+			// plain HTTP, so fall back to a throwaway textarea + execCommand.
+			const scratch = document.createElement("textarea");
+			scratch.value = text;
+			scratch.setAttribute("readonly", "");
+			scratch.style.position = "fixed";
+			scratch.style.opacity = "0";
+			document.body.appendChild(scratch);
+			scratch.select();
+			document.execCommand("copy");
+			scratch.remove();
+		}
+		setCopied(true);
+		window.setTimeout(() => setCopied(false), 2000);
 	};
 	const ready = values.name.trim() !== "" && isEmail(values.email.trim()) && values.subject.trim() !== "" && values.message.trim() !== "";
 	const messageLength = values.message.trim().length;
@@ -546,8 +585,22 @@ function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) =>
 							<button type="submit" className="tx-submit" id="submit" name="submit" value="Submit">
 								<i className="fa fa-paper-plane-o" aria-hidden="true" /> Send message
 							</button>
-							<span className="tx-hint">Opens in your mail app</span>
+							<span className="tx-hint">Opens in your mail app &mdash; you press send</span>
 						</div>
+						{handoffFailed ? (
+							<div className="tx-fallback" role="status">
+								<p className="tx-fallback-title">
+									<i className="fa fa-exclamation-triangle" aria-hidden="true" /> Your mail app didn&rsquo;t open
+								</p>
+								<p className="tx-fallback-body">
+									Some browsers block it, and there&rsquo;s no configured mail client on every machine. Copy the message and send
+									it to <a href={"mailto:" + CONTACT_EMAIL}>{CONTACT_EMAIL}</a> from wherever you already email.
+								</p>
+								<button type="button" className="tx-copy" onClick={copyMessage}>
+									<i className={"fa " + (copied ? "fa-check" : "fa-clipboard-o")} aria-hidden="true" /> {copied ? "Copied to clipboard" : "Copy message"}
+								</button>
+							</div>
+						) : null}
 					</form>
 					<aside className="tx-panel" aria-hidden="true">
 						<div className="tx-panel-head">
@@ -602,8 +655,8 @@ function Footer() {
 							</p>
 							<p>
 								<i className="fa fa-envelope" aria-hidden="true"></i>
-								<a className="email" href="mailto:victor.arsenie@yahoo.com">
-									victor.arsenie@yahoo.com
+								<a className="email" href={"mailto:" + CONTACT_EMAIL}>
+									{CONTACT_EMAIL}
 								</a>
 							</p>
 						</div>
@@ -886,11 +939,13 @@ const workData: WorkEntry[] = [
 ]; // Page header component for all sections
 export default function HomePage() {
 	const handleContactSubmit = async (formData: ContactFormData): Promise<void> => {
+		// Hand the visitor a prefilled draft in their own mail client. This cannot
+		// send on their behalf — the form deliberately makes no claim that it did.
 		const subject = encodeURIComponent(formData.subject);
 		const name = encodeURIComponent(formData.name);
 		const email = encodeURIComponent(formData.email);
 		const message = encodeURIComponent(formData.message);
-		const mailtoLink = `mailto:contact@victorsenie.com?subject=${subject}&body=From: ${name} (${email})%0D%0A${message}`;
+		const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=From: ${name} (${email})%0D%0A%0D%0A${message}`;
 		window.location.href = mailtoLink;
 	};
 	return (
