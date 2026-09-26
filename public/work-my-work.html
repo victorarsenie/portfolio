@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    @font-face {
+      font-family: "Hype";
+      src: url(/fonts/HYPE.ttf) format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+    svg {
+      display: block;
+    }
+    text {
+      font-family: "Hype", serif;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <svg width="360" height="360" viewBox="0 0 360 360">
+    <defs>
+      <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+        <feGaussianBlur stdDeviation="8" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="glow2" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <g filter="url(#glow2)">
+      <text x="180" y="170" text-anchor="middle" font-size="64" fill="#ffffff">MY WORK</text>
+    </g>
+    <g filter="url(#glow)">
+      <rect x="167" y="196" width="26" height="98" fill="#26adf4" />
+      <polygon points="106,298 180,358 254,298" fill="#26adf4" />
+    </g>
+  </svg>
+</body>
+</html>
