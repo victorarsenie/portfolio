@@ -1,3 +1,5 @@
+import PipelineFlow from "./PipelineFlow";
+
 function scrollToId(id: string) {
 	document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -7,6 +9,7 @@ export default function TerminalHero() {
 		<section id="home" className="terminal-hero">
 			<div className="terminal-hero-inner">
 				<h1 className="terminal-hero-title">I make systems talk to each other.</h1>
+				<PipelineFlow />
 				<p className="terminal-hero-sub">
 					Years of wiring billing platforms, backup software, and support desks so data entered once actually shows up
 					everywhere. I build the pipelines that turn chaos into clarity.
