@@ -70,6 +70,10 @@ a:focus-visible:not(:focus-visible) {
   font-display: swap;
 }
 
+.amp {
+  font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;

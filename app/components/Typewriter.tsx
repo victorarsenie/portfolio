@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 interface TypewriterProps {
 	text: string;
@@ -35,7 +35,12 @@ export default function Typewriter({ text, delay = 6000, speed = 55 }: Typewrite
 
 	return (
 		<span>
-			{typed}
+			{typed.split("&").map((part, i, parts) => (
+				<Fragment key={i}>
+					{part}
+					{i < parts.length - 1 && <span className="amp">&amp;</span>}
+				</Fragment>
+			))}
 			<span className="typewriter-caret" aria-hidden="true">
 				&#9612;
 			</span>

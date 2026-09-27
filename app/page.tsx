@@ -42,6 +42,7 @@ function SkillsTabs() {
 				{ label: "CodeIgniter", src: "/images/logos/codeigniter.png", alt: "codeigniter" },
 				{ label: "JavaScript", src: "/images/logos/javascript.png", alt: "javascript" },
 				{ label: "npm", src: "/images/logos/npm.png", alt: "npm" },
+				{ label: "Lighthouse", src: "/images/logos/lighthouse.png", alt: "lighthouse" },
 			],
 			tools: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS"],
 			live: true,
@@ -59,6 +60,7 @@ function SkillsTabs() {
 				{ label: "LM Studio", src: "/images/logos/lmstudio.png", alt: "lmstudio" },
 				{ label: "opencode", src: "/images/logos/opencode.png", alt: "opencode" },
 				{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
+				{ label: "Playwright", src: "/images/logos/playwright.png", alt: "playwright" },
 			],
 			text: "Local models on my own hardware for refactoring, review and boilerplate — private, offline and free to re-run.",
 		},
@@ -122,6 +124,8 @@ function SkillsTabs() {
 			{ label: "Notepad++", src: "/images/logos/notepadpp.png", alt: "notepadpp" },
 			{ label: "Sublime Text", src: "/images/logos/sublime.png", alt: "sublime" },
 			{ label: "Atom", src: "/images/logos/atom.png", alt: "atom" },
+			{ label: "Playwright", src: "/images/logos/playwright.png", alt: "playwright" },
+			{ label: "Lighthouse", src: "/images/logos/lighthouse.png", alt: "lighthouse" },
 		],
 		[
 			{ label: "Photoshop", src: "/images/logos/photoshop.png", alt: "photoshop" },
@@ -302,6 +306,20 @@ function openImagePreview(e: MouseEvent<HTMLElement>, project: WorkProject) {
 		color: "#e8e8ec",
 		customClass: { title: "swal-shot-title", confirmButton: "swal-shot-btn" },
 	});
+} // The Hype font has no "&" glyph (it renders blank), so ampersands get a
+// span that falls back to the site's mono font.
+function AmpText({ text }: { text: string }) {
+	const parts = text.split("&");
+	return (
+		<>
+			{parts.map((part, i, all) => (
+				<Fragment key={i}>
+					{part}
+					{i < all.length - 1 && <span className="amp">&amp;</span>}
+				</Fragment>
+			))}
+		</>
+	);
 } // Bento grid of a company's showcased projects: asymmetric card spans, a mono
 // category tag, title, short snippet and a visit link.
 function ProjectBento({ entry, index }: { entry: WorkEntry; index: number }) {
@@ -333,7 +351,7 @@ function ProjectBento({ entry, index }: { entry: WorkEntry; index: number }) {
 							<span className="bento-proj-idx">
 								/{String(index + 1)}.{String(i + 1)}
 							</span>
-							<h4>{project.title}</h4> <p className="bento-snippet">{project.problem}</p>
+							<h4><AmpText text={project.title} /></h4> <p className="bento-snippet">{project.problem}</p>
 							<p className="bento-solution">{project.solution}</p>
 							<ul className="bento-stack">
 								{project.stack.map((tech) => (
