@@ -917,9 +917,9 @@ p {
   margin: 22px 0 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
-  font-size: clamp(2.75rem, 7.4vw, 5.25rem);
-  line-height: 1.04;
-  letter-spacing: -0.03em;
+  font-size: clamp(3rem, 8.2vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.032em;
   color: #f8fafc;
   text-wrap: balance;
 }
@@ -928,7 +928,7 @@ p {
    letters descend. Guarded so browsers without background-clip keep solid ink. */
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .terminal-hero-title {
-    background-image: linear-gradient(180deg, #ffffff 34%, #9fd8f7 100%);
+    background-image: linear-gradient(180deg, #ffffff 40%, #cfe9fa 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -1055,11 +1055,14 @@ p {
 
 .terminal-hero-sub {
   margin: 40px auto 0;
-  max-width: 56ch;
+  max-width: 62ch;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "SF Mono", monospace;
-  font-size: clamp(0.875rem, 1.3vw, 1rem);
+  font-size: clamp(0.9375rem, 1.35vw, 1.0625rem);
   line-height: 1.8;
-  color: rgba(203, 213, 225, 0.7);
+  /* A touch of tracking reads as "technical" without pushing the mono apart
+     into something else. */
+  letter-spacing: 0.02em;
+  color: rgba(203, 213, 225, 0.68);
   text-align: center;
   text-wrap: pretty;
 }
@@ -1111,6 +1114,49 @@ p {
   transform: translateY(-1px);
 }
 
+/* Staggered entrance, in reading order: tag, headline, pipe, sub, CTAs. Each
+   runs once and settles visible. The pipe wrapper fades while its trace draws
+   itself in, so the diagram arrives as one gesture. */
+.terminal-hero-tag,
+.terminal-hero-title,
+.pipe,
+.terminal-hero-sub,
+.terminal-hero-ctas {
+  opacity: 0;
+  animation: hero-rise 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+.terminal-hero-tag {
+  animation-delay: 0.05s;
+}
+
+.terminal-hero-title {
+  animation-delay: 0.15s;
+}
+
+.pipe {
+  animation-delay: 0.3s;
+}
+
+.terminal-hero-sub {
+  animation-delay: 0.5s;
+}
+
+.terminal-hero-ctas {
+  animation-delay: 0.7s;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Capability ticker — grounds the composition and states the offer without
    restating the headline. */
 .terminal-hero-ticker {
@@ -1143,6 +1189,14 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .terminal-hero-tag,
+  .terminal-hero-title,
+  .pipe,
+  .terminal-hero-sub,
+  .terminal-hero-ctas {
+    opacity: 1;
+    animation: none;
+  }
   .terminal-hero-btn {
     transition: none;
   }
