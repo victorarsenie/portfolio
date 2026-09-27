@@ -2,9 +2,7 @@
 import Image from "next/image";
 import { Fragment, useState, useEffect, useRef, type MouseEvent } from "react";
 import Swal from "sweetalert2";
-import ParallaxHeroBackground from "./components/ParallaxHeroBackground";
-import CodeParticles from "./components/CodeParticles";
-import Typewriter from "./components/Typewriter";
+import TerminalHero from "./components/TerminalHero";
 import SkillCard from "./components/SkillCard";
 import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
@@ -969,36 +967,7 @@ export default function HomePage() {
 	return (
 		<main id="main-content" className="min-h-screen bg-white">
 			<Navigation />
-			<section id="home" className="relative min-h-screen overflow-hidden bg-stone-600">
-				<ParallaxHeroBackground imageSrc="/images/bg-code-grain2.webp" mobileSrc="/images/bg-code-grain2-mobile.webp" alt="Background" />
-				<CodeParticles />
-				<div className="relative z-10 text-center text-white greeting">
-					<h1 id="greet_1">Hi</h1> <h2 id="greet_2">I’m Victor</h2>
-					<p id="greet_3">
-						<Typewriter text="Full-stack developer & systems integrator" delay={2000} />
-					</p>
-					<p id="hero_terminal" aria-hidden="true">
-						<span className="hero-terminal-prompt">$</span>
-						<Typewriter text="codeigniter --migrate nextjs" delay={5000} speed={80} />
-					</p>
-					<p id="hero_now">
-						<span className="hero-now-dot" aria-hidden="true" /> Currently migrating legacy CodeIgniter to Next.js + TypeScript
-					</p>
-					<div className="flex justify-center" id="work-arrow">
-						<a href="#work" onClick={(e) => handleAnchorClick(e, "work")} aria-label="View Work">
-							<Image
-								src="/images/cmd-hang-nails.png"
-								alt="My Work"
-								width={260}
-								height={163}
-								className="work-hang-img"
-								loading="eager"
-								style={{ width: "auto", height: "auto" }}
-							/>
-						</a>
-					</div>
-				</div>
-			</section>
+			<TerminalHero />
 			<WorkSection />
 			<section id="about" className="pt-5 pb-20 bg-white">
 				<div className="bootstrap-container">
