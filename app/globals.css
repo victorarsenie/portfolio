@@ -819,410 +819,251 @@ p {
   transition: padding 0.5s ease, color 0.3s ease;
 }
 
-/* Greeting sections */
-.greeting {
-  font-family: "Hype", serif;
-  text-align: center;
-  color: #fff;
-}
-
-#home #greet_1 {
-  font-family: "Hype", serif;
-  font-size: 84px;
-  line-height: 1.1;
-  margin-top: 170px;
-  text-align: center;
-  display: inline-block;
-  transform-origin: 50% 50%;
-  text-shadow: 1px 0 0 #0c5c89, 2px 1px 0 #0c5c89, 3px 1px 0 #0b5380, 4px 2px 0 #0b5380, 5px 2px 0 #0a4a72, 7px 4px 12px rgba(0, 0, 0, 0.45), 12px 9px 28px rgba(0, 0, 0, 0.3), 0 0 14px rgba(38, 173, 244, 0.55), 0 0 34px rgba(120, 90, 255, 0.25);
-}
-
-#home #greet_2 {
-  font-family: "Hype", serif;
-  font-size: 58px;
-  line-height: 1.1;
-  text-shadow: 1px 0 0 #0c5c89, 2px 1px 0 #0c5c89, 3px 1px 0 #0b5380, 4px 2px 0 #0b5380, 5px 2px 0 #0a4a72, 7px 4px 12px rgba(0, 0, 0, 0.45), 12px 9px 28px rgba(0, 0, 0, 0.3), 0 0 14px rgba(38, 173, 244, 0.55), 0 0 34px rgba(120, 90, 255, 0.25);
-  margin-top: 40px;
-  text-align: center;
-}
-
-#home #greet_3 {
-  font-family: "Hype", serif;
-  font-size: 28px;
-  line-height: 30px;
-  margin-top: 40px;
-  text-align: center;
-}
-
-#home #hero_terminal {
-  margin-top: 12px;
-  font-family: var(--font-mono, monospace);
-  font-size: 15px;
-  color: rgba(38, 173, 244, 0.7);
-  letter-spacing: 0.02em;
-  opacity: 0;
-  animation: fadeIn 0.5s ease 2.2s forwards;
-}
-
-#home .hero-terminal-prompt {
-  color: rgba(38, 173, 244, 0.9);
-  margin-right: 6px;
-  font-weight: bold;
-}
-
-#home #hero_role {
-  max-width: 780px;
-  margin: 18px auto 0;
-  font-size: 16px;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.78);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
-}
-
-#home #hero_now {
-  display: inline-flex;
+/* Terminal hero — an instrument panel, not a poster.
+   Layer order, back to front: a vertical base gradient with light entering from
+   the top edge; a cyan blueprint grid carrying faint CRT scanlines (::before);
+   two viewfinder corner ticks (.terminal-hero-frame); the type; and a monospace
+   capability ticker pinned to the bottom. All CSS, no images. */
+.terminal-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 16px auto 0;
-  padding: 7px 15px 7px 13px;
-  border: 1px solid rgba(38, 173, 244, 0.32);
-  border-radius: 999px;
-  background: rgba(38, 173, 244, 0.08);
+  justify-content: center;
+  overflow: hidden;
+  background-color: #05070a;
+  background-image: radial-gradient(900px 320px at 50% 0%, rgba(56, 189, 248, 0.1), transparent 70%),
+    linear-gradient(180deg, #0a1119 0%, #070a0f 52%, #05070a 100%);
+  color: #e2e8f0;
+}
+
+/* Blueprint grid: 32px cells with a brighter line every 5th, plus a 4px
+   scanline comb. Faded on the vertical axis so it dissolves above the headline
+   and below the ticker rather than competing with the type. */
+.terminal-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: linear-gradient(rgba(125, 211, 252, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(125, 211, 252, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.09) 1px, transparent 1px),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 4px);
+  background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px, auto;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 60%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 60%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Viewfinder ticks on opposite corners — enough to frame the viewport without
+   boxing it in. The lower one is lifted clear of the ticker. */
+.terminal-hero-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.terminal-hero-frame::before,
+.terminal-hero-frame::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-color: rgba(125, 211, 252, 0.32);
+  border-style: solid;
+}
+
+.terminal-hero-frame::before {
+  top: 34px;
+  left: 34px;
+  border-width: 1px 0 0 1px;
+}
+
+.terminal-hero-frame::after {
+  right: 34px;
+  bottom: 78px;
+  border-width: 0 1px 1px 0;
+}
+
+.terminal-hero-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 150px 24px 124px;
+  text-align: center;
+}
+
+.terminal-hero-tag {
+  margin: 0;
   font-family: var(--font-mono, monospace);
-  font-size: 12.5px;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.86);
-  text-shadow: none;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.9);
 }
 
-#home .hero-now-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #26adf4;
-  box-shadow: 0 0 0 0 rgba(38, 173, 244, 0.55);
-  animation: hero-now-pulse 2.4s ease-out infinite;
+.terminal-hero-tag span {
+  color: rgba(125, 211, 252, 0.55);
 }
 
-@keyframes hero-now-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(38, 173, 244, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 7px rgba(38, 173, 244, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(38, 173, 244, 0);
-  }
+.terminal-hero-title {
+  margin: 22px 0 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.75rem, 7.4vw, 5.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: #f8fafc;
+  text-wrap: balance;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  #home .hero-now-dot {
-    animation: none;
-  }
-}
-
-#home #work-arrow {
-  margin-top: 28px;
-}
-
-#home #work-arrow img {
-  transform-origin: 50% 5.3%;
-}
-
-@keyframes work-hover-bounce {
-  0% {
-    transform: perspective(900px) rotateX(0deg);
-  }
-  15% {
-    transform: perspective(900px) rotateX(-7deg);
-  }
-  30% {
-    transform: perspective(900px) rotateX(6deg);
-  }
-  45% {
-    transform: perspective(900px) rotateX(-4deg);
-  }
-  60% {
-    transform: perspective(900px) rotateX(3deg);
-  }
-  75% {
-    transform: perspective(900px) rotateX(-1.5deg);
-  }
-  88% {
-    transform: perspective(900px) rotateX(1deg);
-  }
-  100% {
-    transform: perspective(900px) rotateX(0deg);
+/* A restrained top-to-bottom fade — white where the eye lands, cooling as the
+   letters descend. Guarded so browsers without background-clip keep solid ink. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .terminal-hero-title {
+    background-image: linear-gradient(180deg, #ffffff 34%, #9fd8f7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 
-#home #work-arrow a:hover img {
-  animation: work-hover-bounce 1.2s ease-out 1;
+.terminal-hero-sub {
+  margin: 26px auto 0;
+  max-width: 56ch;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "SF Mono", monospace;
+  font-size: clamp(0.875rem, 1.3vw, 1rem);
+  line-height: 1.8;
+  color: rgba(203, 213, 225, 0.7);
+  text-align: center;
+  text-wrap: pretty;
 }
 
-@media (max-width: 1199px) {
-  #home #greet_1 {
-    margin-top: 180px;
-  }
+.terminal-hero-ctas {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 42px;
 }
 
-@media (max-width: 768px) {
-  #home #greet_1 {
-    font-size: 64px;
-    margin-top: 120px;
-  }
-  #home #greet_2 {
-    font-size: 40px;
-    margin-top: 20px;
-  }
-  #home #greet_3 {
-    font-size: 18px;
-    margin-top: 20px;
-  }
-  #home #hero_role {
-    font-size: 14.5px;
-    line-height: 1.6;
-    max-width: 340px;
-    margin-top: 14px;
-  }
-  #home #hero_now {
-    font-size: 11px;
-    padding: 6px 12px 6px 11px;
-    margin-top: 12px;
-  }
-  #home #work-arrow {
-    margin-top: 14px;
-  }
-  #home #work-arrow img {
-    max-width: 240px;
-    height: auto;
-  }
-}
-
-/* Greeting entrance — "Hi" drops in tilted like a dice roll and swings back
-   to normal, "I'm Victor" pops up with a springy settle, the tagline and work
-   arrow fade in. Animations run once and end visible. */
-#home #greet_1,
-#home #greet_2,
-#home #greet_3,
-#home #hero_role,
-#home #hero_now,
-#home #work-arrow {
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-#home #greet_1 {
-  animation-name: greeting-dice;
-  animation-duration: 1.2s;
-  animation-delay: 0.3s;
-}
-
-#home #greet_2 {
-  animation-name: greeting-pop;
-  animation-duration: 0.9s;
-  animation-delay: 1s;
-}
-
-#home #greet_3 {
-  animation-name: greeting-fade-in;
-  animation-duration: 0.4s;
-  animation-delay: 1.9s;
-}
-
-#home #hero_role {
-  animation-name: greeting-fade-in;
-  animation-duration: 0.4s;
-  animation-delay: 2.1s;
-}
-
-#home #hero_now {
-  animation-name: greeting-fade-in;
-  animation-duration: 0.4s;
-  animation-delay: 2.35s;
-}
-
-#home #work-arrow {
-  transform-origin: 50% 5.3%;
-  animation-name: work-flip;
-  animation-duration: 1.2s;
-  animation-delay: 3.7s;
-}
-
-/* Work cmd window — hangs by two strings from fixed points, appears edge-on
-   as a thin line along the strings, then swings down toward the viewer with
-   gravity, overshooting a few damped swings like a sign on strings. Pivot =
-   the string anchor line. */
-@keyframes work-flip {
-  0% {
-    opacity: 1;
-    transform: perspective(900px) rotateX(-90deg);
-  }
-  6% {
-    transform: perspective(900px) rotateX(-90deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.3);
-  }
-  38% {
-    transform: perspective(900px) rotateX(13deg);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
-  }
-  52% {
-    transform: perspective(900px) rotateX(-7deg);
-  }
-  66% {
-    transform: perspective(900px) rotateX(4deg);
-  }
-  78% {
-    transform: perspective(900px) rotateX(-2deg);
-  }
-  88% {
-    transform: perspective(900px) rotateX(0.8deg);
-  }
-  100% {
-    opacity: 1;
-    transform: perspective(900px) rotateX(0deg);
-  }
-}
-
-@keyframes greeting-dice {
-  0% {
-    opacity: 0;
-    transform: translate(-45px, -210px) translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
-  }
-  12% {
-    opacity: 1;
-    transform: translate(-45px, -210px) translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
-    animation-timing-function: cubic-bezier(0.3, 0.1, 0.9, 0.5);
-  }
-  36% {
-    transform: translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
-  }
-  44% {
-    transform: translate(-50%, 50%) rotateZ(-70deg) translate(50%, -50%);
-    animation-timing-function: steps(3, jump-none);
-  }
-  56% {
-    transform: translate(50%, 50%) rotateZ(0deg) translate(-50%, -50%);
-  }
-  64% {
-    transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
-  }
-  70% {
-    transform: translate(50%, 50%) rotateZ(10deg) translate(-50%, -50%);
-    animation-timing-function: ease-out;
-  }
-  79% {
-    transform: translate(-50%, 50%) rotateZ(-5deg) translate(50%, -50%);
-  }
-  87% {
-    transform: translate(50%, 50%) rotateZ(2.5deg) translate(-50%, -50%);
-  }
-  94% {
-    transform: translate(-50%, 50%) rotateZ(-1.5deg) translate(50%, -50%);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 50%) rotateZ(0deg) translate(50%, -50%);
-  }
-}
-
-@keyframes greeting-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) translateY(50px);
-  }
-  55% {
-    opacity: 1;
-    transform: scale(1.07) translateY(-8px);
-  }
-  70% {
-    transform: scale(0.99) translateY(4px);
-  }
-  82% {
-    transform: scale(1.03) translateY(-2.5px);
-  }
-  91% {
-    transform: scale(0.995) translateY(1.2px);
-  }
-  97% {
-    transform: scale(1.008) translateY(-0.6px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes greeting-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #home #greet_1,
-  #home #greet_2,
-  #home #greet_3,
-  #home #work-arrow {
-    opacity: 1;
-    animation: none;
-  }
-  #home #work-arrow img {
-    animation: none;
-  }
-}
-
-/* Mobile hero — gentle slow-zoom on the cover background for depth without a
-   scroll-linked parallax. GPU-composited (transform only), reversible. */
-.mobile-kenburns {
-  animation: mobile-kenburns-zoom 26s ease-in-out infinite alternate;
-  transform-origin: center 38%;
-  will-change: transform;
-}
-
-@keyframes mobile-kenburns-zoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.12);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mobile-kenburns {
-    animation: none;
-    will-change: auto;
-  }
-}
-
-/* Typewriter caret for the hero tagline */
-.typewriter-caret {
+/* Sharp-cornered keys rather than pills — reads as control surface, not call
+   to action bubble. */
+.terminal-hero-btn {
   display: inline-block;
-  margin-left: 3px;
-  color: #26adf4;
-  animation: caret-blink 1s steps(2, start) infinite;
+  padding: 13px 26px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-@keyframes caret-blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
+.terminal-hero-btn.primary {
+  background: #38bdf8;
+  color: #04121e;
+}
+
+.terminal-hero-btn.primary:hover {
+  background: #7dd3fc;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.28);
+}
+
+.terminal-hero-btn.ghost {
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+}
+
+.terminal-hero-btn.ghost:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.07);
+  transform: translateY(-1px);
+}
+
+/* Capability ticker — grounds the composition and states the offer without
+   restating the headline. */
+.terminal-hero-ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 14px 24px;
+  border-top: 1px solid rgba(125, 211, 252, 0.12);
+  background: rgba(5, 7, 10, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.78);
+}
+
+.terminal-hero-ticker span + span::before {
+  content: "/";
+  margin-right: 20px;
+  color: rgba(125, 211, 252, 0.32);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .typewriter-caret {
-    animation: none;
-    opacity: 1;
+  .terminal-hero-btn {
+    transition: none;
+  }
+  .terminal-hero-btn:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .terminal-hero-inner {
+    padding: 118px 20px 108px;
+  }
+  .terminal-hero-title {
+    margin-top: 18px;
+  }
+  .terminal-hero-tag {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+  }
+  .terminal-hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 300px;
+    margin: 34px auto 0;
+  }
+  .terminal-hero-btn {
+    width: 100%;
+  }
+  .terminal-hero-frame {
+    display: none;
+  }
+  .terminal-hero-ticker {
+    gap: 4px 12px;
+    padding: 11px 16px;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+  .terminal-hero-ticker span + span::before {
+    margin-right: 12px;
   }
 }
 
