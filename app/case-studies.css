@@ -1,0 +1,465 @@
+/* ==========================================================================
+   Case studies — Problem → Pipeline → Result
+   --------------------------------------------------------------------------
+   All of the original copy is kept. What changed is the architecture: the
+   cards were 558px wide in a two-up grid, which forced four blocks of prose
+   into one narrow column where they read as an undifferentiated wall. Giving
+   the rail a wider canvas and splitting each card into an identity column
+   and a narrative column lets every block keep its full text while doing a
+   distinct job.
+
+   Desktop scrolls horizontally with snap so each case is engaged with
+   individually; below 860px the rail collapses to a vertical stack, which is
+   the honest mobile behaviour — a sideways swipe is a poor affordance on a
+   phone.
+
+   Dot travel is a whole number of dash periods (24px period, 240px travel) so
+   the loop never seams. Speed is a custom property rather than a second
+   keyframe set, so :hover shortens one variable instead of redeclaring
+   everything.
+   ========================================================================== */
+
+/* --- Rail ---------------------------------------------------------------- */
+/* timeline-scope hoists the rail's named timeline so the progress fill — a
+   sibling of the scroller rather than a descendant of it — can still bind to
+   it. Name lookup only walks up the tree, so without this the fill would have
+   no timeline to reference. */
+.case-rail-scope {
+  timeline-scope: --case-scroll;
+}
+
+.case-rail {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  /* proximity, not mandatory. These cards are text-heavy, and a hard snap
+     yanks the reader back to a card edge when they stop to re-read a line.
+     Proximity still settles onto a card when you land near one, without
+     taking control away. */
+  scroll-snap-type: x proximity;
+  scroll-timeline: --case-scroll inline;
+  /* Line the first card up with the page's 1140px container gutter rather than
+     the viewport edge, so the rail does not look misaligned with the heading
+     above it. scroll-padding keeps snap points on that same line. */
+  padding-inline: max(20px, calc((100% - 1140px) / 2));
+  scroll-padding-inline: max(20px, calc((100% - 1140px) / 2));
+  padding-block: 10px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.4) rgba(255, 255, 255, 0.05);
+}
+
+/* Smooth scrolling is opt-in behind a motion preference: paired with snap it
+   produces long animated scrolls that reduced-motion users find exhausting. */
+@media (prefers-reduced-motion: no-preference) {
+  .case-rail {
+    scroll-behavior: smooth;
+  }
+}
+
+.case-rail:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.case-rail::-webkit-scrollbar {
+  height: 6px;
+}
+
+.case-rail::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.case-rail::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.4);
+  border-radius: 3px;
+}
+
+/* 840 rather than something tighter: at 700px the narrative column fell to
+   ~344px, which wrapped the problem onto 8 lines and the detail onto 9 at
+   43-46 characters per line — narrower than comfortable reading. The wider
+   card buys back the measure and gives the diagram more presence, and still
+   leaves the next card peeking in to advertise the rail. */
+.case-rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(840px, 88vw);
+  gap: 24px;
+}
+
+/* --- Progress + affordance ----------------------------------------------- */
+/* A rail has to advertise that there is more content this way, otherwise it
+   reads as a clipped layout bug. The fill is driven by the rail's own scroll
+   timeline in pure CSS, so there is no scroll listener on the main thread.
+   Where scroll-timeline is unsupported the bar renders full and reads as a
+   static divider rather than a stuck-at-zero gauge. */
+.case-progress {
+  height: 2px;
+  margin-inline: max(20px, calc((100% - 1140px) / 2));
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.case-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.45), #38bdf8);
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+@supports (animation-timeline: scroll()) {
+  .case-progress-fill {
+    animation: case-progress-grow linear both;
+    animation-timeline: --case-scroll;
+  }
+
+  @keyframes case-progress-grow {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.case-hint {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 11px 0 0;
+  padding-inline: max(20px, calc((100% - 1140px) / 2));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.58);
+}
+
+.case-hint i {
+  font-size: 0.75rem;
+  color: rgba(56, 189, 248, 0.75);
+}
+
+/* --- Card ---------------------------------------------------------------- */
+.case-card {
+  --case-dot-dur: 1.6s;
+  --case-dots-in: 0.9s;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 34px;
+  padding: 28px 30px 26px;
+  border-radius: 18px;
+  background: #121216;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #fff;
+  scroll-snap-align: start;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease;
+}
+
+.case-card:hover,
+.case-card:focus-within {
+  --case-dot-dur: 0.55s;
+  transform: translateY(-5px);
+  border-color: rgba(38, 173, 244, 0.55);
+  box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(56, 189, 248, 0.16);
+}
+
+/* --- Identity column ----------------------------------------------------- */
+.case-card-id {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.case-card-id-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.case-card-ord {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+}
+
+.case-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.case-card-sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.65;
+}
+
+.case-card-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(1.375rem, 1.8vw, 1.75rem);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+/* Pinned to the foot of the identity column so the stack lines up across
+   every card in the rail regardless of how long the title runs. */
+.case-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: auto 0 0;
+  padding: 16px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.case-stack li + li {
+  margin-left: 6px;
+}
+
+.case-stack li + li::before {
+  content: "/";
+  margin-right: 6px;
+  color: rgba(148, 163, 184, 0.4);
+}
+
+/* --- Narrative column ---------------------------------------------------- */
+.case-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.case-block {
+  min-width: 0;
+}
+
+/* The two mono labels give the card a scannable spine: the reader can see
+   problem / result framing without reading either paragraph. */
+.case-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.case-problem {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+/* The result is the payoff, so it is the largest type in the card — the
+   number has to win the eye before the supporting copy is read. */
+.case-result {
+  margin: 0 0 10px;
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 2.7vw, 2.375rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.case-detail {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 1px solid rgba(56, 189, 248, 0.32);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(148, 163, 184, 0.86);
+}
+
+/* --- Pipeline diagram ---------------------------------------------------- */
+.case-pipe {
+  margin: 2px 0;
+}
+
+.case-pipe svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.case-pipe-base {
+  fill: none;
+  stroke: rgba(125, 211, 252, 0.22);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 240;
+  stroke-dashoffset: 240;
+  animation: case-pipe-draw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes case-pipe-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 0.1 dash + 23.9 gap = 24px period, rendered round by the linecap, so the
+   stream reads as discrete dots travelling along the rail. */
+.case-pipe-dots {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 23.9;
+  opacity: 0;
+  animation: case-pipe-dots-in 0.5s linear var(--case-dots-in) forwards, case-pipe-run var(--case-dot-dur) linear var(--case-dots-in) infinite;
+}
+
+@keyframes case-pipe-dots-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes case-pipe-run {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+.case-seg-late {
+  --case-dots-in: 1.15s;
+}
+
+.case-seg-late .case-pipe-base {
+  animation-delay: 0.2s;
+}
+
+.case-pipe-node {
+  fill: #0b0d11;
+  stroke: #38bdf8;
+  stroke-width: 2;
+}
+
+.case-pipe-ring {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: case-pipe-ring-pulse 3s ease-out infinite;
+}
+
+.case-pipe-ring-b {
+  animation-delay: 0.4s;
+}
+
+.case-pipe-ring-c {
+  animation-delay: 0.8s;
+}
+
+@keyframes case-pipe-ring-pulse {
+  0% {
+    transform: scale(0.45);
+    opacity: 0.5;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+.case-pipe-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  fill: rgba(148, 163, 184, 0.85);
+  text-anchor: middle;
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* Below this width a sideways rail is a poor affordance, so the same cards
+     become a plain vertical stack and the container gutter is dropped. */
+  .case-rail {
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-inline: 0;
+  }
+
+  /* Nothing scrolls sideways here, so the progress gauge and its hint would
+     be describing an interaction that no longer exists. */
+  .case-progress,
+  .case-hint {
+    display: none;
+  }
+
+  .case-rail-track {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .case-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 24px 22px 22px;
+    border-radius: 16px;
+  }
+
+  /* The 600-unit viewBox scales to roughly half size on a phone, so the node
+     labels are enlarged in SVG units to stay legible once scaled down. */
+  .case-pipe-label {
+    font-size: 21px;
+    letter-spacing: 0.02em;
+  }
+
+  .case-stack {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-pipe-base {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .case-pipe-dots {
+    animation: none;
+    opacity: 0.9;
+  }
+
+  .case-pipe-ring {
+    animation: none;
+  }
+}

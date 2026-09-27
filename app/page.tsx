@@ -7,6 +7,9 @@ import { handleAnchorClick } from "./lib/scroll";
 import SkillCard from "./components/SkillCard";
 import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
+import AmpText from "./components/AmpText";
+import CaseStudyCard from "./components/CaseStudyCard";
+import { caseStudies } from "./lib/caseStudies";
 
 const CONTACT_EMAIL = "contact@victorsenie.com";
 
@@ -305,20 +308,6 @@ function openImagePreview(e: MouseEvent<HTMLElement>, project: WorkProject) {
 		color: "#e8e8ec",
 		customClass: { title: "swal-shot-title", confirmButton: "swal-shot-btn" },
 	});
-} // The Hype font has no "&" glyph (it renders blank), so ampersands get a
-// span that falls back to the site's mono font.
-function AmpText({ text }: { text: string }) {
-	const parts = text.split("&");
-	return (
-		<>
-			{parts.map((part, i, all) => (
-				<Fragment key={i}>
-					{part}
-					{i < all.length - 1 && <span className="amp">&amp;</span>}
-				</Fragment>
-			))}
-		</>
-	);
 } // Bento grid of a company's showcased projects: asymmetric card spans, a mono
 // category tag, title, short snippet and a visit link.
 function ProjectBento({ entry, index }: { entry: WorkEntry; index: number }) {
@@ -399,6 +388,39 @@ function WorkSection() {
 						</span>
 					</a>
 				</footer>
+			</div>
+		</section>
+	);
+} // Case studies — a horizontal rail on desktop so each case is engaged with
+// on its own rather than skimmed in a long column, collapsing to a vertical
+// stack on mobile. The rail is focusable so it can be scrolled from the
+// keyboard, which a scrollable region must be to satisfy WCAG 2.1.1.
+function CaseStudiesPreview() {
+	return (
+		<section id="case-studies" className="section work">
+			<div className="bootstrap-container">
+				<header className="work-header">
+					<span className="work-kicker">{"// 02 — case studies"}</span>
+					<h1 className="work-title">Case studies</h1>
+					<p className="work-lede">
+						Problem, pipeline, result — the mechanics behind the deliverables. Scroll the rail to move through them one at a time.
+					</p>
+				</header>
+			</div>
+			<div className="case-rail-scope">
+				<div className="case-rail" role="region" aria-label="Case studies" tabIndex={0}>
+					<div className="case-rail-track">
+						{caseStudies.map((study, i) => (
+							<CaseStudyCard key={study.slug} study={study} index={i} />
+						))}
+					</div>
+				</div>
+				<div className="case-progress" aria-hidden="true">
+					<span className="case-progress-fill" />
+				</div>
+				<p className="case-hint">
+					<i className="fa fa-long-arrow-right" aria-hidden="true" /> Scroll for more
+				</p>
 			</div>
 		</section>
 	);
@@ -947,6 +969,7 @@ export default function HomePage() {
 			<Navigation />
 			<TerminalHero />
 			<WorkSection />
+			<CaseStudiesPreview />
 			<section id="about" className="pt-5 pb-20 bg-white">
 				<div className="bootstrap-container">
 					<div className="page-header">
