@@ -935,8 +935,126 @@ p {
   }
 }
 
+/* Living plumbing — the claim above, drawn. Sits in normal flow between the
+   headline and the sub-headline, in the band the brief called for. The trace
+   draws itself in once, then a dash stream runs along it: the connection gets
+   made, and only then does data start moving. */
+.pipe {
+  width: 100%;
+  max-width: 1100px;
+  margin: 44px auto 0;
+  pointer-events: none;
+}
+
+.pipe svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* 1400 comfortably exceeds the ~1150 trace length, so the dash hides the whole
+   path before the reveal begins. */
+.pipe-base {
+  fill: none;
+  stroke: rgba(125, 211, 252, 0.24);
+  stroke-width: 1.5;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: pipe-draw 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+@keyframes pipe-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dash period is 4 + 16 = 20px; the offset travels 10 whole periods so the
+   loop has no visible seam. */
+.pipe-flow {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 4 16;
+  opacity: 0;
+  animation: pipe-stream 0.6s linear 1.65s forwards, pipe-flow-move 1.2s linear 1.65s infinite;
+}
+
+@keyframes pipe-stream {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pipe-flow-move {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+.pipe-node {
+  fill: #05070a;
+  stroke: #38bdf8;
+  stroke-width: 2;
+}
+
+.pipe-ring {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pipe-ring-pulse 3s ease-out infinite;
+}
+
+@keyframes pipe-ring-pulse {
+  0% {
+    transform: scale(0.45);
+    opacity: 0.5;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* Dashed drop from each node to a shared label baseline — schematic, so the
+   labels read as annotations on the trace rather than free-floating captions. */
+.pipe-leader {
+  stroke: rgba(125, 211, 252, 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.pipe-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 17px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(148, 163, 184, 0.85);
+  text-anchor: middle;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pipe-base {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .pipe-flow {
+    animation: none;
+    opacity: 0.5;
+  }
+  .pipe-ring {
+    animation: none;
+  }
+}
+
 .terminal-hero-sub {
-  margin: 26px auto 0;
+  margin: 40px auto 0;
   max-width: 56ch;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "SF Mono", monospace;
   font-size: clamp(0.875rem, 1.3vw, 1rem);
@@ -1039,6 +1157,37 @@ p {
   }
   .terminal-hero-title {
     margin-top: 18px;
+  }
+  /* The SVG scales with its container, so at ~350px wide a 17px label lands
+     near 4px. Scaling the type up in viewBox units — and the strokes with it —
+     keeps the four labels legible instead of hiding them. */
+  .pipe {
+    margin-top: 30px;
+  }
+  .pipe-label {
+    font-size: 34px;
+  }
+  .pipe-leader {
+    stroke-width: 2.5;
+  }
+  .pipe-base {
+    stroke-width: 3.5;
+  }
+  .pipe-flow {
+    stroke-width: 6;
+    stroke-dasharray: 9 34;
+  }
+  @keyframes pipe-flow-move {
+    to {
+      stroke-dashoffset: -430;
+    }
+  }
+  .pipe-node {
+    stroke-width: 4;
+    r: 11;
+  }
+  .pipe-ring {
+    stroke-width: 3.5;
   }
   .terminal-hero-tag {
     font-size: 10.5px;

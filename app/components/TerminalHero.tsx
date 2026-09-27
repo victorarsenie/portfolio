@@ -1,4 +1,5 @@
 import { handleAnchorClick } from "../lib/scroll";
+import PipelineFlow from "./PipelineFlow";
 
 const CAPABILITIES = ["data sync", "legacy migration", "integration", "automation", "monitoring"];
 
@@ -16,6 +17,8 @@ export default function TerminalHero() {
 				</p>
 
 				<h1 className="terminal-hero-title">I make systems talk to each other.</h1>
+
+				<PipelineFlow />
 
 				<p className="terminal-hero-sub">
 					I&rsquo;m the one other teams call when billing, backups, and support data refuse to line up. I build
