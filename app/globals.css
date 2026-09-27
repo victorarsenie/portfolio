@@ -862,19 +862,20 @@ p {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
-  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
-  color: #f8fafc;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: #ffffff;
 }
 
 .terminal-hero-sub {
   margin: 28px auto 0;
-  max-width: 620px;
+  max-width: 640px;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "SF Mono", monospace;
   font-size: clamp(0.875rem, 1.35vw, 1rem);
   line-height: 1.75;
-  color: rgba(226, 232, 240, 0.72);
+  letter-spacing: 0.03em;
+  color: rgba(226, 232, 240, 0.65);
 }
 
 .terminal-hero-caret {
