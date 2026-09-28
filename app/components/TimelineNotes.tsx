@@ -1,13 +1,24 @@
-// The two timeline entries that are not case studies. They break the alternating
-// rhythm deliberately — a full-width card in the middle of a left/right cadence
-// reads as a change of voice rather than as another item in the list, which is
-// what both of these are.
+// The three timeline entries that are not case studies: what is being built
+// now, what the person is, and what is planned but not built. They break the
+// alternating rhythm deliberately — a full-width card in the middle of a
+// left/right cadence reads as a change of voice rather than as another item in
+// the list, which is what all three are.
 
+// Three entries, not four. The first three are work that actually happened:
+// route parity, typed facades over the untyped models, and session bridging
+// between PHP and Next.js middleware. The fourth — a strangler-pattern cutover
+// plan — was invented to fill a slot and has been removed, along with the
+// "40+ legacy controllers" count, which was never more than a guess at a
+// number. Padding to a round four would have meant a visitor could check one
+// claim, find nothing, and discount the other three with it.
+//
+// No dates, and no "Week N" either: the sequence is real but the timeline
+// around it is not something to assert. If a date becomes worth having, it
+// should come from the commit log rather than from here.
 const BUILDING_LOGS = [
-	"Routing parity across 40+ legacy controllers",
-	"Typed facades over untyped CI models",
-	"Session bridging between PHP and Next.js middleware",
-	"Cutover plan: strangler pattern, route by route",
+	"Route parity between the CodeIgniter front controller and the Next.js app router",
+	"Typed facades wrapping untyped CodeIgniter models",
+	"Session bridging between PHP sessions and Next.js middleware",
 ];
 
 // The personal data CMS, as a plan rather than a result. It is listed here
@@ -100,13 +111,16 @@ export function BuildingEntry() {
 
 			<div className="case-card-body">
 				<p className="case-build-copy">
-					Documenting the process of modernizing a legacy codebase.
+					Moving a legacy CodeIgniter codebase to Next.js and TypeScript — route by route, documenting
+					what each step actually cost. This site is the same work: every case study above was
+					rewritten into the stack it now runs on.
 				</p>
 
 				{/* A running log rather than a result: this work has no finished
 				    metric to quote yet, and inventing one would be worse than
-				    showing where it actually is. No dates — the milestones are
-				    real but the timeline around them is not something to guess at. */}
+				    showing where it actually is. The dashed border above and
+				    the note below both say so, so the card cannot be mistaken
+				    for delivered work. */}
 				<ol className="case-build-log">
 					{BUILDING_LOGS.map(entry => (
 						<li key={entry}>{entry}</li>
@@ -119,8 +133,8 @@ export function BuildingEntry() {
 				    instead, and will become a link when there is something to
 				    point at. */}
 				<p className="case-build-soon">
-					<i className="fa fa-pencil" aria-hidden="true" /> Notes still being
-					written — nothing published yet.
+					<i className="fa fa-pencil" aria-hidden="true" /> In progress, nothing published
+					yet. No public migration-notes repo — this becomes a link when there is one.
 				</p>
 			</div>
 		</article>

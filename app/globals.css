@@ -86,12 +86,49 @@ a:focus-visible:not(:focus-visible) {
   --font-sans: var(--font-display);
 }
 
+/* Hype ships BLANK OUTLINES - not missing glyphs - for every digit and for
+   # $ % & ( ) * + / < = > . A missing codepoint would make the browser fall
+   through to the next family in the stack, but a codepoint that maps to an
+   empty outline counts as "found", so nothing falls back and the browser just
+   paints nothing. That is why "175 t/s on one consumer GPU" rendered with a
+   blank where the number and the slash should be, and "Billing = provisioning"
+   lost its equals sign, while the same characters were fine in
+   .case-figure-value (already Glacial).
+
+   Verified by ink width, not by advance width: all the blank glyphs report the
+   identical 22.79px notdef advance, so a width comparison says "present" and
+   is exactly the test that got this wrong the first time. actualBoundingBox
+   width of 0 is the signal that a glyph paints nothing.
+
+   The fix is a two-face composite under one family name, partitioned by
+   unicode-range, so the browser picks per character: Hype for the letters it
+   actually draws, Glacial for the numbers and signs it does not. This is
+   site-wide and needs no per-element opt-out, so a future metric starting with
+   a digit is covered too. Glacial is the fallback because it is already the
+   site's body face and its figures are what .case-figure-value already shows,
+   so the numbers match the supporting data underneath them.
+
+   Ranges are exact complements, so no codepoint is served twice or dropped:
+     Hype    : U+0-22, U+27, U+2C-2E, U+3A-3B, U+3F-10FFFF
+     Glacial : U+23-26, U+28-2B, U+2F-39, U+3C-3E                                     */
 @font-face {
   font-family: "Hype";
   src: url(/fonts/HYPE.ttf) format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0-22, U+27, U+2C-2E, U+3A-3B, U+3F-10FFFF;
+}
+
+/* Same family name on purpose: this is not a fallback in the stack, it is the
+   other half of the composite above. */
+@font-face {
+  font-family: "Hype";
+  src: url(/fonts/GlacialIndifference-Regular.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+23-26, U+28-2B, U+2F-39, U+3C-3E;
 }
 
 @font-face {
@@ -116,6 +153,12 @@ a:focus-visible:not(:focus-visible) {
 html, body {
   height: 100%;
   font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  /* Justify is inherited by every descendant that doesn't override it, which
+     quietly stretched any wrapped heading into word rivers. The narrow
+     `.lead` and `.skills-heading` blocks below genuinely want it; short
+     titles and card headers never do. Kept here as the legacy default and
+     overridden where it hurts - see `.work-lede`, `.bento-solution` and
+     `.case-card` in case-studies.css. */
   text-align: justify;
   background: #ffffff;
   color: #171717;
@@ -1484,11 +1527,21 @@ p {
 
 .work-title {
   font-family: "Hype", serif;
-  font-size: clamp(52px, 8vw, 96px);
+  /* Was clamp(52px, 8vw, 96px), which resolved to exactly the hero H1's
+     maximum - a two-word section label shouting as loud as the site's one
+     real headline. Sits in a 720px column, so at 96px it also left a large
+     empty right half. Now a clear step below the hero (48-96px) and below
+     .contact-title, and closer to the 720px measure it actually occupies. */
+  font-size: clamp(40px, 5.2vw, 64px);
   font-weight: 500;
-  line-height: 1.02;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
   color: #ffffff;
-  margin: 0 0 28px;
+  margin: 0 0 24px;
+  /* Left, not the inherited justify. "My work" is one line so nothing shows
+     today, but a heading this size that ever wraps would stretch its first
+     line edge to edge, and the fix is cheaper now than after a copy edit. */
+  text-align: left;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 

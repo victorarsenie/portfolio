@@ -125,10 +125,20 @@
 /* --- Card ---------------------------------------------------------------- */
 /* Billboard proportions: one column, header across the top, metric as the only
    large element. The paragraphs that used to sit here now live in the drawer,
-   which is why the card can afford to be short. */
+   which is why the card can afford to be short.
+
+   text-align: left is load-bearing, not cosmetic. globals.css sets
+   `html, body { text-align: justify }`, which every card header inherited: a
+   two-line title had its first line stretched edge to edge, opening rivers
+   between words that read as a gap inside the title. The full-width About and
+   Roadmap cards were the worst case, at 1240px of text. This is the same
+   inheritance bug the .work-lede and .bento-solution rules already opt out of,
+   and it is set on the card rather than the header so the whole surface,
+   including the drawer, is left-aligned. */
 .case-card {
   display: flex;
   flex-direction: column;
+  text-align: left;
   gap: 20px;
   padding: 26px 30px 24px;
   border-radius: 18px;
@@ -150,7 +160,9 @@
 .case-card-id {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* 12px was enough to read as a separate band; tightened so the meta row and
+     the title read as one header block rather than two floating elements. */
+  gap: 8px;
   min-width: 0;
 }
 
@@ -180,13 +192,18 @@
   opacity: 0.65;
 }
 
+/* The title is the card's heading and now also its largest type. It used to
+   be 1.375-1.75rem (25.92px at 1440) while .case-result below was 38.88px, so
+   the card shouted its metric and relegated the project's name to a subtitle -
+   backwards for something whose job is to name the work. */
 .case-card-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.375rem, 1.8vw, 1.75rem);
-  line-height: 1.14;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 2.1vw, 2.125rem);
+  line-height: 1.12;
+  letter-spacing: -0.08em;
   color: #fff;
+  text-align: left;
   text-wrap: balance;
 }
 
@@ -222,18 +239,40 @@
   color: rgba(226, 232, 240, 0.88);
 }
 
-/* The result is the payoff, so it is the largest type in the card — the
-   number has to win the eye before the supporting copy is read.
-   vw tracks the card width closely here (a card is about half the canvas, and
-   both scale with the viewport), so the ceiling is set high enough to keep
-   growing on a large display rather than pinning every card at one size. */
+/* The result is the payoff, and it is still the loudest thing in the body -
+   but it is no longer the loudest thing on the card. It used to run
+   clamp(1.75rem, 2.7vw, 3.25rem), which at 1440 was 38.88px against a 25.92px
+   title: a one-and-a-half-times inversion that made the project name read as a
+   caption on its own outcome. It now sits just under the title, which puts the
+   card's hierarchy in the order a reader needs it - what this was, then what
+   it moved.
+
+   vw still tracks the card width closely (a card is about half the canvas, and
+   both scale with the viewport), so the ceiling keeps growing on a large
+   display rather than pinning every card at one size.
+
+   No `text-wrap: balance` change: balance is right here and stays. These
+   metrics are 2-4 words in a 590px column, and balance keeps every one to two
+   lines without stranding a word - plain greedy wrapping filled line 1 to
+   551px and left "server" alone on line 2, which measured worse on all three
+   counts (step, orphan, and the two lines reading as unrelated).
+
+   One alignment note that CSS cannot fix, recorded so it is not rediscovered:
+   Hype's caps overhang left of the text origin by 3-6px while its digits sit
+   flush, so a digit-leading metric in a cap-leading card is optically indented
+   against the title. "0 raw files opened" under "Property ingestion pipeline"
+   measured 5px right of the title's ink edge. Changing the metric to "Zero raw
+   files opened" pulls it to -2px, i.e. aligned. It is a copy constraint, not a
+   style one: a new metric starting with a digit in a card whose title starts
+   with a capital will drift right by that much again. */
 .case-result {
   margin: 0 0 10px;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2.7vw, 3.25rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
+  font-size: clamp(1.375rem, 1.9vw, 1.9375rem);
+  line-height: 1.1;
+  letter-spacing: -0.08em;
   color: #fff;
+  text-align: left;
   text-wrap: balance;
 }
 
@@ -770,6 +809,12 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  /* The drawer is the card's expanded detail, so it must read as one system
+     with it. It is rendered as a single instance outside the card grid
+     (page.tsx), so it never receives .case-card's text-align: left and would
+     otherwise inherit the justified text-align that html/body set in
+     globals.css - which is what opened rivers in the prose. Match the card. */
+  text-align: left;
 }
 
 .case-drawer-head {
@@ -799,7 +844,7 @@
   font-family: var(--font-display);
   font-size: clamp(1.25rem, 2vw, 1.5rem);
   line-height: 1.2;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.08em;
   color: #fff;
   text-wrap: balance;
 }

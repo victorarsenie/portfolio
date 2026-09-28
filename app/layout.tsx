@@ -11,9 +11,18 @@ import "./font-awesome.min.css";
 
 export const metadata: Metadata = {
   title: "Victor Arsenie - Full-Stack Developer & Systems Integrator",
+  // This description is what a search result and a link preview show, so it
+  // has to be true on its own rather than by reference to the page. It said
+  // "Ten years of WHMCS extensions", which was a claim retracted on the site
+  // and unsupported here. It now says what the work is, and leads with the
+  // local-AI angle the case studies are actually about.
   description:
-    "I make disconnected systems talk. Ten years of WHMCS extensions, multi-API orchestration and automated data pipelines - billing platforms, backup software, DNS and support desks wired together.",
-  authors: [{ name: "Victor Alexandru" }],
+    "I wire billing platforms, backup software, DNS and support desks together so data in one shows up in the others - and I run the local LLM stack that does the migrating, on my own GPU.",
+  // Victor Arsenie, not Alexandru. Both appear in the source material; the
+  // site's own contact block and the git remote both use Arsenie, and a
+  // metadata author that disagrees with the page it describes is a small
+  // correctness bug rather than a style choice.
+  authors: [{ name: "Victor Arsenie" }],
   keywords: [
     "full-stack developer",
     "systems integrator",
@@ -21,6 +30,8 @@ export const metadata: Metadata = {
     "WHMCS developer",
     "PHP developer",
     "data pipelines",
+    "legacy modernisation",
+    "local LLM",
     "Next.js",
   ],
   icons: {

@@ -130,7 +130,13 @@ export const caseStudies: CaseStudy[] = [
 		year: "2016",
 		nodes: ["XML feeds", "Reconcile", "Live database"],
 		topology: "chain",
-		metric: "0 raw files opened",
+		// Spelled out rather than "0 raw files opened". Same number, and the
+		// zero is the point either way, but a digit-leading metric is optically
+		// indented against this card's capital-P title: Hype's caps overhang the
+		// text origin by 5px and its digits sit flush, which measured the
+		// result 5px right of the title's ink edge. "Zero" gives it a cap to
+		// match and lands at -2px. See the .case-result note in case-studies.css.
+		metric: "Zero raw files opened",
 		chips: ["Deduplication", "Schema normalization", "Cron scheduling"],
 		tech: ["PHP", "MySQL", "XML parsing", "Cron"],
 		link: "http://www.nkres.co.uk/",

@@ -2,7 +2,7 @@ import AmpText from "./AmpText";
 import PipelineDiagram from "./PipelineDiagram";
 import type { CaseStudySummary } from "../lib/caseStudies";
 
-// A billboard, deliberately. On the timeline it competes vertically with six
+// A billboard, deliberately. On the timeline it competes vertically with ten
 // other entries, so it gets one job: say what this was and what it moved, at a
 // glance. The diagram carries the mechanics, the metric is the largest thing on
 // the card, and every paragraph lives in the drawer — which is why this
@@ -17,7 +17,7 @@ export default function CaseStudyCard({
 }) {
 	return (
 		// case-entry-card is what the timeline's alternation rule keys on, so it
-		// has to be here and not only on the two non-case-study entries.
+		// has to be here and not only on the three non-case-study entries.
 		<article className="case-card case-entry-card">
 			{/* Header — what it was called, and when. Client is kept because the
 			    section spans two employers and the split is the point of it. */}
@@ -30,7 +30,7 @@ export default function CaseStudyCard({
 				{/* The project title stays the heading element even though the metric
 				    is what the eye lands on. Headings are the document outline: a
 				    screen reader listing this section should read "Property ingestion
-				    pipeline", not "0 raw files opened". */}
+				    pipeline", not "Zero raw files opened". */}
 				<h3 className="case-card-title">
 					<AmpText text={study.title} />
 				</h3>
