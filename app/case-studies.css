@@ -43,6 +43,16 @@
   padding-block: 6px 4px;
 }
 
+/* The page container is 1170px at ≥1200px; the fluid canvas above bled past it,
+   so the cards sat wider than the header and everything else. Cap the canvas to
+   the container and match its 15px inset so the cards line up with the header. */
+@media (min-width: 1200px) {
+  .case-timeline {
+    max-width: 1170px;
+    padding-inline: 15px;
+  }
+}
+
 .case-timeline::before {
   content: "";
   position: absolute;
@@ -423,6 +433,77 @@
 
 .case-more:hover .fa {
   transform: translateX(3px);
+}
+
+/* --- Slim row ------------------------------------------------------------
+   The studies that are not featured. Same timeline slot and same drawer on the
+   far side, but no diagram, chips or tech line - one compact strip that names
+   the work, says what moved, and points at the drawer for the rest. It keeps
+   the case-entry-card class so it lands on the same alternating rail as the
+   full cards rather than spanning the line. */
+.case-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 22px;
+  text-align: left;
+  background: #121216;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  color: #fff;
+  transition: border-color 0.25s ease, box-shadow 0.3s ease;
+}
+
+.case-row:hover,
+.case-row:focus-within {
+  border-color: rgba(38, 173, 244, 0.4);
+  box-shadow: 0 14px 32px -20px rgba(0, 0, 0, 0.7);
+}
+
+.case-row-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.case-row .case-card-meta {
+  margin-bottom: 4px;
+}
+
+.case-row-title {
+  margin: 0 0 2px;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.2;
+  letter-spacing: -0.05em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.case-row-metric {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.78);
+}
+
+/* The full card pins its trigger to the bottom of a tall column with
+   margin-top: auto; in a row there is no column to pin to, so it centres. */
+.case-row-more {
+  flex: 0 0 auto;
+  margin-top: 0;
+  align-self: center;
+}
+
+@media (max-width: 640px) {
+  .case-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .case-row-more {
+    align-self: flex-start;
+  }
 }
 
 /* --- Pipeline diagram ---------------------------------------------------- */

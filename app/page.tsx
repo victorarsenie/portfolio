@@ -9,11 +9,15 @@ import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
 import AmpText from "./components/AmpText";
 import CaseStudyCard from "./components/CaseStudyCard";
+import CaseStudyRow from "./components/CaseStudyRow";
 import CaseStudyDrawer from "./components/CaseStudyDrawer";
 import { AboutEntry, BuildingEntry, RoadmapEntry } from "./components/TimelineNotes";
-import { caseStudiesByRecency } from "./lib/caseStudies";
+import { caseStudiesByRecency, featuredCaseStudies } from "./lib/caseStudies";
 
 const CONTACT_EMAIL = "contact@victorsenie.com";
+
+// Lead (featured) studies lead the timeline; the rest follow in recency order.
+const restCaseStudies = caseStudiesByRecency.filter(study => !study.featured);
 
 // TypeScript interfaces for component props
 interface ContactFormData {
@@ -433,7 +437,7 @@ function CaseStudiesPreview() {
 					<h1 className="work-title">Case studies</h1>
 					<p className="work-lede">
 						Ten case studies — the local LLM stack, the client builds across two employers,
-						the early protocol work, and the 2015 start. Problem, plumbing, result. Newest first.
+						the early protocol work, and the 2015 start. Problem, plumbing, result. Lead studies first.
 					</p>
 				</header>
 			</div>
@@ -442,15 +446,22 @@ function CaseStudiesPreview() {
 			    the sequence is conveyed by the markup rather than by CSS, and a
 			    screen reader gets the timeline in the order it reads. */}
 			<ol className="case-timeline">
-				{caseStudiesByRecency.map(study => (
-					<li className="case-entry" key={study.slug}>
-						<span className="case-entry-dot" aria-hidden="true" />
+			{[...featuredCaseStudies, ...restCaseStudies].map(study => (
+				<li className="case-entry" key={study.slug}>
+					<span className="case-entry-dot" aria-hidden="true" />
+					{study.featured ? (
 						<CaseStudyCard
 							study={study}
 							onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
 						/>
-					</li>
-				))}
+					) : (
+						<CaseStudyRow
+							study={study}
+							onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
+						/>
+					)}
+				</li>
+			))}
 
 				{/* Full width, and last of the delivered work: a change of voice
 				    rather than another entry. */}

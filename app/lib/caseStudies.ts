@@ -71,6 +71,10 @@ export interface CaseStudyDetails {
 }
 
 export type CaseStudy = CaseStudySummary & {
+	/** The four the case-study section leads with; the rest stay billboard rows.
+	    Curation marker for the timeline lead/row split - inert until that layout
+	    lands, but it names the lead set in one place. */
+	featured?: boolean;
 	/** Optional: an entry may be a billboard with nothing to expand (KeyElement),
 	    in which case the card renders without a "Read case study" trigger. */
 	details?: CaseStudyDetails;
@@ -86,6 +90,7 @@ export const caseStudies: CaseStudy[] = [
 		// of the timeline on its own - not as an employer entry, but as the
 		// current chapter.
 		slug: "local-llm-setup",
+		featured: true,
 		title: "A local LLM stack tuned to one GPU",
 		client: "Ongoing research",
 		year: "2026",
@@ -157,6 +162,7 @@ export const caseStudies: CaseStudy[] = [
 	},
 	{
 		slug: "property-ingestion",
+		featured: true,
 		title: "Property ingestion pipeline",
 		client: "Iceberg Digital",
 		year: "2016",
@@ -262,6 +268,7 @@ export const caseStudies: CaseStudy[] = [
 	},
 	{
 		slug: "billing-logic",
+		featured: true,
 		title: "Bespoke billing logic",
 		client: "CWCS",
 		year: "2017–2021",
@@ -290,6 +297,7 @@ export const caseStudies: CaseStudy[] = [
 	},
 	{
 		slug: "backup-tickets",
+		featured: true,
 		title: "Backup state in support tickets",
 		client: "CWCS",
 		year: "2017–2021",
@@ -384,3 +392,9 @@ export const caseStudies: CaseStudy[] = [
 export const caseStudiesByRecency = [...caseStudies].sort(
 	(a, b) => parseInt(b.year, 10) - parseInt(a.year, 10),
 );
+
+/**
+ * The lead set, in array order (not recency) - a deliberate list, not a sort
+ * side effect. Consumed by the timeline layout once the lead/row split lands.
+ */
+export const featuredCaseStudies = caseStudies.filter(study => study.featured);
