@@ -13,7 +13,9 @@ export default function CaseStudyCard({
 	onOpen,
 }: {
 	study: CaseStudySummary;
-	onOpen: () => void;
+	/** Omitted when the study has no drawer (KeyElement) - the card then renders
+	    without the trigger, which is how the absence reads. */
+	onOpen?: () => void;
 }) {
 	return (
 		// case-entry-card is what the timeline's alternation rule keys on, so it
@@ -71,15 +73,17 @@ export default function CaseStudyCard({
 					<p className="case-tech">{study.tech.join("  •  ")}</p>
 				</div>
 
-				<button
-					type="button"
-					className="case-more"
-					onClick={onOpen}
-					aria-haspopup="dialog"
-				>
-					Read case study
-					<i className="fa fa-long-arrow-right" aria-hidden="true" />
-				</button>
+				{onOpen && (
+					<button
+						type="button"
+						className="case-more"
+						onClick={onOpen}
+						aria-haspopup="dialog"
+					>
+						Read case study
+						<i className="fa fa-long-arrow-right" aria-hidden="true" />
+					</button>
+				)}
 			</div>
 		</article>
 	);

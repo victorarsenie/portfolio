@@ -1,7 +1,7 @@
 // Case studies — the proof layer. Every entry is a real deliverable, recast
 // into a Problem → Pipeline → Result shape so the reader sees the mechanics
-// rather than a job title. Seven client builds across two employers, plus the
-// local LLM work that all of them now run through.
+// rather than a job title. Seven client builds across two employers, the early
+// xHumanity protocol work, the 2015 start at KeyElement, and the local LLM work.
 //
 // Each record is split in two, because the card and the drawer do different
 // jobs. The summary is the billboard: what it was called, what it moved, what it
@@ -70,7 +70,11 @@ export interface CaseStudyDetails {
 	stackGrouped?: Partial<TechGroup>;
 }
 
-export type CaseStudy = CaseStudySummary & { details: CaseStudyDetails };
+export type CaseStudy = CaseStudySummary & {
+	/** Optional: an entry may be a billboard with nothing to expand (KeyElement),
+	    in which case the card renders without a "Read case study" trigger. */
+	details?: CaseStudyDetails;
+};
 
 const CWCS = "https://www.cwcs.co.uk/";
 
@@ -121,6 +125,34 @@ export const caseStudies: CaseStudy[] = [
 				data: ["Throughput curves", "VRAM budget maps", "Context-length sweeps"],
 				infra: ["llama.cpp", "GGUF", "CUDA", "RTX 5070 Ti 16 GB", "OpenAI-compatible API"],
 			},
+		},
+	},
+	{
+		// Core-team work, not a client build, so it sits outside the "two
+		// employers" frame the rest of the timeline runs on. Recent and senior
+		// but the least substantive entry, and it shipped nothing publicly, so
+		// the copy is about what was done - whitepaper, UI/UX, coordination -
+		// not what the protocol achieved.
+		slug: "xhumanity",
+		client: "xHumanity",
+		year: "2021–2023",
+		title: "Protocol whitepaper and product design",
+		metric: "Whitepaper, UI/UX and team coordination",
+		// A chain, not a sync or cycle: the spec was written, then turned into
+		// flows, then the team ran against both. There is no feedback loop to
+		// draw, so the two-way topologies would overstate the shape.
+		nodes: ["Whitepaper", "UI/UX flows", "Distributed team"],
+		topology: "chain",
+		chips: ["Technical writing", "UI/UX architecture", "Distributed team coordination", "System design"],
+		tech: ["Vue.js"],
+		link: "",
+		details: {
+			problem:
+				"The project was a decentralized identity protocol aimed at reputation, privacy and reducing disinformation - funded at $150k+ before anything was public. The gap was between a protocol that is hard to explain and a product people could trust: the whitepaper had to be right, and the interface had to make it feel obvious.",
+			pipeline:
+				"I was on the core team from early on and worked across the product rather than one slice: contributing to the technical whitepaper so the documented behaviour matched the protocol, designing the UI/UX flows against the cryptographic constraints it set, and coordinating the distributed development team - recruiting, onboarding and giving technical direction to developers working from overseas.",
+			outcome:
+				"The protocol reached a funded, staffed build - a whitepaper that documented the system, UI/UX flows that carried it to an interface, and a remote team moving against both. It never shipped publicly; the project ran into management problems, not engineering ones. So the work lives as the whitepaper and the design, and there is nothing to link to.",
 		},
 	},
 	{
@@ -305,6 +337,35 @@ export const caseStudies: CaseStudy[] = [
 				core: ["Cloudflare API", "cPanel / WHMCS"],
 				data: ["DNS zone automation"],
 				infra: ["SSL provisioning", "Event-driven hooks"],
+			},
+		},
+	},
+	{
+		// Six months, but a full arc: hand-built front-ends wired into a bespoke
+		// modular CMS the client could then drive itself. The drawer is real, not
+		// invented - the projects (VW Ireland, Tom Murphy, Pivotal, Grace) are
+		// documented on the original site's projects page.
+		slug: "keyelement",
+		client: "KeyElement",
+		year: "2015",
+		title: "Bespoke-CMS client sites",
+		metric: "Hand-built, CMS-wired",
+		nodes: ["Built from scratch", "Modular CMS", "Client-editable"],
+		topology: "chain",
+		chips: ["Modular CMS", "Dynamic navigation", "Drag-and-drop modules"],
+		tech: ["HTML5/CSS3", "jQuery", "PHP", "MySQL"],
+		link: "http://www.keyelement.co.uk/",
+		details: {
+			problem:
+				"The clients - car dealers and a corporate finance and aftersales section - wanted fully responsive sites they could update themselves, not hand off a design and wait on a developer. The in-house CMS was bespoke, so every build had to be hand-wired into its own modular page composition.",
+			pipeline:
+				"Each site was built from scratch, then integrated into the CMS so the client could add, edit and reorder pages and modules - dragging them to a new order. Navigation was generated from the CMS rather than hardcoded, and content ran through carousels, accordions, galleries, iframes and video modals.",
+			outcome:
+				"A set of client-managed responsive sites - Volkswagen Ireland Finance and Aftersales, Tom Murphy Car Sales, Pivotal Defense and Grace Consulting - where the client adds pages, reorders modules and updates content in the CMS rather than raising a ticket.",
+			stackGrouped: {
+				core: ["HTML5", "CSS3", "JavaScript", "jQuery"],
+				data: ["PHP", "MySQL"],
+				infra: ["AJAX", "JSON"],
 			},
 		},
 	},

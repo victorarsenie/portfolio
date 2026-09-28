@@ -432,8 +432,8 @@ function CaseStudiesPreview() {
 					<span className="work-kicker">{"// 02 — case studies"}</span>
 					<h1 className="work-title">Case studies</h1>
 					<p className="work-lede">
-						Eight case studies — seven client builds across two employers, plus the local LLM
-						stack they now run through. Problem, plumbing, result. Newest first.
+						Ten case studies — the local LLM stack, the client builds across two employers,
+						the early protocol work, and the 2015 start. Problem, plumbing, result. Newest first.
 					</p>
 				</header>
 			</div>
@@ -445,7 +445,10 @@ function CaseStudiesPreview() {
 				{caseStudiesByRecency.map(study => (
 					<li className="case-entry" key={study.slug}>
 						<span className="case-entry-dot" aria-hidden="true" />
-						<CaseStudyCard study={study} onOpen={() => setOpenSlug(study.slug)} />
+						<CaseStudyCard
+							study={study}
+							onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
+						/>
 					</li>
 				))}
 
