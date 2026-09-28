@@ -76,9 +76,9 @@ const TOPOLOGY_CONFIG: Record<CaseTopology, TopologyConfig> = {
 		// outside the diamond on its own side so none crowd the loop.
 		spots: [
 			{ x: 300, y: 30, labelY: 16, anchor: "middle" },
-			{ x: 480, y: 106, labelY: 112, anchor: "start" },
+			{ x: 480, y: 106, labelY: 140, anchor: "middle" },
 			{ x: 300, y: 182, labelY: 200, anchor: "middle" },
-			{ x: 120, y: 106, labelY: 112, anchor: "end" },
+			{ x: 120, y: 106, labelY: 140, anchor: "middle" },
 		],
 		rails: [
 			{

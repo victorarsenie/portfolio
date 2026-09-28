@@ -28,8 +28,8 @@ export default function TerminalHero() {
 				<PipelineFlow />
 
 				<p className="terminal-hero-sub">
-					Legacy PHP and CodeIgniter, migrated to modern tooling — with the AI running on my
-					own GPU, not someone&rsquo;s API.
+					Migrating legacy stacks to modern tooling.<br />
+					AI-assisted, on local LLMs — private, offline, unlimited.
 				</p>
 
 				<div className="terminal-hero-ctas">

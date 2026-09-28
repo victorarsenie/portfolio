@@ -996,8 +996,8 @@ p {
      screenshotted was the one that could change appearance on a visitor. */
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 8.2vw, 6rem);
-  line-height: 1.02;
+  font-size: clamp(2.75rem, 6.5vw, 4.5rem);
+  line-height: 1.05;
   letter-spacing: -0.032em;
   color: #f8fafc;
   text-wrap: balance;

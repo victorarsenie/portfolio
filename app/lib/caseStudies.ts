@@ -91,7 +91,7 @@ export const caseStudies: CaseStudy[] = [
 		// current chapter.
 		slug: "local-llm-setup",
 		featured: true,
-		title: "A local LLM stack tuned to one GPU",
+		title: "Stack of local LLMs tuned to their limits",
 		client: "Ongoing research",
 		year: "2026",
 		// A cycle rather than a chain, because that is the shape of the work:
@@ -104,10 +104,10 @@ export const caseStudies: CaseStudy[] = [
 		// one number but the shape of the tuning: throughput traded against
 		// context, vision bought for almost nothing, and a 4x regression
 		// traced to one wrong field in a model file.
-		metric: "175 t/s on one consumer GPU",
+		metric: "Overcoming hardware constraints",
 		figures: [
 			{ value: "54 t/s", label: "27B dense · 128K · vision" },
-			{ value: "85 t/s", label: "MTP at 64K, trading context" },
+			{ value: "175 t/s", label: "35B MoE · 256K" },
 			{ value: "-3%", label: "vision cost, 0 GB VRAM" },
 			{ value: "4x", label: "regression traced to KV cache" },
 		],
