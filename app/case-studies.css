@@ -247,6 +247,71 @@
   color: rgba(148, 163, 184, 0.86);
 }
 
+/* --- Measured figures ----------------------------------------------------- */
+/* Where a study has real readings, they sit directly under the metric and
+   before the pills: a number is evidence, and evidence belongs at the top of
+   the evidence block rather than below the vocabulary. Hairline top edges
+   instead of boxes, so four of them read as one table rather than four tiles. */
+/* Two across, always. auto-fit looked right and was not: at this card width
+   it packed three per row and left the fourth alone underneath, which reads as
+   a mistake rather than as four measurements. Two by two is the only split
+   that balances at every width this card is ever rendered at. */
+.case-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 18px 0 0;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.case-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 11px 13px 12px;
+  background: #14141a;
+}
+
+.case-figure-value {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+}
+
+.case-figure-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+/* Same 2x2 split, so the rule is the type size alone rather than a second
+   grid the two viewports have to be kept in agreement about. */
+@media (max-width: 640px) {
+  .case-figure {
+    padding: 10px 11px 11px;
+  }
+  .case-figure-value {
+    font-size: 1rem;
+  }
+  .case-figure-label {
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+  }
+}
+
 /* --- Metadata under the result -------------------------------------------- */
 /* Capabilities read as things the work did, so they get pills and the accent
    colour — they are the only part of the metadata with any claim on attention.

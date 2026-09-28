@@ -44,6 +44,22 @@ export default function CaseStudyCard({
 					{/* Visual headline. Not a heading — see the note above the title. */}
 					<p className="case-result">{study.metric}</p>
 
+					{/* The measurements behind that headline, when the study has
+					    any. A benchmark card that shows one number invites the
+					    reader to assume it was the best one; showing four makes
+					    the trade-off visible instead. Absent on the studies whose
+					    result is an outcome rather than a reading. */}
+					{study.figures?.length ? (
+						<dl className="case-figures">
+							{study.figures.map(figure => (
+								<div key={figure.label} className="case-figure">
+									<dt className="case-figure-value">{figure.value}</dt>
+									<dd className="case-figure-label">{figure.label}</dd>
+								</div>
+							))}
+						</dl>
+					) : null}
+
 					{/* What the work was, in the plainest words available. */}
 					<ul className="case-chips">
 						{study.chips.map(chip => (

@@ -39,6 +39,16 @@ interface SummaryBase {
 	/** The technologies, short enough for a single muted line. */
 	tech: readonly string[];
 	link: string;
+	/**
+	 * Optional measured figures, for a study whose result is a set of numbers
+	 * rather than a single outcome. One metric cannot say "54 t/s across 128K
+	 * with vision" without becoming a sentence, and a sentence stops being a
+	 * headline. These render as a compact row under the metric, so the
+	 * benchmark card can carry the actual readings while the rest of the
+	 * timeline keeps its single line. Optional by design: a study with an
+	 * outcome rather than a benchmark omits it and nothing shifts.
+	 */
+	figures?: readonly { value: string; label: string }[];
 }
 
 /** Everything the card is allowed to know. */
@@ -80,7 +90,18 @@ export const caseStudies: CaseStudy[] = [
 		// produced a new question. Nothing here was finished once.
 		nodes: ["Benchmark", "Diagnose", "Tune", "Re-measure"],
 		topology: "cycle",
-		metric: "175 t/s, 256K context",
+		// The headline is the best single reading. The rest of the benchmark
+		// lives in `figures` below, because the interesting result here is not
+		// one number but the shape of the tuning: throughput traded against
+		// context, vision bought for almost nothing, and a 4x regression
+		// traced to one wrong field in a model file.
+		metric: "175 t/s on one consumer GPU",
+		figures: [
+			{ value: "54 t/s", label: "27B dense · 128K · vision" },
+			{ value: "85 t/s", label: "MTP at 64K, trading context" },
+			{ value: "-3%", label: "vision cost, 0 GB VRAM" },
+			{ value: "4x", label: "regression traced to KV cache" },
+		],
 		chips: ["VRAM budgeting", "Throughput profiling", "Speculative decoding", "Reasoning budgets"],
 		tech: ["llama.cpp", "CUDA", "GGUF", "RTX 5070 Ti"],
 		// Deliberately empty for the same reason the Building entry has no
