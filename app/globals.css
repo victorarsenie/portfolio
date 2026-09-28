@@ -49,9 +49,41 @@ a:focus-visible:not(:focus-visible) {
   box-shadow: var(--focus-ring);
 }
 
+/* The two faces this site is built from, and what each one is for.
+ *
+ * Hype is a display face. It is the right choice for headlines and large
+ * figures and it is a distinctive one - which is exactly why it is confined
+ * to them. Measured against the live page, Hype.ttf has no glyph for 26 of the
+ * characters this site actually uses: @ [ ] { } \ | _ ~ ^ ` and every
+ * typographic mark (em-dash, en-dash, ellipsis, middot, bullet, arrows, and
+ * all four smart quotes). Those characters do not fail loudly - they fall
+ * through to the next font in the stack, so a heading set in Hype renders as
+ * two different typefaces with mismatched spacing. Prose contains those marks
+ * constantly, so Hype is reserved for the short, sparse strings that do not:
+ * headlines, titles, and the large measured figures.
+ *
+ * Glacial Indifference carries every other word on the site. It has full
+ * ASCII coverage and is the only face trusted with running text.
+ *
+ * Both webfonts ship a single weight, so anything asking for 500/600/700 gets
+ * a synthetically emboldened outline from the browser rather than a real bold
+ * cut. The two families below therefore make that explicit and consistent
+ * instead of leaving each rule to discover it.
+ *
+ * Neither fallback chain ends in a generic family. Falling back to `serif`
+ * turns every heading into Times on a font-load failure, which is a worse
+ * outcome than falling back to the other face on this site.
+ */
 @theme inline {
-  --font-sans: "Hype", serif;
-  --font-mono: "GlacialIndifference-Regular", sans-serif;
+  --font-display: "Hype", "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  --font-body: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
+  /* A genuine monospace, and the one Leo proposed for the data layer. It is a
+     system stack rather than a third webfont: the metadata this styles is
+     small, and adding a download to fix a label is the wrong trade. */
+  --font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, "SF Mono", "Menlo", monospace;
+  /* Aliases kept so existing rules keep working while pointing at faces that
+     are actually monospace / actually sans. */
+  --font-sans: var(--font-display);
 }
 
 @font-face {
@@ -915,7 +947,11 @@ p {
 
 .terminal-hero-title {
   margin: 22px 0 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Hype, like every other headline on the site. It was Helvetica Neue, which
+     is not self-hosted, so the hero was silently rendering in a system font
+     that differs between Windows and macOS - the one heading most likely to be
+     screenshotted was the one that could change appearance on a visitor. */
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(3rem, 8.2vw, 6rem);
   line-height: 1.02;
@@ -1056,12 +1092,14 @@ p {
 .terminal-hero-sub {
   margin: 40px auto 0;
   max-width: 62ch;
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "SF Mono", monospace;
+  /* Glacial, not a monospace. This is a sentence, and the sentence carries an
+     em-dash and an apostrophe - neither of which Hype or the mono stack here
+     can be relied on for. A mono at this size also reads as a label rather
+     than as a claim. */
+  font-family: var(--font-body);
   font-size: clamp(0.9375rem, 1.35vw, 1.0625rem);
   line-height: 1.8;
-  /* A touch of tracking reads as "technical" without pushing the mono apart
-     into something else. */
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: rgba(203, 213, 225, 0.68);
   text-align: center;
   text-wrap: pretty;
@@ -1082,7 +1120,7 @@ p {
   padding: 13px 26px;
   border: 1px solid transparent;
   border-radius: 3px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 14.5px;
   font-weight: 600;
   letter-spacing: 0.02em;

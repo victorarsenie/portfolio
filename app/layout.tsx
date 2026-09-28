@@ -1,18 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./case-studies.css";
 import "./font-awesome.min.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Geist and Geist_Mono were imported here and set as --font-geist-sans /
+// --font-geist-mono, but no stylesheet consumed either variable. next/font
+// downloads and subsets them anyway, so both were being fetched on every page
+// load and never rendered. The site is set in Hype and Glacial Indifference;
+// those two faces are the whole type system now.
 
 export const metadata: Metadata = {
   title: "Victor Arsenie - Full-Stack Developer & Systems Integrator",
@@ -40,10 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-screen antialiased`}
-    >
+    <html lang="en" className="h-screen antialiased">
       <body className="flex flex-col">{children}</body>
     </html>
   );
