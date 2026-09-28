@@ -8,7 +8,7 @@ import SkillCard from "./components/SkillCard";
 import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
 import AmpText from "./components/AmpText";
-import CaseStudyCard from "./components/CaseStudyCard";
+import ShowcasePanel from "./components/ShowcasePanel";
 import CaseStudyRow from "./components/CaseStudyRow";
 import CaseStudyDrawer from "./components/CaseStudyDrawer";
 import { AboutEntry, BuildingEntry, RoadmapEntry } from "./components/TimelineNotes";
@@ -445,21 +445,25 @@ function CaseStudiesPreview() {
 			{/* A plain list: the visual order and the DOM order are the same, so
 			    the sequence is conveyed by the markup rather than by CSS, and a
 			    screen reader gets the timeline in the order it reads. */}
-			<ol className="case-timeline">
-			{[...featuredCaseStudies, ...restCaseStudies].map(study => (
+		<ol className="case-timeline">
+			{/* Featured studies as full-width, diagram-led showcase panels; the
+			    lighter builds sit back on the alternating rail as slim rows. */}
+			{featuredCaseStudies.map((study, index) => (
+				<li className="case-entry case-entry--wide" key={study.slug}>
+					<ShowcasePanel
+						study={study}
+						flip={index % 2 === 1}
+						onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
+					/>
+				</li>
+			))}
+			{restCaseStudies.map(study => (
 				<li className="case-entry" key={study.slug}>
 					<span className="case-entry-dot" aria-hidden="true" />
-					{study.featured ? (
-						<CaseStudyCard
-							study={study}
-							onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
-						/>
-					) : (
-						<CaseStudyRow
-							study={study}
-							onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
-						/>
-					)}
+					<CaseStudyRow
+						study={study}
+						onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
+					/>
 				</li>
 			))}
 
