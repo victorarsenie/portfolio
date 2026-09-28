@@ -9,7 +9,9 @@ import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
 import AmpText from "./components/AmpText";
 import CaseStudyCard from "./components/CaseStudyCard";
-import { caseStudies } from "./lib/caseStudies";
+import CaseStudyDrawer from "./components/CaseStudyDrawer";
+import { AboutEntry, BuildingEntry, RoadmapEntry } from "./components/TimelineNotes";
+import { caseStudiesByRecency } from "./lib/caseStudies";
 
 const CONTACT_EMAIL = "contact@victorsenie.com";
 
@@ -64,7 +66,27 @@ function SkillsTabs() {
 				{ label: "Cline", src: "/images/logos/cline.png", alt: "cline" },
 				{ label: "Playwright", src: "/images/logos/playwright.png", alt: "playwright" },
 			],
-			text: "Local models on my own hardware for refactoring, review and boilerplate — private, offline and free to re-run.",
+			tools: ["Benchmarking", "VRAM budgeting", "Speculative decoding", "Reasoning budgets"],
+			text: "A local model stack tuned to one RTX 5070 Ti: a 27B dense model doing multi-file edits at 54 t/s across 128K with vision, and a 35B MoE at 175 t/s across 256K. Private, offline, no rate limit — and documented as ongoing work, including what failed.",
+			live: true,
+		},
+		{
+			// Chips rather than logos: Git, Playwright and Lighthouse already appear
+			// in the marquee rails above, and the same logo twice on one page reads
+			// as an oversight rather than as emphasis.
+			id: "delivery-tooling",
+			title: "Automated verification & delivery",
+			icon: "fa fa-check-square",
+			tools: [
+				"Headless Chrome (CDP)",
+				"Playwright",
+				"Lighthouse",
+				"Computed-style inspection",
+				"Responsive geometry checks",
+				"Conventional commits",
+				"CI lint + build gates",
+			],
+			text: "I verify in a real browser before calling anything done — DOM and computed styles rather than guessing from a screenshot, at desktop and mobile widths. Then it ships as a conventional commit behind lint and build gates.",
 		},
 		{
 			id: "api-orchestration",
@@ -391,11 +413,18 @@ function WorkSection() {
 			</div>
 		</section>
 	);
-} // Case studies — a horizontal rail on desktop so each case is engaged with
-// on its own rather than skimmed in a long column, collapsing to a vertical
-// stack on mobile. The rail is focusable so it can be scrolled from the
-// keyboard, which a scrollable region must be to satisfy WCAG 2.1.1.
+} // Case studies — an integration timeline. The horizontal rail this replaced
+// needed a drag or swipe to reach a case and hid whatever was off-screen; a
+// vertical column is the one scroll direction every input already knows, and
+// reading downward is the same gesture as reading a career.
+//
+// The cards carry only their summary; the drawer holds the full account. A
+// single selection is tracked here, so opening one study replaces whatever was
+// open rather than stacking panels.
 function CaseStudiesPreview() {
+	const [openSlug, setOpenSlug] = useState<string | null>(null);
+	const open = caseStudiesByRecency.find(study => study.slug === openSlug) ?? null;
+
 	return (
 		<section id="case-studies" className="section work">
 			<div className="bootstrap-container">
@@ -403,25 +432,52 @@ function CaseStudiesPreview() {
 					<span className="work-kicker">{"// 02 — case studies"}</span>
 					<h1 className="work-title">Case studies</h1>
 					<p className="work-lede">
-						Problem, pipeline, result — the mechanics behind the deliverables. Scroll the rail to move through them one at a time.
+						Eight case studies — seven client builds across two employers, plus the local LLM
+						stack they now run through. Problem, plumbing, result. Newest first.
 					</p>
 				</header>
 			</div>
-			<div className="case-rail-scope">
-				<div className="case-rail" role="region" aria-label="Case studies" tabIndex={0}>
-					<div className="case-rail-track">
-						{caseStudies.map((study, i) => (
-							<CaseStudyCard key={study.slug} study={study} index={i} />
-						))}
-					</div>
-				</div>
-				<div className="case-progress" aria-hidden="true">
-					<span className="case-progress-fill" />
-				</div>
-				<p className="case-hint">
-					<i className="fa fa-long-arrow-right" aria-hidden="true" /> Scroll for more
-				</p>
-			</div>
+
+			{/* A plain list: the visual order and the DOM order are the same, so
+			    the sequence is conveyed by the markup rather than by CSS, and a
+			    screen reader gets the timeline in the order it reads. */}
+			<ol className="case-timeline">
+				{caseStudiesByRecency.map(study => (
+					<li className="case-entry" key={study.slug}>
+						<span className="case-entry-dot" aria-hidden="true" />
+						<CaseStudyCard study={study} onOpen={() => setOpenSlug(study.slug)} />
+					</li>
+				))}
+
+				{/* Full width, and last of the delivered work: a change of voice
+				    rather than another entry. */}
+				<li className="case-entry case-entry--wide">
+					<span className="case-entry-dot" aria-hidden="true" />
+					<AboutEntry />
+				</li>
+
+				{/* In progress, so it has no metric to quote and a different
+				    border to say so. */}
+				<li className="case-entry case-entry--wide">
+					<span className="case-entry-dot" aria-hidden="true" />
+					<BuildingEntry />
+				</li>
+
+				{/* Also has no metric, for a stronger reason: nothing behind
+				    it exists yet. */}
+				<li className="case-entry case-entry--wide">
+					<span className="case-entry-dot" aria-hidden="true" />
+					<RoadmapEntry />
+				</li>
+			</ol>
+
+			<CaseStudyDrawer
+				title={open?.title ?? ""}
+				meta={open ? `${open.client} · ${open.year}` : ""}
+				details={open?.details ?? null}
+				tech={open?.tech ?? []}
+				onClose={() => setOpenSlug(null)}
+			/>
 		</section>
 	);
 } // Contact commands — each one pre-fills the subject/message and retitles the
@@ -970,40 +1026,58 @@ export default function HomePage() {
 			<TerminalHero />
 			<WorkSection />
 			<CaseStudiesPreview />
-			<section id="about" className="pt-5 pb-20 bg-white">
-				<div className="bootstrap-container">
-					<div className="page-header">
-						<h1>About me</h1>
-						<p className="lead">
-							<a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer">
-								<Image
-									src="/images/cv.png"
-									alt="Download my CV"
-									width={66}
-									height={87}
-									className="inline float-left mr-[15px]"
-									style={{ width: "auto", height: "auto" }}
-								/>
-							</a>
-							I work in the space between systems — wiring up billing platforms, backup software, DNS and support desks so data in one
-							actually shows up in the others. Ten years of WHMCS add-ons and hooks, multi-API orchestration and automated data
-							pipelines.
-						</p>
-						<p className="lead">
-							Most of that work is invisible once it works. A property feed that ingests thousands of listings a night without anyone
-							opening a spreadsheet. A magazine generated from live data instead of a designer. Support tickets that appear next to the
-							server they belong to. I spend my time on the plumbing — schema mismatches, duplicate records, providers down at 3am — so
-							nobody using it has to.
-						</p>
-						<p className="lead">
-							Photoshop, Illustrator and Acrobat for the design side; Git, Sourcetree and JIRA for the work around the code.
-						</p>
-						<p className="lead">
-							Currently migrating a decade of CodeIgniter to Next.js and TypeScript.
-						</p>
+				<section id="about" className="pt-5 pb-20 bg-white">
+					<div className="bootstrap-container">
+						<div className="page-header">
+							<h1>About me</h1>
+							<p className="lead">
+								<a id="my_cv" href="/documents/cv.docx" target="_blank" rel="noopener noreferrer">
+									<Image
+										src="/images/cv.png"
+										alt="Download my CV"
+										width={66}
+										height={87}
+										className="inline float-left mr-[15px]"
+										style={{ width: "auto", height: "auto" }}
+									/>
+								</a>
+								I work in the space between systems — wiring up billing platforms, backup software, DNS and
+								support desks so data in one actually shows up in the others. WHMCS add-ons and hooks,
+								multi-API orchestration, and automated data pipelines.
+							</p>
+							<p className="lead">
+								Most of that work is invisible once it works. A property feed that ingests thousands of
+								listings a night without anyone opening a spreadsheet. A magazine generated from live
+								data instead of a designer. Support tickets that appear next to the server they belong
+								to. I spend my time on the plumbing — schema mismatches, duplicate records, providers
+								down at 3am — so nobody using it has to.
+							</p>
+
+							{/* The current chapter. The framing that matters here is that
+							    the framework is the cheap part: the fundamentals are
+							    what make a migration routine rather than a rewrite. */}
+							<p className="lead">
+								What I&rsquo;m doing now is taking that same kind of legacy system — CodeIgniter, plain
+								PHP, jQuery, AJAX, MySQL — and moving it to Next.js and TypeScript. The base is the
+								same either way. Having written the fundamentals directly, I can change what sits on
+								top of them without relearning the problem.
+							</p>
+							<p className="lead">
+								What makes that tractable is that I run the AI myself. I benchmarked and tuned a
+								local model stack against one RTX 5070 Ti until a 27B dense model was doing real
+								multi-file edits at 54 tokens per second across a 128K context, with vision, and a
+								35B mixture-of-experts running at 175 tokens per second across 256K. No rate limit, no
+								training on client code, nothing uploaded, and every run re-runnable for free. It is
+								documented as an ongoing project rather than a weekend experiment — including the
+								configurations I measured, the ones that failed, and why.
+							</p>
+							<p className="lead">
+								Photoshop, Illustrator and Acrobat for the design side; Git, Sourcetree and JIRA for the
+								work around the code.
+							</p>
+						</div>
 					</div>
-				</div>
-			</section>
+				</section>
 			<SkillsSection />
 			<ContactConsole onSubmit={handleContactSubmit} />
 			<Footer />

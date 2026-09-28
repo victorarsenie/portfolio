@@ -1,17 +1,18 @@
 /* ==========================================================================
-   Case studies — Problem → Pipeline → Result
+   Case studies — an integration timeline
    --------------------------------------------------------------------------
    All of the original copy is kept. What changed is the architecture: the
    cards were 558px wide in a two-up grid, which forced four blocks of prose
-   into one narrow column where they read as an undifferentiated wall. Giving
-   the rail a wider canvas and splitting each card into an identity column
-   and a narrative column lets every block keep its full text while doing a
-   distinct job.
+   into one narrow column where they read as an undifferentiated wall. The
+   timeline gives each case a card of its own with room for the diagram to
+   breathe, and a pipe running down the middle to tie the sequence together.
 
-   Desktop scrolls horizontally with snap so each case is engaged with
-   individually; below 860px the rail collapses to a vertical stack, which is
-   the honest mobile behaviour — a sideways swipe is a poor affordance on a
-   phone.
+   Desktop runs newest-first down the page, alternating each card across a
+   central line. Below 1024px the alternation is dropped and the line moves to
+   the left edge, because a half-width card stops being readable before the
+   layout is too wide for the line to be worth centering. Two entries — the
+   about card and the in-progress one — span the full width and so deliberately
+   interrupt the left/right rhythm.
 
    Dot travel is a whole number of dash periods (24px period, 240px travel) so
    the loop never seams. Speed is a custom property rather than a second
@@ -19,140 +20,117 @@
    everything.
    ========================================================================== */
 
-/* --- Rail ---------------------------------------------------------------- */
-/* timeline-scope hoists the rail's named timeline so the progress fill — a
-   sibling of the scroller rather than a descendant of it — can still bind to
-   it. Name lookup only walks up the tree, so without this the fill would have
-   no timeline to reference. */
-.case-rail-scope {
-  timeline-scope: --case-scroll;
-}
-
-.case-rail {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  /* proximity, not mandatory. These cards are text-heavy, and a hard snap
-     yanks the reader back to a card edge when they stop to re-read a line.
-     Proximity still settles onto a card when you land near one, without
-     taking control away. */
-  scroll-snap-type: x proximity;
-  scroll-timeline: --case-scroll inline;
-  /* Line the first card up with the page's 1140px container gutter rather than
-     the viewport edge, so the rail does not look misaligned with the heading
-     above it. scroll-padding keeps snap points on that same line. */
-  padding-inline: max(20px, calc((100% - 1140px) / 2));
-  scroll-padding-inline: max(20px, calc((100% - 1140px) / 2));
-  padding-block: 10px 18px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56, 189, 248, 0.4) rgba(255, 255, 255, 0.05);
-}
-
-/* Smooth scrolling is opt-in behind a motion preference: paired with snap it
-   produces long animated scrolls that reduced-motion users find exhausting. */
-@media (prefers-reduced-motion: no-preference) {
-  .case-rail {
-    scroll-behavior: smooth;
-  }
-}
-
-.case-rail:focus-visible {
-  outline: 2px solid #38bdf8;
-  outline-offset: 2px;
-  border-radius: 6px;
-}
-
-.case-rail::-webkit-scrollbar {
-  height: 6px;
-}
-
-.case-rail::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
-}
-
-.case-rail::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.4);
-  border-radius: 3px;
-}
-
-/* 840 rather than something tighter: at 700px the narrative column fell to
-   ~344px, which wrapped the problem onto 8 lines and the detail onto 9 at
-   43-46 characters per line — narrower than comfortable reading. The wider
-   card buys back the measure and gives the diagram more presence, and still
-   leaves the next card peeking in to advertise the rail. */
-.case-rail-track {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(840px, 88vw);
-  gap: 24px;
-}
-
-/* --- Progress + affordance ----------------------------------------------- */
-/* A rail has to advertise that there is more content this way, otherwise it
-   reads as a clipped layout bug. The fill is driven by the rail's own scroll
-   timeline in pure CSS, so there is no scroll listener on the main thread.
-   Where scroll-timeline is unsupported the bar renders full and reads as a
-   static divider rather than a stuck-at-zero gauge. */
-.case-progress {
-  height: 2px;
-  margin-inline: max(20px, calc((100% - 1140px) / 2));
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.07);
-  overflow: hidden;
-}
-
-.case-progress-fill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.45), #38bdf8);
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-@supports (animation-timeline: scroll()) {
-  .case-progress-fill {
-    animation: case-progress-grow linear both;
-    animation-timeline: --case-scroll;
-  }
-
-  @keyframes case-progress-grow {
-    from {
-      transform: scaleX(0);
-    }
-
-    to {
-      transform: scaleX(1);
-    }
-  }
-}
-
-.case-hint {
+/* --- Timeline ------------------------------------------------------------ */
+/* The pipe is a single pseudo-element on the container rather than a border on
+   each card, so it is one continuous run instead of seven segments that have
+   to be made to line up. It fades out at both ends so the section does not
+   begin and end on a hard stop. */
+/* Alternation caps a card at roughly half the canvas minus the gutter, so the
+   canvas is the only real lever on width. The old 1240px ceiling threw away
+   200px of viewport at 1440 and 680px at 1920 — which is what left the cards
+   at 592px on a laptop. Left fluid with a modest gutter they gain ~13% at 1440
+   and ~50% at 1920, with the alternation and the centred line untouched. The
+   1760px ceiling is only to stop the whole thing sprawling on an ultrawide. */
+.case-timeline {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 11px 0 0;
-  padding-inline: max(20px, calc((100% - 1140px) / 2));
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.58);
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  max-width: 1760px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 3vw, 48px);
+  padding-block: 6px 4px;
 }
 
-.case-hint i {
-  font-size: 0.75rem;
-  color: rgba(56, 189, 248, 0.75);
+.case-timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  margin-left: -0.5px;
+  background: linear-gradient(
+    180deg,
+    rgba(148, 163, 184, 0) 0%,
+    rgba(148, 163, 184, 0.26) 5%,
+    rgba(148, 163, 184, 0.26) 95%,
+    rgba(148, 163, 184, 0) 100%
+  );
 }
+
+.case-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* Fluid rather than fixed: every pixel here comes straight out of the card
+     width, and the dot-to-card stub only has to reach the nearer edge. */
+  column-gap: clamp(32px, 3.5vw, 52px);
+  align-items: start;
+}
+
+.case-entry-card {
+  grid-column: 1;
+}
+
+.case-entry:nth-child(even) .case-entry-card {
+  grid-column: 2;
+}
+
+/* The two voice-changing entries, and the rule that keeps them full width even
+   on the alternating rows they land on. Written as two classes so it matches
+   the specificity of the :nth-child(even) rule above and wins on source order —
+   at (0,2,0) it would lose to that (0,3,0) rule and the about card would sit
+   in one column. */
+.case-entry.case-entry--wide .case-entry-card {
+  grid-column: 1 / -1;
+}
+
+/* --- Anchor point -------------------------------------------------------- */
+/* Sits on the pipe, level with the card header, with a short stub reaching
+   toward the card so the association is unambiguous. */
+.case-entry-dot {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1), 0 0 14px rgba(56, 189, 248, 0.45);
+}
+
+.case-entry-dot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 26px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.case-entry:nth-child(odd) .case-entry-dot::after {
+  right: 100%;
+  margin-right: 10px;
+}
+
+.case-entry:nth-child(even) .case-entry-dot::after {
+  left: 100%;
+  margin-left: 10px;
+}
+
 
 /* --- Card ---------------------------------------------------------------- */
+/* Billboard proportions: one column, header across the top, metric as the only
+   large element. The paragraphs that used to sit here now live in the drawer,
+   which is why the card can afford to be short. */
 .case-card {
-  --case-dot-dur: 1.6s;
-  --case-dots-in: 0.9s;
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 34px;
-  padding: 28px 30px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 26px 30px 24px;
   border-radius: 18px;
   background: #121216;
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -163,17 +141,16 @@
 
 .case-card:hover,
 .case-card:focus-within {
-  --case-dot-dur: 0.55s;
   transform: translateY(-5px);
   border-color: rgba(38, 173, 244, 0.55);
   box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(56, 189, 248, 0.16);
 }
 
-/* --- Identity column ----------------------------------------------------- */
+/* --- Header -------------------------------------------------------------- */
 .case-card-id {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -181,13 +158,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.case-card-ord {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  color: #38bdf8;
 }
 
 .case-card-meta {
@@ -218,32 +188,6 @@
   letter-spacing: -0.015em;
   color: #fff;
   text-wrap: balance;
-}
-
-/* Pinned to the foot of the identity column so the stack lines up across
-   every card in the rail regardless of how long the title runs. */
-.case-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 6px;
-  margin: auto 0 0;
-  padding: 16px 0 0;
-  list-style: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.06em;
-  color: rgba(203, 213, 225, 0.72);
-}
-
-.case-stack li + li {
-  margin-left: 6px;
-}
-
-.case-stack li + li::before {
-  content: "/";
-  margin-right: 6px;
-  color: rgba(148, 163, 184, 0.4);
 }
 
 /* --- Narrative column ---------------------------------------------------- */
@@ -279,11 +223,14 @@
 }
 
 /* The result is the payoff, so it is the largest type in the card — the
-   number has to win the eye before the supporting copy is read. */
+   number has to win the eye before the supporting copy is read.
+   vw tracks the card width closely here (a card is about half the canvas, and
+   both scale with the viewport), so the ceiling is set high enough to keep
+   growing on a large display rather than pinning every card at one size. */
 .case-result {
   margin: 0 0 10px;
   font-family: var(--font-sans);
-  font-size: clamp(1.75rem, 2.7vw, 2.375rem);
+  font-size: clamp(1.75rem, 2.7vw, 3.25rem);
   line-height: 1.06;
   letter-spacing: -0.025em;
   color: #fff;
@@ -300,6 +247,77 @@
   color: rgba(148, 163, 184, 0.86);
 }
 
+/* --- Metadata under the result -------------------------------------------- */
+/* Capabilities read as things the work did, so they get pills and the accent
+   colour — they are the only part of the metadata with any claim on attention.
+   The tech line below is the opposite: names only, muted, last. */
+.case-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-chips li {
+  padding: 3px 9px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.07);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: #7dd3fc;
+  white-space: nowrap;
+}
+
+.case-tech {
+  margin: 12px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  color: rgba(148, 163, 184, 0.62);
+}
+
+/* --- Read-more trigger --------------------------------------------------- */
+/* Sharp-cornered like the hero keys, so it reads as a control surface rather
+   than another pill competing with the capability chips above it. */
+.case-more {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 10px;
+  margin-top: auto;
+  padding: 9px 15px;
+  border: 1px solid rgba(38, 173, 244, 0.42);
+  border-radius: 3px;
+  background: rgba(38, 173, 244, 0.08);
+  color: #7dd3fc;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.case-more:hover {
+  background: rgba(38, 173, 244, 0.16);
+  border-color: rgba(38, 173, 244, 0.7);
+  color: #bae6fd;
+}
+
+.case-more .fa {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.case-more:hover .fa {
+  transform: translateX(3px);
+}
+
 /* --- Pipeline diagram ---------------------------------------------------- */
 .case-pipe {
   margin: 2px 0;
@@ -312,14 +330,19 @@
   overflow: visible;
 }
 
+/* Each rail is measured in JS and handed over as --case-len, so the reveal
+   runs for exactly as long as the path is long. A shared constant would make
+   the 780-unit cycle finish revealing at a different rate than the 440-unit
+   chain, and the fill would visibly desync from the stroke. */
 .case-pipe-base {
   fill: none;
   stroke: rgba(125, 211, 252, 0.22);
   stroke-width: 1.5;
   stroke-linecap: round;
-  stroke-dasharray: 240;
-  stroke-dashoffset: 240;
+  stroke-dasharray: var(--case-len);
+  stroke-dashoffset: var(--case-len);
   animation: case-pipe-draw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: stroke 0.3s ease;
 }
 
 @keyframes case-pipe-draw {
@@ -329,7 +352,14 @@
 }
 
 /* 0.1 dash + 23.9 gap = 24px period, rendered round by the linecap, so the
-   stream reads as discrete dots travelling along the rail. */
+   stream reads as discrete dots travelling along the rail. The run shifts the
+   pattern by exactly five whole periods, which both loops seamlessly and keeps
+   the speed identical on every topology. */
+/* The fallbacks are load-bearing, not decoration. An unresolved var() inside the
+   animation shorthand invalidates the whole declaration, not just the one
+   value — so if --case-dots-in is not inherited by this segment the dots lose
+   their animation entirely and sit at opacity 0. Only .case-seg-late sets that
+   variable, so every first rail needs a default here. */
 .case-pipe-dots {
   fill: none;
   stroke: #38bdf8;
@@ -337,7 +367,13 @@
   stroke-linecap: round;
   stroke-dasharray: 0.1 23.9;
   opacity: 0;
-  animation: case-pipe-dots-in 0.5s linear var(--case-dots-in) forwards, case-pipe-run var(--case-dot-dur) linear var(--case-dots-in) infinite;
+  animation: case-pipe-dots-in 0.5s linear var(--case-dots-in, 0.9s) forwards, case-pipe-run var(--case-dot-run, 1.6s) linear var(--case-dots-in, 0.9s) infinite;
+  transition: stroke 0.3s ease;
+}
+
+.case-pipe-head {
+  fill: #38bdf8;
+  transition: fill 0.3s ease;
 }
 
 @keyframes case-pipe-dots-in {
@@ -348,12 +384,12 @@
 
 @keyframes case-pipe-run {
   to {
-    stroke-dashoffset: -240;
+    stroke-dashoffset: var(--case-dot-travel);
   }
 }
 
 .case-seg-late {
-  --case-dots-in: 1.15s;
+  --case-dots-in: 0.2s;
 }
 
 .case-seg-late .case-pipe-base {
@@ -364,6 +400,7 @@
   fill: #0b0d11;
   stroke: #38bdf8;
   stroke-width: 2;
+  transition: stroke 0.3s ease;
 }
 
 .case-pipe-ring {
@@ -374,14 +411,6 @@
   transform-box: fill-box;
   transform-origin: center;
   animation: case-pipe-ring-pulse 3s ease-out infinite;
-}
-
-.case-pipe-ring-b {
-  animation-delay: 0.4s;
-}
-
-.case-pipe-ring-c {
-  animation-delay: 0.8s;
 }
 
 @keyframes case-pipe-ring-pulse {
@@ -396,6 +425,27 @@
   }
 }
 
+/* Hovering a card brings the rail forward and stops the dots, so the reader can
+   actually look at the shape instead of watching it move past. */
+.case-card:hover .case-pipe-base {
+  stroke: rgba(125, 211, 252, 0.5);
+}
+
+.case-card:hover .case-pipe-dots,
+.case-card:hover .case-pipe-dots path {
+  animation-play-state: paused;
+  stroke: #7dd3fc;
+}
+
+.case-card:hover .case-pipe-node,
+.case-card:hover .case-pipe-head {
+  stroke: #7dd3fc;
+}
+
+.case-card:hover .case-pipe-head {
+  fill: #7dd3fc;
+}
+
 .case-pipe-label {
   font-family: var(--font-mono);
   font-size: 14px;
@@ -406,31 +456,46 @@
 }
 
 /* --- Responsive ---------------------------------------------------------- */
-@media (max-width: 860px) {
-  /* Below this width a sideways rail is a poor affordance, so the same cards
-     become a plain vertical stack and the container gutter is dropped. */
-  .case-rail {
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-inline: 0;
+/* The alternation is dropped before it gets tight rather than after. At 1180px
+   each column is ~540px, which is the narrowest an alternating card should
+   ever be; below that the line moves to the left edge and every card takes the
+   full measure, which is the layout a phone wants anyway. Raising this from
+   1024px is what stops the fix above from being undone on a small laptop. */
+@media (max-width: 1180px) {
+  /* The line and its dots have to be measured from the same edge, so the
+     clearance is padding on the entry rather than on the timeline. Padding the
+     timeline instead would push the entries right while the absolutely
+     positioned line and dots stayed at the container edge, leaving every dot
+     34px off its own pipe. */
+  .case-timeline::before {
+    left: 0;
+    margin-left: 0;
   }
 
-  /* Nothing scrolls sideways here, so the progress gauge and its hint would
-     be describing an interaction that no longer exists. */
-  .case-progress,
-  .case-hint {
+  .case-entry {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 34px;
+  }
+
+  .case-entry-card,
+  .case-entry:nth-child(even) .case-entry-card {
+    grid-column: 1;
+  }
+
+  .case-entry-dot {
+    left: 0;
+    margin-left: -4.5px;
+  }
+
+  /* The stub had a card to reach toward on the alternating layout; in a single
+     column the line is already directly beside the card. */
+  .case-entry-dot::after {
     display: none;
   }
+}
 
-  .case-rail-track {
-    grid-auto-flow: row;
-    grid-auto-columns: auto;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-  }
-
+@media (max-width: 860px) {
   .case-card {
-    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
     padding: 24px 22px 22px;
     border-radius: 16px;
@@ -442,11 +507,8 @@
     font-size: 21px;
     letter-spacing: 0.02em;
   }
-
-  .case-stack {
-    margin-top: 0;
-  }
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .case-pipe-base {
@@ -461,5 +523,376 @@
 
   .case-pipe-ring {
     animation: none;
+  }
+}
+
+/* --- About + Currently building ------------------------------------------ */
+/* Both share the card frame, so they sit inside .case-entry-card and only
+   override what makes them different. */
+
+.case-entry-about,
+.case-entry-build {
+  padding: 28px 30px 26px;
+}
+
+/* The about card is the argument the seven case studies were evidence for, so
+   it gets the widest setting on the timeline and a brighter body copy. */
+.case-entry-about {
+  border-color: rgba(56, 189, 248, 0.24);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.05), #121216 55%);
+}
+
+.case-about-copy {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(1.0625rem, 1.6vw, 1.3125rem);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: #fff;
+  max-width: 62ch;
+}
+
+.case-about-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px 28px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.case-about-skill p {
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.65;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+/* Unfinished work says so in the border itself: a dashed edge is a promise the
+   card has not kept yet, which is exactly what it is. The roadmap card is
+   dashed too but in a cooler, quieter tone — it is further out than the build
+   card, and it has no live dot precisely because there is no running system
+   behind it to visit. */
+.case-entry-build,
+.case-entry-roadmap {
+  border-style: dashed;
+  border-color: rgba(56, 189, 248, 0.32);
+  background: #101014;
+}
+
+.case-entry-roadmap {
+  border-color: rgba(148, 163, 184, 0.26);
+  background: #0f0f13;
+}
+
+.case-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.case-build-copy {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(203, 213, 225, 0.82);
+  max-width: 60ch;
+}
+
+/* A log, not a result. One entry per line with no date column: the milestones
+   are real, but the timeline around them is not something to guess at, and a
+   fabricated "Week 5" is the same invention as a fabricated metric. */
+.case-build-log {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.case-build-log li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+/* Set as copy rather than a disabled control: a button that does nothing reads
+   as broken, and a link to a repo that does not exist reads as fiction. Saying
+   plainly that there is nothing published yet is the honest version. */
+.case-build-soon {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.case-build-soon .fa {
+  font-size: 0.6875rem;
+  color: rgba(148, 163, 184, 0.45);
+}
+
+/* --- Drawer --------------------------------------------------------------- */
+/* The dialog element is only the frame: it carries the top-layer placement, the
+   backdrop and the focus trap, and this styles the panel that slides inside it. */
+.case-drawer {
+  width: min(560px, 100vw);
+  max-width: 100vw;
+  height: 100%;
+  max-height: 100%;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid rgba(56, 189, 248, 0.18);
+  background: #0e0e11;
+  color: #fff;
+  overflow: visible;
+  transform: translateX(100%);
+}
+
+/* `forwards` matters: without it the animation releases on completion and the
+   element snaps back to the base translateX(100%), parking the open drawer just
+   off the right edge of the viewport. */
+.case-drawer[open] {
+  animation: case-drawer-in 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.case-drawer--leaving {
+  animation: case-drawer-out 200ms cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes case-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes case-drawer-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.case-drawer::backdrop {
+  background: rgba(4, 4, 6, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.case-drawer-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.case-drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 26px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0e0e11;
+}
+
+.case-drawer-meta {
+  margin: 0 0 6px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.case-drawer-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.case-drawer-close {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.8);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.case-drawer-close:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #7dd3fc;
+}
+
+.case-drawer-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px 26px 32px;
+}
+
+.case-drawer-section + .case-drawer-section {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Matches the card label treatment exactly, so the two read as one system. */
+.case-drawer-label {
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.case-drawer-section p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgba(203, 213, 225, 0.88);
+}
+
+.case-drawer-outcome {
+  color: #fff !important;
+  font-size: 1rem !important;
+}
+
+/* Grouped so the language reads separately from the datastore and the plumbing,
+   rather than as one undifferentiated run of names. */
+.case-drawer-stack {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.case-drawer-stack-row {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+}
+
+/* The fallback: the summary's flat tech line, shown when there are too few
+   items to be worth three labelled rows. Same monospace voice as the grouped
+   values, so the swap reads as a change of shape rather than of style. */
+.case-drawer-tech {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.case-drawer-stack dt {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.case-drawer-stack dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+/* --- Drawer, responsive --------------------------------------------------- */
+/* Below the rail's breakpoint the panel stops being a side drawer and becomes a
+   sheet rising from the bottom edge, which is the gesture a thumb expects and
+   the only placement with room for the stack rows to stay readable. */
+@media (max-width: 860px) {
+  .case-drawer {
+    width: 100%;
+    height: auto;
+    max-height: 88vh;
+    margin: auto 0 0;
+    border-left: 0;
+    border-top: 1px solid rgba(56, 189, 248, 0.18);
+    border-radius: 18px 18px 0 0;
+    transform: translateY(100%);
+  }
+
+  .case-drawer[open] {
+    animation-name: case-sheet-in;
+    animation-fill-mode: forwards;
+  }
+
+  .case-drawer--leaving {
+    animation-name: case-sheet-out;
+  }
+
+  @keyframes case-sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes case-sheet-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  .case-drawer-head {
+    padding: 20px 20px 16px;
+  }
+
+  .case-drawer-body {
+    padding: 20px 20px 28px;
+  }
+
+  /* Labels and values stop sharing a line: at this width a fixed label column
+     squeezes the technology names into an unreadable remainder. */
+  .case-drawer-stack-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-drawer[open],
+  .case-drawer--leaving {
+    animation: none;
+    transform: none;
   }
 }

@@ -1067,6 +1067,46 @@ p {
   text-wrap: pretty;
 }
 
+.terminal-hero-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 34px;
+  margin: 34px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each figure gets a hairline left edge rather than a box, so four numbers
+   read as one instrument panel instead of four competing cards. */
+.terminal-hero-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(125, 211, 252, 0.22);
+  text-align: left;
+}
+
+.terminal-hero-stat-value {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(1.25rem, 2.1vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+}
+
+.terminal-hero-stat-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  line-height: 1.45;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.72);
+}
+
 .terminal-hero-ctas {
   display: flex;
   gap: 12px;
@@ -1114,13 +1154,14 @@ p {
   transform: translateY(-1px);
 }
 
-/* Staggered entrance, in reading order: tag, headline, pipe, sub, CTAs. Each
-   runs once and settles visible. The pipe wrapper fades while its trace draws
-   itself in, so the diagram arrives as one gesture. */
+/* Staggered entrance, in reading order: tag, headline, pipe, sub, stats,
+   CTAs. Each runs once and settles visible. The pipe wrapper fades while its
+   trace draws itself in, so the diagram arrives as one gesture. */
 .terminal-hero-tag,
 .terminal-hero-title,
 .pipe,
 .terminal-hero-sub,
+.terminal-hero-stats,
 .terminal-hero-ctas {
   opacity: 0;
   animation: hero-rise 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
@@ -1140,6 +1181,10 @@ p {
 
 .terminal-hero-sub {
   animation-delay: 0.5s;
+}
+
+.terminal-hero-stats {
+  animation-delay: 0.6s;
 }
 
 .terminal-hero-ctas {
@@ -1193,6 +1238,7 @@ p {
   .terminal-hero-title,
   .pipe,
   .terminal-hero-sub,
+  .terminal-hero-stats,
   .terminal-hero-ctas {
     opacity: 1;
     animation: none;
@@ -1246,6 +1292,23 @@ p {
   .terminal-hero-tag {
     font-size: 10.5px;
     letter-spacing: 0.12em;
+  }
+  /* Two columns on a phone: four stats on one row would put the labels at
+     ~7px. The left-edge rule reads as a divider either way. */
+  .terminal-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+    max-width: 340px;
+    margin: 28px auto 0;
+    text-align: left;
+  }
+  .terminal-hero-stats li {
+    padding-left: 12px;
+  }
+  .terminal-hero-stat-label {
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
   }
   .terminal-hero-ctas {
     flex-direction: column;
