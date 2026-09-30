@@ -1412,7 +1412,12 @@ p {
   background-color: #0c0c0e;
   background-image: radial-gradient(1200px 700px at 85% -10%, rgba(38, 173, 244, 0.08), transparent 60%), radial-gradient(900px 600px at 0% 100%, rgba(38, 173, 244, 0.06), transparent 55%);
   color: #fff;
-  overflow: hidden;
+  /* `clip`, not `hidden`: this still contains the gallery's absolutely
+     positioned frames, but it does not establish a scroll container. With
+     `hidden` the section became the scrollport for every `view()` timeline
+     inside it, and since the section never scrolls internally those timelines
+     stayed frozen at a fixed progress instead of tracking the page. */
+  overflow: clip;
   padding-top: 0;
 }
 

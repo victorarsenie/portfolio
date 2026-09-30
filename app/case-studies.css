@@ -53,83 +53,74 @@
   }
 }
 
-.case-timeline::before {
-  content: "";
+/* --- Reading-progress spine ---------------------------------------------- */
+/* The centre rail and its nine dots are gone. They sat between two alternating
+   cards, so the line carried no information — a decorative rule with data
+   flowing around it — and on a phone they pushed every card off centre. What
+   replaces them is a rule in the left margin that fills as the section passes,
+   which is the one thing the rail was reaching for: a column of work that says
+   how far through it you are.
+
+   Deliberately neutral. The accent colour on this site means a measured result,
+   and a progress bar is not a measurement; colouring it blue would spend the
+   one thing the palette is supposed to be saying. The whole rule is behind two
+   progressive-enhancement gates, so a browser without scroll-driven animations
+   gets the static track and a reader who has asked for less motion gets the
+   same — both of which are a complete, sensible design rather than a fallback
+   that looks broken. */
+.case-spine {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
+  left: 0;
   width: 1px;
-  margin-left: -0.5px;
-  background: linear-gradient(
-    180deg,
-    rgba(148, 163, 184, 0) 0%,
-    rgba(148, 163, 184, 0.26) 5%,
-    rgba(148, 163, 184, 0.26) 95%,
-    rgba(148, 163, 184, 0) 100%
-  );
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none;
 }
 
-.case-entry {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  /* Fluid rather than fixed: every pixel here comes straight out of the card
-     width, and the dot-to-card stub only has to reach the nearer edge. */
-  column-gap: clamp(32px, 3.5vw, 52px);
-  align-items: start;
-}
-
-.case-entry-card {
-  grid-column: 1;
-}
-
-.case-entry:nth-child(even) .case-entry-card {
-  grid-column: 2;
-}
-
-/* The two voice-changing entries, and the rule that keeps them full width even
-   on the alternating rows they land on. Written as two classes so it matches
-   the specificity of the :nth-child(even) rule above and wins on source order —
-   at (0,2,0) it would lose to that (0,3,0) rule and the about card would sit
-   in one column. */
-.case-entry.case-entry--wide .case-entry-card {
-  grid-column: 1 / -1;
-}
-
-/* --- Anchor point -------------------------------------------------------- */
-/* Sits on the pipe, level with the card header, with a short stub reaching
-   toward the card so the association is unambiguous. */
-.case-entry-dot {
-  position: absolute;
-  top: 28px;
-  left: 50%;
-  width: 9px;
-  height: 9px;
-  margin-left: -4.5px;
-  border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1), 0 0 14px rgba(56, 189, 248, 0.45);
-}
-
-.case-entry-dot::after {
+.case-spine::after {
   content: "";
   position: absolute;
-  top: 50%;
-  width: 26px;
-  height: 1px;
-  background: rgba(148, 163, 184, 0.3);
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.12));
+  transform-origin: top;
+  transform: scaleY(0);
 }
 
-.case-entry:nth-child(odd) .case-entry-dot::after {
-  right: 100%;
-  margin-right: 10px;
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .case-spine::after {
+      animation: case-spine-fill linear both;
+      /* `view()` on the rule's own containing block, so the fill tracks the
+         spine rather than the whole page. `contain` is the range where the
+         section fully covers the viewport, which is the stretch of scrolling
+         that is actually spent reading it. */
+      animation-timeline: view();
+      animation-range: contain 0% contain 100%;
+    }
+  }
 }
 
-.case-entry:nth-child(even) .case-entry-dot::after {
-  left: 100%;
-  margin-left: 10px;
+@keyframes case-spine-fill {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
 }
+
+/* Reduced motion gets the rule at its finished state — a plain margin rule, with
+   no progress to speak of. Stated explicitly rather than left to fall out of the
+   base `scaleY(0)`, so what a reader who has asked for less motion sees is a
+   decision and not an accident of which branch the cascade took. */
+@media (prefers-reduced-motion: reduce) {
+  .case-spine::after {
+    transform: scaleY(1);
+  }
+}
+
 
 
 /* --- Card ---------------------------------------------------------------- */
@@ -310,8 +301,8 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   margin: 18px 0 0;
-  background: rgba(56, 189, 248, 0.16);
-  border: 1px solid rgba(56, 189, 248, 0.16);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -365,9 +356,11 @@
 }
 
 /* --- Metadata under the result -------------------------------------------- */
-/* Capabilities read as things the work did, so they get pills and the accent
-   colour — they are the only part of the metadata with any claim on attention.
-   The tech line below is the opposite: names only, muted, last. */
+/* Capabilities read as things the work did, so they get pills — but in the
+   neutral outline, not the accent. The accent on this site means a measured
+   result, and a card covered in blue pills spent the reader's attention on
+   nouns ("VRAM budgeting") that are not claims. The tech line below is the
+   opposite: names only, muted, last. */
 .case-chips {
   display: flex;
   flex-wrap: wrap;
@@ -379,15 +372,16 @@
 
 .case-chips li {
   padding: 3px 9px;
-  border: 1px solid rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  background: rgba(56, 189, 248, 0.07);
+  background: rgba(255, 255, 255, 0.03);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.04em;
-  color: #7dd3fc;
+  color: rgba(203, 213, 225, 0.7);
   white-space: nowrap;
 }
+
 
 .case-tech {
   margin: 12px 0 0;
@@ -480,84 +474,10 @@
 }
 
 /* --- Slim row ------------------------------------------------------------
-   The studies that are not featured. Same timeline slot and same drawer on the
-   far side, but no diagram, chips or tech line - one compact strip that names
-   the work, says what moved, and points at the drawer for the rest. It keeps
-   the case-entry-card class so it lands on the same alternating rail as the
-   full cards rather than spanning the line. */
-.case-row {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 15px 22px;
-  text-align: left;
-  background: #121216;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 14px;
-  color: #fff;
-  transition: border-color 0.25s ease, box-shadow 0.3s ease;
-}
-
-.case-row:hover,
-.case-row:focus-within {
-  border-color: rgba(38, 173, 244, 0.4);
-  box-shadow: 0 14px 32px -20px rgba(0, 0, 0, 0.7);
-}
-
-.case-row-main {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.case-row .case-card-meta {
-  margin-bottom: 4px;
-}
-
-.case-row-title {
-  margin: 0 0 2px;
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  line-height: 1.2;
-  letter-spacing: -0.05em;
-  color: #fff;
-  text-wrap: balance;
-}
-
-.case-row-metric {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: rgba(148, 163, 184, 0.78);
-}
-
-/* The full card pins its trigger to the bottom of a tall column with
-   margin-top: auto; in a row there is no column to pin to, so it centres. */
-.case-row-more {
-  flex: 0 0 auto;
-  margin-top: 0;
-  align-self: center;
-}
-
-.case-row-actions {
-  flex: 0 0 auto;
-  align-self: center;
-  margin-top: 0;
-}
-
-@media (max-width: 640px) {
-  .case-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .case-row-more {
-    align-self: flex-start;
-  }
-  .case-row-actions {
-    align-self: flex-start;
-  }
-}
+   Removed. The seven studies that are not in the lead set are ledger rows now
+   (.ledger-row), grouped by employer — a row per study either way, but the
+   grouping is what makes the list say something, and these styles had no way to
+   express it. */
 
 /* --- Pipeline diagram ---------------------------------------------------- */
 .case-pipe {
@@ -703,25 +623,11 @@
    full measure, which is the layout a phone wants anyway. Raising this from
    1024px is what stops the fix above from being undone on a small laptop. */
 @media (max-width: 1180px) {
-  /* The anchor line and its dots are a desktop device: on a phone they push
-     every card right of centre to make room for themselves, so the whole rig —
-     line, dots, and the entry's left clearance — is dropped and the cards take
-     the full, centred measure. */
-  .case-timeline::before {
-    display: none;
-  }
-
-  .case-entry {
-    grid-template-columns: minmax(0, 1fr);
-    padding-left: 0;
-  }
-
-  .case-entry-card,
-  .case-entry:nth-child(even) .case-entry-card {
-    grid-column: 1;
-  }
-
-  .case-entry-dot {
+  /* The progress spine is a desktop device: at this width the canvas is narrow
+     enough that a rule in the margin is closer to the content than to the edge
+     of the page, and the bento already stacks. The whole spine goes rather than
+     being re-sited, so the phone gets one clean measure. */
+  .case-spine {
     display: none;
   }
 }
@@ -758,20 +664,20 @@
   }
 }
 
-/* --- About + Currently building ------------------------------------------ */
-/* Both share the card frame, so they sit inside .case-entry-card and only
-   override what makes them different. */
+/* --- About ---------------------------------------------------------------- */
+/* The one card that is not a case study, and the argument the other nine are
+   evidence for, so it keeps the card frame and the brighter body copy.
 
-.case-entry-about,
-.case-entry-build {
-  padding: 28px 30px 26px;
-}
-
-/* The about card is the argument the seven case studies were evidence for, so
-   it gets the widest setting on the timeline and a brighter body copy. */
+   It used to carry an accent border and a blue wash, on the reasoning that the
+   studies below it were the evidence. That spent the accent on an introduction:
+   by the time the reader reached the chapter, the one thing on the page that was
+   actually a measurement had been pre-empted. Neutral now, and a shade lighter
+   than the cards so it reads as the section's floor rather than as one item
+   among ten. */
 .case-entry-about {
-  border-color: rgba(56, 189, 248, 0.24);
-  background: linear-gradient(180deg, rgba(56, 189, 248, 0.05), #121216 55%);
+  padding: 28px 30px 26px;
+  background: #14141a;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Body copy throughout these entries is Glacial, never Hype. A sentence carries
@@ -804,37 +710,89 @@
   color: rgba(203, 213, 225, 0.72);
 }
 
-/* Unfinished work says so in the border itself: a dashed edge is a promise the
-   card has not kept yet, which is exactly what it is. The roadmap card is
-   dashed too but in a cooler, quieter tone — it is further out than the build
-   card, and it has no live dot precisely because there is no running system
-   behind it to visit. */
-.case-entry-build,
-.case-entry-roadmap {
-  border-style: dashed;
-  border-color: rgba(56, 189, 248, 0.32);
+/* --- In progress and planned --------------------------------------------- */
+/* One strip, two columns, rather than two cards. As full-width cards in the
+   same frame as a delivered study they cost most of a viewport to say two
+   things honestly, and they read as two more results when they are not.
+
+   The border is what carries the difference now, and it says three different
+   things across the section rather than one: solid for what shipped, dashed
+   for what is mid-flight, and no edge at all for a plan with nothing behind
+   it. A dashed edge is a promise the card has not kept yet. The planned column
+   has no edge because there is no system to have an edge. */
+.case-future {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.case-future-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px 20px;
   background: #101014;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  text-align: left;
 }
 
-.case-entry-roadmap {
-  border-color: rgba(148, 163, 184, 0.26);
-  background: #0f0f13;
+.case-future-col--building {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
-.case-live {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+.case-future-col--planned {
+  border: 0;
+  background: transparent;
+  padding-inline: 0;
+  padding-block: 4px 0;
+}
+
+.case-future-meta {
+  margin: 0;
+}
+
+.case-future-state {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.case-future-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+/* The planned column is the quieter of the two, so its title steps down and
+   loses the display face. It is a plan; it should not shout over work that
+   shipped. */
+.case-future-col--planned .case-future-title {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.case-future-col--planned .case-build-copy,
+.case-future-col--planned .case-build-log li {
+  color: rgba(203, 213, 225, 0.66);
 }
 
 .case-build-copy {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
-  color: rgba(203, 213, 225, 0.82);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(203, 213, 225, 0.78);
   max-width: 60ch;
 }
 
@@ -843,18 +801,33 @@
    fabricated "Week 5" is the same invention as a fabricated metric. */
 .case-build-log {
   list-style: none;
-  margin: 20px 0 0;
+  margin: 0;
   padding: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .case-build-log li {
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-family: var(--font-body);
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.case-build-log strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  .case-future {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .case-future-col--planned {
+    padding-block: 0;
+  }
 }
 
 /* Set as copy rather than a disabled control: a button that does nothing reads
@@ -864,9 +837,10 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  margin: 18px 0 0;
+  margin: auto 0 0;
+  padding-top: 4px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.6);
@@ -1161,14 +1135,59 @@
   }
 }
 
-/* --- DIRECTION-A MOCK (reversible) — showcase panels + grouped ledger ----- */
-.case-entry--ledger {
-  grid-column: 1 / -1;
+/* --- Bands ---------------------------------------------------------------- */
+/* The section is read in three passes, and the headings are what make that
+   legible: the argument, then the three worth the scroll, then the rest of the
+   career at a glance. A single running list had no such breaks, which is why it
+   felt like thirteen things of equal weight rather than a page with a shape. */
+.case-band {
+  margin-top: clamp(40px, 6vw, 72px);
 }
 
-/* The ledger has no rail to sit on, so no dot. */
-.case-entry--ledger .case-entry-dot {
-  display: none;
+.case-band-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.case-band-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+/* The site already announces its sections with a mono path comment; reusing that
+   here rather than inventing a second label style is why these bands read as
+   part of the same page and not as a different template. It sits outside the
+   heading element so the heading's accessible name is the heading. */
+.case-band-kicker {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: rgba(148, 163, 184, 0.62);
+}
+
+/* --- Bento ---------------------------------------------------------------- */
+/* One full-width chapter, then two half-width tiles. Unequal by content, not by
+   decoration: the chapter is the only study with a set of measurements, and a
+   comparison of three speeds does not survive being squeezed into half a page.
+   The two tiles have a single result each, and the largest thing on either is
+   that result. */
+.case-bento {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.case-bento > .showcase--chapter {
+  grid-column: 1 / -1;
 }
 
 /* --- Showcase panel ------------------------------------------------------- */
@@ -1184,16 +1203,22 @@
   text-align: left;
 }
 
-.showcase--flip .showcase-diagram {
-  order: 2;
+/* A tile is one column, so nothing has to be told to wrap — and there is no
+   diagram half to alternate with, which is exactly why the old `flip` alternation
+   went with the rail. */
+.showcase--tile {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  padding: 28px 30px 24px;
 }
 
-.showcase--flip .showcase-story {
-  order: 1;
+.showcase--tile .showcase-story {
+  gap: 12px;
 }
 
-/* The current chapter — the local-LLM stack — gets the accent frame the About
-   card uses, to say this is the one the rest of the timeline points at. */
+/* The current chapter — the local-LLM stack — is the one card in the section
+   built around a measurement, so it gets the only accented frame on the page
+   and the only wash. The About card used to hold it and was given up. */
 .showcase--chapter {
   border-color: rgba(56, 189, 248, 0.28);
   background: linear-gradient(180deg, rgba(56, 189, 248, 0.06), #121216 60%);
@@ -1223,6 +1248,13 @@
   text-wrap: balance;
 }
 
+/* A tile's title has no diagram to balance against, so it steps down one notch
+   and stops competing with its own result. */
+.showcase-title--tile {
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+  letter-spacing: -0.055em;
+}
+
 .showcase-metric {
   margin: 0;
   font-family: var(--font-body);
@@ -1233,21 +1265,139 @@
   color: #7dd3fc;
 }
 
-.showcase-figures {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  margin: 0;
-  background: rgba(56, 189, 248, 0.16);
-  border: 1px solid rgba(56, 189, 248, 0.16);
-  border-radius: 6px;
-  overflow: hidden;
+/* On a tile the result is the headline — it is the only claim the study makes,
+   and the chapter card has already set the precedent of a number being the
+   largest thing on a card. */
+.showcase-metric--tile {
+  font-size: clamp(1.375rem, 2vw, 1.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
 }
 
-/* The diagnosis, set off from the figure grid: an open left rule rather than a
-   boxed cell, because it argues rather than reports. The value keeps the
-   display face at figure scale so it still scans, and the text sits on the
-   baseline with it rather than centred, so the two read as one line. */
+/* --- The benchmark, as a comparison --------------------------------------- */
+/* Three throughput readings on one scale, rather than four boxes.
+
+   The boxes were four facts in a grid; 54, 175 and 85 tokens a second are one
+   fact with three measurements, and the thing worth saying about them is the
+   gap. Drawn to scale, the gap is the first thing the eye gets — which is the
+   entire claim of the study, arrived at without reading a word. The bars are
+   the accent because they are the measured results; the tracks behind them are
+   not, because an empty track is not a result. */
+.case-bench {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.case-bench-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 14px;
+  margin: 0;
+}
+
+.case-bench-value {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.case-bench-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  min-width: 0;
+}
+
+.case-bench-track {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  /* `clip` rather than `hidden` for the same reason as `.work`: `hidden` would
+     make this the scrollport for the bar's `view()` timeline, and the bar would
+     never be drawn. Clipping to the rounded track is all this needs. */
+  overflow: clip;
+}
+
+.case-bench-bar {
+  display: block;
+  width: var(--share);
+  height: 100%;
+  border-radius: 2px;
+  background: #38bdf8;
+  /* Left-anchored so the grow animation extends the bar rather than scaling one
+     out of the middle of itself. */
+  transform-origin: left;
+}
+
+.case-bench-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+/* A figure with no share is not part of the comparison — a price is not a speed
+   — so it sits under the bars as a line of copy rather than being given a width
+   it was never measured against. */
+.case-bench-aside {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: rgba(148, 163, 184, 0.66);
+}
+
+.case-bench-aside-value {
+  color: rgba(203, 213, 225, 0.9);
+  font-weight: 700;
+}
+
+/* The bars draw themselves as the chapter enters. Scroll-driven rather than
+   time-driven, so the animation is tied to the reading position and stops being
+   a loop: scroll past and it is simply already drawn. Behind two gates, so a
+   browser without scroll-driven animations — or a reader who has asked for less
+   motion — gets the finished chart, which is the thing that matters. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .case-bench-bar {
+      animation: case-bench-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 35%;
+    }
+  }
+}
+
+@keyframes case-bench-grow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The diagnosis, set off from the bars: an open left rule rather than a bar,
+   because it argues rather than reports. The value keeps the display face at
+   figure scale so it still scans, and the text sits on the baseline with it
+   rather than centred, so the two read as one line. Neutral rule — the accent
+   is spoken for by the numbers above it. */
 .showcase-finding {
   display: flex;
   flex-wrap: wrap;
@@ -1255,10 +1405,10 @@
   gap: 4px 12px;
   margin: 0;
   padding: 10px 14px;
-  border: 1px solid rgba(56, 189, 248, 0.14);
-  border-left: 2px solid rgba(56, 189, 248, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 2px solid rgba(255, 255, 255, 0.28);
   border-radius: 0 6px 6px 0;
-  background: rgba(56, 189, 248, 0.05);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 /* Body face, tabular figures, same as .case-figure-value - the site already has
@@ -1295,14 +1445,24 @@
 
 .showcase-chips li {
   padding: 3px 9px;
-  border: 1px solid rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  background: rgba(56, 189, 248, 0.07);
+  background: rgba(255, 255, 255, 0.03);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.04em;
-  color: #7dd3fc;
+  color: rgba(203, 213, 225, 0.7);
   white-space: nowrap;
+}
+
+/* The tech line closes a tile rather than introducing it: the tile has no chips,
+   so the names sit last, quiet, after the result they were built with. */
+.showcase--tile .showcase-tech {
+  margin: 0;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 12px;
+  font-size: 0.625rem;
 }
 
 .showcase-tech {
@@ -1315,17 +1475,45 @@
 }
 
 /* --- Ledger --------------------------------------------------------------- */
+/* The seven studies that are not in the lead set, grouped by employer. A list
+   of ten gave every study the same box; grouping says the thing a flat list
+   could not — that four of these were one pipeline problem at one employer —
+   and it earns the height back, because a row is a title, a result and a way
+   in. Nothing here is a stub: every row opens the same drawer. */
+.ledger-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
 .ledger {
-  padding: 6px 4px;
+  padding: 0 4px;
+}
+
+/* The employer is the heading, and the years sit with it, so grouping does not
+   quietly throw the chronology away: the span is stated once per employer
+   instead of once per study. */
+.ledger-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .ledger-employer {
-  margin: 0 0 2px;
+  margin: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.7);
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.ledger-years {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: rgba(148, 163, 184, 0.55);
 }
 
 .ledger-list {
@@ -1338,10 +1526,15 @@
 .ledger-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: 8px 20px;
   align-items: center;
-  padding: 16px 6px;
+  padding: 15px 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease;
+}
+
+.ledger-row:hover {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .ledger-main {
@@ -1357,58 +1550,74 @@
   color: #fff;
 }
 
+/* The result stays in the accent even at ledger size: it is still the one
+   measured claim on the row, and the whole point of the discipline is that the
+   colour is predictable rather than decorative. */
 .ledger-metric {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: #7dd3fc;
 }
 
 .ledger-tech {
-  margin: 6px 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
-  color: rgba(148, 163, 184, 0.6);
-}
-
-.ledger-more {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 13px;
-  border: 1px solid rgba(38, 173, 244, 0.42);
-  border-radius: 3px;
-  background: rgba(38, 173, 244, 0.08);
-  color: #7dd3fc;
+  margin: 5px 0 0;
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: rgba(148, 163, 184, 0.55);
 }
 
-.ledger-more:hover {
-  background: rgba(38, 173, 244, 0.16);
-  border-color: rgba(38, 173, 244, 0.7);
-  color: #bae6fd;
+.ledger-actions {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-top: 0;
 }
 
-.ledger-more .fa {
-  font-size: 0.7rem;
+@media (max-width: 640px) {
+  .ledger-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .ledger-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* The ledger's read trigger is the same control as the cards', one size down —
+   it is applied alongside .case-more, so only the difference is declared here
+   rather than a second copy of the whole thing that could drift. */
+.ledger-more {
+  padding: 6px 12px;
+  font-size: 0.625rem;
 }
 
 @media (max-width: 900px) {
   .showcase {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 26px;
     padding: 28px 24px;
   }
+}
 
-  .showcase--flip .showcase-diagram,
-  .showcase--flip .showcase-story {
-    order: initial;
+/* The bento is a two-column idea: below it the tiles are stacked, and the
+   chapter is already a single column of its own at this width. */
+@media (max-width: 900px) {
+  .case-bento {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
+
+@media (max-width: 640px) {
+  .case-band-head {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .showcase--tile {
+    padding: 24px 22px 20px;
+  }
+}
+

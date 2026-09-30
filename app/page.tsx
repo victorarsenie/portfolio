@@ -9,15 +9,13 @@ import TiltCard from "./components/TiltCard";
 import HappyChip from "./components/HappyChip";
 import AmpText from "./components/AmpText";
 import ShowcasePanel from "./components/ShowcasePanel";
-import CaseStudyRow from "./components/CaseStudyRow";
+import ShowcaseTile from "./components/ShowcaseTile";
+import CaseStudyLedger from "./components/CaseStudyLedger";
 import CaseStudyDrawer from "./components/CaseStudyDrawer";
-import { AboutEntry, BuildingEntry, RoadmapEntry } from "./components/TimelineNotes";
-import { caseStudiesByRecency, featuredCaseStudies } from "./lib/caseStudies";
+import { AboutEntry, FutureEntry } from "./components/TimelineNotes";
+import { caseStudiesByRecency, chapterCaseStudy, tileCaseStudies, ledgerGroups } from "./lib/caseStudies";
 
 const CONTACT_EMAIL = "victor.arsenie@yahoo.com";
-
-// Lead (featured) studies lead the timeline; the rest follow in recency order.
-const restCaseStudies = caseStudiesByRecency.filter(study => !study.featured);
 
 // Skills navigation component
 function SkillsTabs() {
@@ -411,17 +409,33 @@ function WorkSection() {
 			</div>
 		</section>
 	);
-} // Case studies — an integration timeline. The horizontal rail this replaced
-// needed a drag or swipe to reach a case and hid whatever was off-screen; a
-// vertical column is the one scroll direction every input already knows, and
-// reading downward is the same gesture as reading a career.
+} // Case studies — a proof section, in three bands.
 //
-// The cards carry only their summary; the drawer holds the full account. A
-// single selection is tracked here, so opening one study replaces whatever was
+// It replaced a horizontal rail that needed a drag or swipe to reach a case and
+// hid whatever was off-screen; a vertical column is the one scroll direction
+// every input already knows. What it got wrong next was the rail's other half:
+// ten studies laid end to end, each in the same box, so the two with measured
+// results and the one with a real diagnosis in it looked exactly like four CMS
+// builds nobody can check. Ten studies is more than a portfolio can sell, and
+// pretending otherwise hid the strongest three.
+//
+// So: the current chapter gets a full-width panel because it is the only study
+// whose result is a set of numbers, two client builds get half-width tiles
+// because a single result does not need a diagram, and the remaining seven go
+// into a ledger grouped by employer — which is the thing a flat list of ten
+// could not say, that four of them were the same pipeline problem at one
+// employer. Building and planned close it as a strip, not as two more cards
+// the same size as a delivered project. Every study still opens the same
+// drawer, and one selection is tracked so opening a study replaces whatever was
 // open rather than stacking panels.
 function CaseStudiesPreview() {
 	const [openSlug, setOpenSlug] = useState<string | null>(null);
 	const open = caseStudiesByRecency.find(study => study.slug === openSlug) ?? null;
+	// Bound before the JSX rather than tested inside it: the arrow function that
+	// closes over the chapter would otherwise widen the type back to `| null`
+	// and every use inside it would need its own guard.
+	const chapter = chapterCaseStudy;
+	const chapterOnOpen = chapter?.details ? () => setOpenSlug(chapter.slug) : undefined;
 
 	return (
 		<section id="case-studies" className="section work">
@@ -432,52 +446,60 @@ function CaseStudiesPreview() {
 				</header>
 			</div>
 
-			{/* A plain list: the visual order and the DOM order are the same, so
-			    the sequence is conveyed by the markup rather than by CSS, and a
-			    screen reader gets the timeline in the order it reads. */}
-		<ol className="case-timeline">
-			{/* About leads the timeline: who this is, before the evidence. A
-			    full-width card in front of the alternating rail reads as a
-			    change of voice rather than as the first case study. */}
-			<li className="case-entry case-entry--wide">
-				<span className="case-entry-dot" aria-hidden="true" />
+			<div className="case-timeline">
+				{/* The reading-progress spine. A 1px rule in the left margin that
+				    fills as the section passes, so the column of work says how far
+				    through it you are — the one thing the old centre rail was
+				    reaching for and never got, because a line that sits between two
+				    alternating cards carries no information. Neutral on purpose:
+				    the accent colour means a measured result on this site, and a
+				    progress bar is not one. Hidden below 1180px with the rest of
+				    the desktop rig. */}
+				<span className="case-spine" aria-hidden="true" />
+
 				<AboutEntry />
-			</li>
-			{/* Featured studies as full-width, diagram-led showcase panels; the
-			    lighter builds sit back on the alternating rail as slim rows. */}
-			{featuredCaseStudies.map((study, index) => (
-				<li className="case-entry case-entry--wide" key={study.slug}>
-					<ShowcasePanel
-						study={study}
-						flip={index % 2 === 1}
-						onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
-					/>
-				</li>
-			))}
-			{restCaseStudies.map(study => (
-				<li className="case-entry" key={study.slug}>
-					<span className="case-entry-dot" aria-hidden="true" />
-					<CaseStudyRow
-						study={study}
-						onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
-					/>
-				</li>
-			))}
 
-				{/* In progress, so it has no metric to quote and a different
-				    border to say so. */}
-				<li className="case-entry case-entry--wide">
-					<span className="case-entry-dot" aria-hidden="true" />
-					<BuildingEntry />
-				</li>
+				<section className="case-band" aria-labelledby="case-lead-title">
+					<div className="case-band-head">
+						<span className="case-band-kicker">{"// selected"}</span>
+						<h2 className="case-band-title" id="case-lead-title">
+							Three worth the scroll
+						</h2>
+					</div>
+					<div className="case-bento">
+						{chapter ? (
+							<ShowcasePanel study={chapter} onOpen={chapterOnOpen} />
+						) : null}
+						{tileCaseStudies.map(study => (
+							<ShowcaseTile
+								key={study.slug}
+								study={study}
+								onOpen={study.details ? () => setOpenSlug(study.slug) : undefined}
+							/>
+						))}
+					</div>
+				</section>
 
-				{/* Also has no metric, for a stronger reason: nothing behind
-				    it exists yet. */}
-				<li className="case-entry case-entry--wide">
-					<span className="case-entry-dot" aria-hidden="true" />
-					<RoadmapEntry />
-				</li>
-			</ol>
+				<section className="case-band" aria-labelledby="case-ledger-title">
+					<div className="case-band-head">
+						<span className="case-band-kicker">{"// the rest"}</span>
+						<h2 className="case-band-title" id="case-ledger-title">
+							The other seven, by employer
+						</h2>
+					</div>
+					<CaseStudyLedger groups={ledgerGroups} onOpen={setOpenSlug} />
+				</section>
+
+				<section className="case-band" aria-labelledby="case-future-title">
+					<div className="case-band-head">
+						<span className="case-band-kicker">{"// not yet"}</span>
+						<h2 className="case-band-title" id="case-future-title">
+							In progress and planned
+						</h2>
+					</div>
+					<FutureEntry />
+				</section>
+			</div>
 
 			<CaseStudyDrawer
 				title={open?.title ?? ""}

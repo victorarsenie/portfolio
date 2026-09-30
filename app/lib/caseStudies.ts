@@ -47,8 +47,17 @@ interface SummaryBase {
 	 * benchmark card can carry the actual readings while the rest of the
 	 * timeline keeps its single line. Optional by design: a study with an
 	 * outcome rather than a benchmark omits it and nothing shifts.
+	 *
+	 * `share` is a reading as a percentage of the largest reading in the same
+	 * set, and it is what lets the figures render as a comparison instead of
+	 * four unrelated boxes: 54, 175 and 85 t/s are one claim, and side by side
+	 * they say it. It is set per figure on purpose rather than computed at
+	 * render time, so the width on screen is a number somebody chose and can
+	 * be argued with. A figure with no `share` is not part of the comparison -
+	 * "-3% vision cost" is a price, not a speed - so it drops below the bars as
+	 * a note rather than being given a width it does not have.
 	 */
-	figures?: readonly { value: string; label: string }[];
+	figures?: readonly { value: string; label: string; share?: number }[];
 	/**
 	 * Optional: the one finding worth keeping, for a study whose most
 	 * interesting result is a diagnosis rather than a measurement. A figure
@@ -85,9 +94,12 @@ export interface CaseStudyDetails {
 }
 
 export type CaseStudy = CaseStudySummary & {
-	/** The four the case-study section leads with; the rest stay billboard rows.
-	    Curation marker for the timeline lead/row split - inert until that layout
-	    lands, but it names the lead set in one place. */
+	/** The three the section leads with: the current chapter plus two client
+	    builds. Everything else is a ledger row, grouped by employer. Ten
+	    studies is more than the three-to-five a portfolio can actually sell, so
+	    the split is curation rather than padding - the ledger is not a demotion
+	    to hide anything, it is the honest way to show four years of the same
+	    kind of work without giving each one a diagram. */
 	featured?: boolean;
 	/** Optional: an entry may be a billboard with nothing to expand (KeyElement),
 	    in which case the card renders without a "Read case study" trigger. */
@@ -122,10 +134,13 @@ export const caseStudies: CaseStudy[] = [
 		metric: "175 t/s at 256K on a single 16 GB GPU",
 		// Every box here is a result - something the stack did. The 4x below is
 		// deliberately not one of them: it is the diagnosis that explains one.
+		// The three throughput readings carry a `share` so they render as bars
+		// against each other; the vision cost does not, because a price is not a
+		// speed and has no width to be drawn at.
 		figures: [
-			{ value: "54 t/s", label: "27B dense · 128K · vision" },
-			{ value: "175 t/s", label: "35B MoE · 256K" },
-			{ value: "85 t/s", label: "3.8 speculative · 64K" },
+			{ value: "54 t/s", label: "27B dense · 128K · vision", share: 31 },
+			{ value: "175 t/s", label: "35B MoE · 256K", share: 100 },
+			{ value: "85 t/s", label: "3.8 speculative · 64K", share: 49 },
 			{ value: "-3%", label: "vision cost, 0 GB VRAM" },
 		],
 		// The one thing worth carrying out of this study. The clue that cracked
@@ -334,7 +349,6 @@ export const caseStudies: CaseStudy[] = [
 	},
 	{
 		slug: "backup-tickets",
-		featured: true,
 		title: "Backup state in support tickets",
 		client: "CWCS",
 		year: "2017–2021",
@@ -432,6 +446,67 @@ export const caseStudiesByRecency = [...caseStudies].sort(
 
 /**
  * The lead set, in array order (not recency) - a deliberate list, not a sort
- * side effect. Consumed by the timeline layout once the lead/row split lands.
+ * side effect.
  */
 export const featuredCaseStudies = caseStudies.filter(study => study.featured);
+
+/**
+ * The current chapter, and the only study whose result is a set of numbers
+ * rather than a single outcome, so it is the one that gets the full-width
+ * diagram panel. Split out by slug rather than by array position so that
+ * reordering the array cannot silently swap which study is the loud one.
+ */
+export const chapterCaseStudy =
+	featuredCaseStudies.find(study => study.slug === "local-llm-setup") ?? null;
+
+/** The rest of the lead set: half-width tiles, because they have no figures to
+    give a full-width panel anything to say. */
+export const tileCaseStudies = featuredCaseStudies.filter(
+	study => study.slug !== "local-llm-setup",
+);
+
+export interface CaseStudyGroup {
+	/** The employer, or whatever the work was actually for - which is not always
+	    a company. The ledger is grouped by this, so it is the row heading. */
+	client: string;
+	/** The span the group covers, so grouping by employer does not quietly throw
+	    the chronology away: the years are still on screen, once per employer
+	    instead of once per study. */
+	years: string;
+	studies: CaseStudy[];
+}
+
+/**
+ * The rest of the studies, grouped by employer.
+ *
+ * A single running list of ten was nine headlines too long: every entry got the
+ * same amount of space, so the two studies with measured results and the one
+ * with a diagnosis looked the same as four CMS builds nobody can check. Grouping
+ * says something the flat list could not - that four of these were the same
+ * pipeline work at one employer, and two were a different shape of problem at
+ * another - and it lets the section lead with what is actually different.
+ *
+ * Group order follows the most recent study in each group, and rows within a
+ * group keep the recency sort, so nothing reorders relative to the timeline
+ * this replaced.
+ */
+export const ledgerGroups: CaseStudyGroup[] = (() => {
+	const grouped = new Map<string, CaseStudy[]>();
+	for (const study of caseStudiesByRecency) {
+		if (study.featured) continue;
+		const bucket = grouped.get(study.client);
+		if (bucket) {
+			bucket.push(study);
+		} else {
+			grouped.set(study.client, [study]);
+		}
+	}
+	return [...grouped].map(([client, studies]) => {
+		// Every study at one employer shares its era, so this is normally a
+		// single year; the range only appears if a group ever straddles two,
+		// and then it says so rather than picking one.
+		const first = studies[0].year;
+		const last = studies[studies.length - 1].year;
+		return { client, years: first === last ? first : `${first}–${last}`, studies };
+	});
+})();

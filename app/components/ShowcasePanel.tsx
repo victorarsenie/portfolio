@@ -1,33 +1,33 @@
+import type { CSSProperties } from "react";
 import AmpText from "./AmpText";
 import PipelineDiagram from "./PipelineDiagram";
 import CaseLink from "./CaseLink";
 import type { CaseStudy } from "../lib/caseStudies";
 
-// A full-width showcase panel: the diagram leads (and each topology — chain,
-// cycle, sync — already looks different, which is what keeps four of these from
-// reading as a cloned stack), the story sits opposite it, and the diagram side
-// alternates across the rail via .showcase--flip. The local-LLM study is the
-// current chapter, so it carries a distinct accent frame and is the only one
-// that shows the measured figures.
+// The current chapter, and the only card in the section built around a diagram.
+// It leads because it is the newest work and the only study whose result is a
+// set of numbers, so it has something a half-width tile cannot show: a
+// throughput comparison, drawn to scale. The other topologies - chain, cycle,
+// sync - are drawn rather than described, which is what keeps the section from
+// reading as one card cloned four times, but only the studies that earned a
+// tile keep them.
 export default function ShowcasePanel({
 	study,
 	onOpen,
-	flip,
 }: {
 	study: CaseStudy;
 	onOpen?: () => void;
-	/** Puts the diagram on the opposite side; the timeline alternates it. */
-	flip?: boolean;
 }) {
-	const figures = study.figures ?? [];
-	const cls = [
-		"showcase",
-		"case-entry-card",
-		study.slug === "local-llm-setup" ? "showcase--chapter" : "",
-		flip ? "showcase--flip" : "",
-	].join(" ");
+	// Split on the same field the data is split on: a figure with a `share` is a
+	// speed and belongs in the comparison, one without is a price and is a note
+	// under it. Deciding this here rather than in the data keeps "what counts as
+	// comparable" a rendering decision, where the alternative is a second
+	// boolean on every figure.
+	const measured = (study.figures ?? []).filter(figure => figure.share !== undefined);
+	const noted = (study.figures ?? []).filter(figure => figure.share === undefined);
+
 	return (
-		<article className={cls}>
+		<article className="showcase showcase--chapter case-card">
 			<div className="showcase-diagram">
 				<PipelineDiagram topology={study.topology} nodes={study.nodes} />
 				<ul className="showcase-chips">
@@ -47,20 +47,43 @@ export default function ShowcasePanel({
 					<AmpText text={study.title} />
 				</h3>
 				<p className="showcase-metric">{study.metric}</p>
-				{figures.length > 0 && (
-					<dl className="showcase-figures">
-						{figures.map(f => (
-							<div key={f.label} className="case-figure">
-								<dt className="case-figure-value">{f.value}</dt>
-								<dd className="case-figure-label">{f.label}</dd>
+				{measured.length > 0 && (
+					// A bar each, on one scale, so the claim is the comparison: 54
+					// and 175 tokens a second are not three facts on a card, they
+					// are one fact with three measurements. Four boxes said it
+					// less well and took more room.
+					<dl className="case-bench">
+						{measured.map(figure => (
+							<div key={figure.label} className="case-bench-row">
+								<dt className="case-bench-value">{figure.value}</dt>
+								<dd className="case-bench-cell">
+									<span className="case-bench-track">
+										<span
+											className="case-bench-bar"
+											style={{ "--share": `${figure.share}%` } as CSSProperties}
+										/>
+									</span>
+									<span className="case-bench-label">{figure.label}</span>
+								</dd>
 							</div>
 						))}
 					</dl>
 				)}
+				{noted.length > 0 && (
+					<ul className="case-bench-aside">
+						{noted.map(figure => (
+							<li key={figure.label}>
+								<span className="case-bench-aside-value">{figure.value}</span>
+								{` ${figure.label}`}
+							</li>
+						))}
+					</ul>
+				)}
 				{study.finding && (
-					// Its own line rather than a fifth figure box: a measurement and
-					// a diagnosis are different claims, and the grid is for the
-					// measurements.
+					// Its own line rather than a fifth bar: a measurement and
+					// a diagnosis are different claims, and a diagnosis has no
+					// width on a scale it was never measured against. Setting
+					// it as an open left rule says it argues rather than reports.
 					<p className="showcase-finding">
 						<span className="case-finding-value">{study.finding.value}</span>
 						<span className="case-finding-text">{study.finding.text}</span>
