@@ -49,6 +49,17 @@ interface SummaryBase {
 	 * outcome rather than a benchmark omits it and nothing shifts.
 	 */
 	figures?: readonly { value: string; label: string }[];
+	/**
+	 * Optional: the one finding worth keeping, for a study whose most
+	 * interesting result is a diagnosis rather than a measurement. A figure
+	 * says "this is what it did"; a finding says "this was broken, and it did
+	 * not look broken". The two cannot share a row without implying they are
+	 * the same kind of claim - a 4x speedup and the bug that explains a 4x
+	 * slowdown are opposites, and setting them side by side flattens the
+	 * second into the first. Given its own line, the diagnosis reads as the
+	 * harder half of the work, which is what it was.
+	 */
+	finding?: { value: string; text: string };
 }
 
 /** Everything the card is allowed to know. */
@@ -102,18 +113,33 @@ export const caseStudies: CaseStudy[] = [
 		// produced a new question. Nothing here was finished once.
 		nodes: ["Benchmark", "Diagnose", "Tune", "Re-measure"],
 		topology: "cycle",
-		// The headline is the best single reading. The rest of the benchmark
-		// lives in `figures` below, because the interesting result here is not
-		// one number but the shape of the tuning: throughput traded against
-		// context, vision bought for almost nothing, and a 4x regression
-		// traced to one wrong field in a model file.
-		metric: "Overcoming hardware constraints",
+		// The headline leads with the number, because that is the claim worth
+		// remembering, and carries the constraint as the frame rather than the
+		// other way round. "Overcoming hardware constraints" described the work;
+		// this states what it produced, and the 16 GB is the flex - 256K of
+		// context at that rate is not something the card has to defend, because
+		// the figures underneath it are the defence.
+		metric: "175 t/s at 256K on a single 16 GB GPU",
+		// Every box here is a result - something the stack did. The 4x below is
+		// deliberately not one of them: it is the diagnosis that explains one.
 		figures: [
 			{ value: "54 t/s", label: "27B dense · 128K · vision" },
 			{ value: "175 t/s", label: "35B MoE · 256K" },
+			{ value: "85 t/s", label: "3.8 speculative · 64K" },
 			{ value: "-3%", label: "vision cost, 0 GB VRAM" },
-			{ value: "4x", label: "regression traced to KV cache" },
 		],
+		// The one thing worth carrying out of this study. The clue that cracked
+		// it was an inversion: the 15.8 GB quant ran at 170 t/s while the
+		// 13.0 GB one managed 44, and a bigger model should never be the faster
+		// one on a memory-bound card. It was not the model. One GGUF was missing
+		// the Gated DeltaNet layer metadata, so llama.cpp reserved KV cache for
+		// all 40 layers instead of the 10 that actually use it - 2,453 MiB
+		// against 720 - and the 1,173 MiB of overspend pushed the surplus layers
+		// to CPU. The same model, from a different publisher's blob, ran at 178.
+		finding: {
+			value: "4x",
+			text: "slower on the smaller model — missing Gated DeltaNet metadata",
+		},
 		chips: ["VRAM budgeting", "Throughput profiling", "Speculative decoding", "Reasoning budgets"],
 		tech: ["llama.cpp", "CUDA", "GGUF", "RTX 5070 Ti"],
 		// Deliberately empty for the same reason the Building entry has no
@@ -125,12 +151,16 @@ export const caseStudies: CaseStudy[] = [
 			problem:
 				"Hosted free tiers are rationed - roughly 200 requests a day, tool calls capped, models that rotate out from under you - and they train on what you send. The alternative is local, but a consumer GPU has a hard ceiling: 16 GB of VRAM, most of which Windows already takes, against models that want far more.",
 			pipeline:
-				"Every model was benchmarked at fixed context lengths and fixed token counts, then diagnosed down to the layer. A 4x slowdown turned out to be missing Gated DeltaNet metadata in one model file, allocating KV cache for 40 layers instead of 10. Speculative decoding needed 2.4 GB of headroom, so it traded context length for a 57% throughput gain. A 125B model was downloaded, tuned, benchmarked, and rejected as disk-bound. Vision runs through a CPU-resident encoder: 3% throughput cost, zero VRAM, full context.",
+				"Every model was benchmarked at fixed context and token counts, then diagnosed down to the layer. Speculative decoding bought 57% more throughput at 64K, but only with 2.4 GB of headroom to stop CUDA graphs thrashing — so it paid in context. A 125B mixture-of-experts beat the 27B on all twelve shared benchmarks and was still rejected: 76 GB of weights do not fit through SATA into 32 GB of RAM. Vision runs on a CPU-resident encoder — 3% throughput, zero VRAM, full context.",
 			outcome:
-				"A working stack where a 27B dense model does real multi-file edits at 54 t/s across 128K with vision available to check its own work, and a 35B mixture-of-experts runs at 175 t/s across 256K. No rate limit, no training on the code, no model that disappears next quarter - and it works with the network off. The 27B reworked this site's hero section from a written spec, and that output is what the current build continues from.",
+				"A 27B dense model does real multi-file edits at 54 t/s across 128K, vision checking its own work; a 35B MoE runs at 175 t/s across 256K. No rate limit, no training on the code, no model that disappears next quarter — and it works with the network off. The 3.6's hidden reasoning runs 3,000 to 15,000 tokens past the visible answer, 20 to 90 seconds of dead air, so every config caps thinking at 4,096 — verified, the cut lands mid-sentence. The 27B reworked this site's hero from a spec; this build continues from that output.",
 			stackGrouped: {
+				// No `data` group: "throughput curves / VRAM budget maps /
+				// context-length sweeps" are what the research produced, not
+				// what the stack is made of, and the card's figures already
+				// quote the readings. They are also the three pieces of this
+				// that want to be written up rather than listed.
 				core: ["Qwen3.8-27B (dense, vision)", "Qwen3.6-35B-A3B (MoE)"],
-				data: ["Throughput curves", "VRAM budget maps", "Context-length sweeps"],
 				infra: ["llama.cpp", "GGUF", "CUDA", "RTX 5070 Ti 16 GB", "OpenAI-compatible API"],
 			},
 		},

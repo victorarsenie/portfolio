@@ -945,7 +945,11 @@
   flex: 1 1 auto;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 22px 26px 32px;
+  /* Bottom padding trimmed from 32px. This is the densest text-only drawer in
+     the set and 32px of dead space below the last section was the difference
+     between fitting the viewport and not; the separators above already carry
+     the rhythm. */
+  padding: 20px 26px 22px;
 }
 
 .case-drawer-section + .case-drawer-section {
@@ -1185,6 +1189,46 @@
   border: 1px solid rgba(56, 189, 248, 0.16);
   border-radius: 6px;
   overflow: hidden;
+}
+
+/* The diagnosis, set off from the figure grid: an open left rule rather than a
+   boxed cell, because it argues rather than reports. The value keeps the
+   display face at figure scale so it still scans, and the text sits on the
+   baseline with it rather than centred, so the two read as one line. */
+.showcase-finding {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-left: 2px solid rgba(56, 189, 248, 0.5);
+  border-radius: 0 6px 6px 0;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* Body face, tabular figures, same as .case-figure-value - the site already has
+   one convention for numbers and this is not a third kind of thing. A step up
+   in size, because the left rule is doing the differentiating and the value has
+   to hold it. */
+.case-finding-value {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+}
+
+.case-finding-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: rgba(203, 213, 225, 0.8);
 }
 
 .showcase-chips {

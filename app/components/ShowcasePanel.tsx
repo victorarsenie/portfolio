@@ -56,6 +56,15 @@ export default function ShowcasePanel({
 						))}
 					</dl>
 				)}
+				{study.finding && (
+					// Its own line rather than a fifth figure box: a measurement and
+					// a diagnosis are different claims, and the grid is for the
+					// measurements.
+					<p className="showcase-finding">
+						<span className="case-finding-value">{study.finding.value}</span>
+						<span className="case-finding-text">{study.finding.text}</span>
+					</p>
+				)}
 				{onOpen && (
 					<button type="button" className="case-more" onClick={onOpen} aria-haspopup="dialog">
 						Read case study
