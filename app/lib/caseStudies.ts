@@ -68,6 +68,9 @@ export interface CaseStudyDetails {
 	/** Optional: a study may carry only the summary's flat `tech` line, and the
 	    drawer falls back to rendering that instead of an empty Stack section. */
 	stackGrouped?: Partial<TechGroup>;
+	/** Optional: a screenshot of the running deliverable, shown framed at the
+	    top of the drawer. Absent for a study with no public UI to point at. */
+	screenshot?: string;
 }
 
 export type CaseStudy = CaseStudySummary & {
@@ -190,6 +193,7 @@ export const caseStudies: CaseStudy[] = [
 				data: ["MySQL", "XML ingestion", "Schema mapping"],
 				infra: ["Cron scheduling", "Duplicate detection"],
 			},
+			screenshot: "/images/nkres.png",
 		},
 	},
 	{
@@ -214,6 +218,7 @@ export const caseStudies: CaseStudy[] = [
 				data: ["Live listings", "XML import"],
 				infra: ["TCPDF", "InDesign templates", "Page-turner export"],
 			},
+			screenshot: "/images/mag.png",
 		},
 	},
 	{
@@ -239,6 +244,7 @@ export const caseStudies: CaseStudy[] = [
 				data: ["REST APIs", "Third-party API orchestration"],
 				infra: ["Address lookup", "Email delivery"],
 			},
+			screenshot: "/images/outlook.png",
 		},
 	},
 	{
@@ -264,6 +270,7 @@ export const caseStudies: CaseStudy[] = [
 				data: ["Automated deploy"],
 				infra: ["Email signatures", "Responsive markup"],
 			},
+			screenshot: "/images/morganalexandersig.gif",
 		},
 	},
 	{

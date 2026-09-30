@@ -138,6 +138,12 @@ export default function CaseStudyDrawer({
 					</header>
 
 					<div className="case-drawer-body">
+						{details.screenshot && (
+							// Raw <img> on purpose: next/image freezes animated GIFs on their first frame.
+							// eslint-disable-next-line @next/next/no-img-element
+							<img className="case-drawer-shot" src={details.screenshot} alt={`${title} screenshot`} loading="lazy" />
+						)}
+
 						<section className="case-drawer-section">
 							<h3 className="case-drawer-label">The problem</h3>
 							<p>{details.problem}</p>

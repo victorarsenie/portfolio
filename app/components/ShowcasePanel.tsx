@@ -56,9 +56,6 @@ export default function ShowcasePanel({
 						))}
 					</dl>
 				)}
-				{study.details && (
-					<p className="showcase-narrative">{study.details.problem}</p>
-				)}
 				{onOpen && (
 					<button type="button" className="case-more" onClick={onOpen} aria-haspopup="dialog">
 						Read case study

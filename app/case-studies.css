@@ -342,7 +342,7 @@
 .case-figure-label {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   line-height: 1.4;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -359,7 +359,7 @@
     font-size: 1rem;
   }
   .case-figure-label {
-    font-size: 0.5625rem;
+    font-size: 0.625rem;
     letter-spacing: 0.04em;
   }
 }
@@ -650,19 +650,17 @@
    full measure, which is the layout a phone wants anyway. Raising this from
    1024px is what stops the fix above from being undone on a small laptop. */
 @media (max-width: 1180px) {
-  /* The line and its dots have to be measured from the same edge, so the
-     clearance is padding on the entry rather than on the timeline. Padding the
-     timeline instead would push the entries right while the absolutely
-     positioned line and dots stayed at the container edge, leaving every dot
-     34px off its own pipe. */
+  /* The anchor line and its dots are a desktop device: on a phone they push
+     every card right of centre to make room for themselves, so the whole rig —
+     line, dots, and the entry's left clearance — is dropped and the cards take
+     the full, centred measure. */
   .case-timeline::before {
-    left: 0;
-    margin-left: 0;
+    display: none;
   }
 
   .case-entry {
     grid-template-columns: minmax(0, 1fr);
-    padding-left: 34px;
+    padding-left: 0;
   }
 
   .case-entry-card,
@@ -671,13 +669,6 @@
   }
 
   .case-entry-dot {
-    left: 0;
-    margin-left: -4.5px;
-  }
-
-  /* The stub had a card to reach toward on the alternating layout; in a single
-     column the line is already directly beside the card. */
-  .case-entry-dot::after {
     display: none;
   }
 }
@@ -982,6 +973,22 @@
   color: rgba(203, 213, 225, 0.88);
 }
 
+/* The live product, up front: the first thing a reader sees when a study has
+   a public UI is the thing itself. A fixed-height strip with contain, so the
+   drawer's height is the same whether or not a study carries a shot — and
+   wide or tall screenshots alike letterbox onto the dark backing instead of
+   pushing the body into a scrollbar. */
+.case-drawer-shot {
+  display: block;
+  width: 100%;
+  height: 220px;
+  margin: 0 0 22px;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: #141418;
+}
+
 .case-drawer-outcome {
   color: #fff !important;
   font-size: 1rem !important;
@@ -1167,14 +1174,6 @@
   line-height: 1.2;
   letter-spacing: -0.01em;
   color: #7dd3fc;
-}
-
-.showcase-narrative {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: rgba(203, 213, 225, 0.82);
 }
 
 .showcase-figures {
