@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Fragment, useState, useEffect, useRef, type MouseEvent } from "react";
+import { Fragment, useState, useEffect, type MouseEvent } from "react";
 import Swal from "sweetalert2";
 import TerminalHero from "./components/TerminalHero";
 import { handleAnchorClick } from "./lib/scroll";
@@ -14,18 +14,12 @@ import CaseStudyDrawer from "./components/CaseStudyDrawer";
 import { AboutEntry, BuildingEntry, RoadmapEntry } from "./components/TimelineNotes";
 import { caseStudiesByRecency, featuredCaseStudies } from "./lib/caseStudies";
 
-const CONTACT_EMAIL = "contact@victorsenie.com";
+const CONTACT_EMAIL = "victor.arsenie@yahoo.com";
 
 // Lead (featured) studies lead the timeline; the rest follow in recency order.
 const restCaseStudies = caseStudiesByRecency.filter(study => !study.featured);
 
-// TypeScript interfaces for component props
-interface ContactFormData {
-	name: string;
-	email: string;
-	subject: string;
-	message: string;
-} // Skills navigation component
+// Skills navigation component
 function SkillsTabs() {
 	type SkillLogo = { label: string; src: string; alt: string };
 	type SkillCategory = {
@@ -498,255 +492,58 @@ function CaseStudiesPreview() {
 			/>
 		</section>
 	);
-} // Contact commands — each one pre-fills the subject/message and retitles the
-// console, so the visitor starts from a template instead of a blank page.
-interface ContactCommand {
-	id: string;
-	label: string;
-	path: string;
-	note: string;
-	subject: string;
-	message: string;
-}
-const CONTACT_COMMANDS: ContactCommand[] = [
-	{
-		id: "hi",
-		label: "/say hi",
-		path: "C:\\contact\\say-hi",
-		note: "No agenda needed — just say hello.",
-		subject: "Hello",
-		message: "Hi Victor,\n\nJust wanted to say hi.\n\n",
-	},
-	{
-		id: "project",
-		label: "/new project",
-		path: "C:\\contact\\new-project",
-		note: "Tell me what you need built.",
-		subject: "New project enquiry",
-		message: "Hi Victor,\n\nI have a project I would like to discuss.\n\nWhat I need: \nTimeline: \nBudget: \n",
-	},
-	{
-		id: "role",
-		label: "/work together",
-		path: "C:\\contact\\work-together",
-		note: "Contract, freelance or a full-time role.",
-		subject: "Working together",
-		message: "Hi Victor,\n\nI would like to talk about working together.\n\nRole: \nAvailability: \n",
-	},
-	{ id: "custom", label: "/custom", path: "C:\\contact\\custom", note: "Blank canvas — write your own.", subject: "", message: "" },
-];
-const CONTACT_FIELDS = ["name", "email", "subject", "message"] as const;
-type ContactField = (typeof CONTACT_FIELDS)[number];
-type ContactValues = Record<ContactField, string>; // Contact console — a command bar picks the starting template, the form fills
-// in, and the transmission panel mirrors the mailto payload as you type.
-function ContactConsole({ onSubmit }: { onSubmit: (formData: ContactFormData) => Promise<void> }) {
-	const [command, setCommand] = useState<ContactCommand>(CONTACT_COMMANDS[0]);
-	const [values, setValues] = useState<ContactValues>({
-		name: "",
-		email: "",
-		subject: CONTACT_COMMANDS[0].subject,
-		message: CONTACT_COMMANDS[0].message,
-	});
-	const [dirty, setDirty] = useState<{ subject: boolean; message: boolean }>({ subject: false, message: false });
-	const [sent, setSent] = useState(false);
-	const [handoffFailed, setHandoffFailed] = useState(false);
-	const [copied, setCopied] = useState(false);
-	const fields = useRef<Partial<Record<ContactField, HTMLElement | null>>>({});
-	const isEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-	const selectCommand = (next: ContactCommand) => {
-		const merged: ContactValues = {
-			...values,
-			subject: dirty.subject ? values.subject : next.subject,
-			message: dirty.message ? values.message : next.message,
-		};
-		setCommand(next);
-		setValues(merged);
-		setSent(false);
-		setHandoffFailed(false);
-		setCopied(false);
-		const empty = CONTACT_FIELDS.find((field) => !merged[field].trim());
-		if (empty) fields.current[empty]?.focus();
-	};
-	const update = (field: ContactField, value: string) => {
-		setValues((prev) => ({ ...prev, [field]: value }));
-		setSent(false);
-		setHandoffFailed(false);
-		if (field === "subject" || field === "message") setDirty((prev) => ({ ...prev, [field]: true }));
-	};
-	const mark = (form: HTMLFormElement, bad: boolean) => {
-		form
-			.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".form-field")
-			.forEach((field) => field.classList.toggle("warning", bad && !field.value.trim()));
-	};
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const form = e.currentTarget;
-		form.querySelectorAll(".form-field").forEach((field) => field.classList.remove("warning"));
-		if (!values.name.trim() || !values.email.trim() || !values.subject.trim() || !values.message.trim()) {
-			mark(form, true);
-			Swal.fire({ title: "Ooops! Not so fast!", text: "Please fill in the highlighted fields.", icon: "warning", scrollbarPadding: false });
-			return;
-		}
-		if (!isEmail(values.email.trim())) {
-			form.querySelector<HTMLInputElement>("#email")?.classList.add("warning");
-			Swal.fire({ title: "Email not valid!", text: "Please input a correct email address.", icon: "warning", scrollbarPadding: false });
-			return;
-		}
-		await onSubmit({ name: values.name, email: values.email, subject: values.subject, message: values.message });
-		setSent(true);
-		// A mailto hand-off either hands the window to a mail client (which flips
-		// document visibility) or silently does nothing. No false "sent!" claim —
-		// if we're still visible a moment later, no client took it, so offer a
-		// copyable fallback rather than letting the message disappear.
-		window.setTimeout(() => {
-			if (document.visibilityState === "visible") {
-				setSent(false);
-				setHandoffFailed(true);
-			}
-		}, 1500);
-	};
-	const copyMessage = async () => {
-		const text = `${values.subject}\n\n${values.message}\n\n— ${values.name} (${values.email})`;
-		try {
-			await navigator.clipboard.writeText(text);
-		} catch {
-			// navigator.clipboard needs a secure context; this site is served over
-			// plain HTTP, so fall back to a throwaway textarea + execCommand.
-			const scratch = document.createElement("textarea");
-			scratch.value = text;
-			scratch.setAttribute("readonly", "");
-			scratch.style.position = "fixed";
-			scratch.style.opacity = "0";
-			document.body.appendChild(scratch);
-			scratch.select();
-			document.execCommand("copy");
-			scratch.remove();
-		}
-		setCopied(true);
-		window.setTimeout(() => setCopied(false), 2000);
-	};
-	const ready = values.name.trim() !== "" && isEmail(values.email.trim()) && values.subject.trim() !== "" && values.message.trim() !== "";
-	const messageLength = values.message.trim().length;
+} // Contact — one click, no form. The form this replaces asked a visitor to type
+// a name, an address, a subject and a message only for the browser to hand the
+// same text to their own mail client: the slowest possible version of a mailto:
+// link, with four fields of validation and a live preview panel to maintain for
+// it. One click does the same job, so the terminal framing stays as decoration
+// rather than being put to work as an interface.
+function ContactSection() {
 	return (
 		<section id="contact" className="section contact">
 			<div className="bootstrap-container">
 				<div className="contact-cmdbar" aria-hidden="true">
-					<span className="contact-cmdbar-title">C:\contact\message.txt</span>
+					<span className="contact-cmdbar-title">C:\contact\inbox</span>
 					<span className="contact-cmdbar-btns">
 						<i className="btn-min" /> <i className="btn-max" /> <i className="btn-close" />
 					</span>
 				</div>
 				<header className="contact-header">
-					<span className="contact-kicker">{"// 03 — get in touch"}</span> <h1 className="contact-title">Contact me</h1>
-					<p className="contact-lede">
-						Have a system that needs connecting, or a pipeline that needs automating? Drop me a few lines and I&rsquo;ll get back to you
-						quickly. Pick a command to start from a template.
-					</p>
-					<div className="cmd-chips" role="group" aria-label="Pick a starting point for your message">
-						{CONTACT_COMMANDS.map((cmd) => (
-							<button
-								key={cmd.id}
-								type="button"
-								className={"cmd-chip" + (cmd.id === command.id ? " is-active" : "")}
-								aria-pressed={cmd.id === command.id}
-								onClick={() => selectCommand(cmd)}>
-								{cmd.label}
-							</button>
-						))}
-					</div>
-					<p className="cmd-prompt">
-						<span className="cmd-path">{command.path}</span> <span className="cmd-prompt-note">{command.note}</span>
-						<span className="cmd-caret" aria-hidden="true" />
-					</p>
+					<span className="contact-kicker">{"// 03 — get in touch"}</span> <h1 className="contact-title">How to reach me.</h1>
+					<p className="contact-lede">No forms. No agenda. Just open a line.</p>
 				</header>
-				<div className="contact-grid">
-					<form className="sweet tx-form" id="contactform" name="contactform" method="post" onSubmit={handleSubmit} noValidate>
-						{CONTACT_FIELDS.filter((field) => field !== "message").map((field) => (
-							<div className="tx-field" key={field}>
-								<label htmlFor={field}>{field}</label>
-								<input
-									className="form-field"
-									id={field}
-									name={field}
-									type={field === "email" ? "email" : "text"}
-									value={values[field]}
-									placeholder={field === "name" ? "Your name" : field === "email" ? "you@domain.com" : "Subject"}
-									autoComplete={field === "name" ? "name" : field === "email" ? "email" : "off"}
-									ref={(el) => {
-										fields.current[field] = el;
-									}}
-									onChange={(e) => update(field, e.target.value)}
-								/>
-							</div>
-						))}
-						<div className="tx-field">
-							<label htmlFor="message">message</label>
-							<textarea
-								className="form-field"
-								id="message"
-								name="message"
-								rows={7}
-								value={values.message}
-								placeholder="Type your message…"
-								ref={(el) => {
-									fields.current.message = el;
-								}}
-								onChange={(e) => update("message", e.target.value)}
-							/>
+				<div className="contact-reach">
+					<a className="contact-cmd" href={"mailto:" + CONTACT_EMAIL + "?subject=Integration%20Inquiry"}>
+						<span className="contact-cmd-caret" aria-hidden="true">
+							&gt;
+						</span> email {CONTACT_EMAIL}
+					</a>
+					<p className="contact-status">
+						<i aria-hidden="true" /> Available for integration work
+					</p>
+					<dl className="tx-meta">
+						<div>
+							<dt>from</dt> <dd>Victor Arsenie</dd>
 						</div>
-						<div className="tx-actions">
-							<button type="submit" className="tx-submit" id="submit" name="submit" value="Submit">
-								<i className="fa fa-paper-plane-o" aria-hidden="true" /> Send message
-							</button>
-							<span className="tx-hint">Opens in your mail app &mdash; you press send</span>
+						<div>
+							<dt>subject</dt> <dd>Integration Inquiry</dd>
 						</div>
-						{handoffFailed ? (
-							<div className="tx-fallback" role="status">
-								<p className="tx-fallback-title">
-									<i className="fa fa-exclamation-triangle" aria-hidden="true" /> Your mail app didn&rsquo;t open
-								</p>
-								<p className="tx-fallback-body">
-									Some browsers block it, and there&rsquo;s no configured mail client on every machine. Copy the message and send
-									it to <a href={"mailto:" + CONTACT_EMAIL}>{CONTACT_EMAIL}</a> from wherever you already email.
-								</p>
-								<button type="button" className="tx-copy" onClick={copyMessage}>
-									<i className={"fa " + (copied ? "fa-check" : "fa-clipboard-o")} aria-hidden="true" /> {copied ? "Copied to clipboard" : "Copy message"}
-								</button>
-							</div>
-						) : null}
-					</form>
-					<aside className="tx-panel" aria-hidden="true">
-						<div className="tx-panel-head">
-							<span className="tx-panel-label">transmission</span> <span className="tx-panel-cmd">{command.label}</span>
+						<div>
+							<dt>body</dt> <dd>[blank]</dd>
 						</div>
-						<dl className="tx-meta">
-							<div>
-								<dt>from</dt> <dd>{values.name.trim() || "—"}</dd>
-							</div>
-							<div>
-								<dt>reply</dt> <dd>{values.email.trim() || "—"}</dd>
-							</div>
-							<div>
-								<dt>subject</dt> <dd>{values.subject.trim() || "—"}</dd>
-							</div>
-						</dl>
-						<pre className="tx-body">{values.message.trim() || "awaiting input…"}</pre>
-						<div className="tx-panel-foot">
-							<span className="tx-count">{messageLength} chars</span>
-							<span className={"tx-state " + (sent ? "is-sent" : ready ? "is-ready" : "")}>
-								<i /> {sent ? "handed to mail app" : ready ? "ready to send" : "incomplete"}
-							</span>
-						</div>
-						<div className="whoami">
-							<Image src="/images/eu.jpg" alt="" width={1100} height={1100} sizes="72px" className="whoami-avatar" />
-							<div className="whoami-text">
-								<span className="whoami-name">Victor Arsenie</span> <span className="whoami-role">Full-stack web developer</span>
-								<span className="whoami-status">
-									<i /> open to new work
-								</span>
-							</div>
-						</div>
-					</aside>
+					</dl>
+					<p className="contact-note">
+						<i className="fa fa-paper-plane-o" aria-hidden="true" /> Clicking the link opens your mail client. I respond within 24 hours.
+					</p>
+					<p className="contact-links">
+						<a href="https://www.linkedin.com/in/victor-arsenie-391a3bb7/" target="_blank" rel="noopener noreferrer">
+							LinkedIn
+						</a>
+						<span aria-hidden="true">·</span>
+						<a href="https://github.com/victorarsenie" target="_blank" rel="noopener noreferrer">
+							GitHub
+						</a>
+					</p>
 				</div>
 			</div>
 		</section>
@@ -1028,16 +825,6 @@ const workData: WorkEntry[] = [
 	},
 ]; // Page header component for all sections
 export default function HomePage() {
-	const handleContactSubmit = async (formData: ContactFormData): Promise<void> => {
-		// Hand the visitor a prefilled draft in their own mail client. This cannot
-		// send on their behalf — the form deliberately makes no claim that it did.
-		const subject = encodeURIComponent(formData.subject);
-		const name = encodeURIComponent(formData.name);
-		const email = encodeURIComponent(formData.email);
-		const message = encodeURIComponent(formData.message);
-		const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=From: ${name} (${email})%0D%0A%0D%0A${message}`;
-		window.location.href = mailtoLink;
-	};
 	return (
 		<main id="main-content" className="min-h-screen bg-white">
 			<Navigation />
@@ -1097,7 +884,7 @@ export default function HomePage() {
 					</div>
 				</section>
 			<SkillsSection />
-			<ContactConsole onSubmit={handleContactSubmit} />
+			<ContactSection />
 			<Footer />
 		</main>
 	);

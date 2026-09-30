@@ -2077,13 +2077,16 @@ p {
   margin-bottom: 18px;
 }
 
+/* Headline scale was for "Contact me" standing alone as a full-bleed
+   statement. The title is now one short line under a kicker, so it drops to
+   just above body scale — still a heading, no longer a billboard. */
 .contact-title {
   font-family: "Hype", serif;
-  font-size: clamp(48px, 7vw, 88px);
+  font-size: clamp(30px, 3.4vw, 44px);
   font-weight: 500;
-  line-height: 1.02;
+  line-height: 1.08;
   color: #ffffff;
-  margin: 0 0 24px;
+  margin: 0 0 16px;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -2096,454 +2099,133 @@ p {
   margin: 0;
 }
 
-/* Command chips */
-.cmd-chips {
-  display: flex;
+/* The single action: a mailto: dressed as a shell prompt. Terminal styling is
+   decoration here, not an interface — there is nothing to type into. */
+.contact-reach {
+  max-width: 760px;
+  padding: 8px 0 0;
+}
+
+.contact-cmd {
+  display: inline-flex;
+  align-items: baseline;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 30px;
-}
-
-.cmd-chip {
   font-family: "Menlo", "Consolas", monospace;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: #c9c9d0;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  font-size: clamp(18px, 2.6vw, 26px);
+  color: #26adf4;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(38, 173, 244, 0.3);
+  padding-bottom: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  overflow-wrap: anywhere;
 }
 
-.cmd-chip:hover {
-  color: #ffffff;
-  border-color: rgba(38, 173, 244, 0.5);
-  transform: translateY(-1px);
+.contact-cmd:hover {
+  color: #7cd0fb;
+  border-color: #7cd0fb;
 }
 
-.cmd-chip:focus-visible {
+.contact-cmd:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(38, 173, 244, 0.45);
 }
 
-.cmd-chip.is-active {
-  color: #ffffff;
-  background: rgba(38, 173, 244, 0.14);
-  border-color: #26adf4;
+.contact-cmd-caret {
+  color: #7ce38b;
 }
 
-.cmd-prompt {
+.contact-status {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 9px;
   margin: 26px 0 0;
   font-family: "Menlo", "Consolas", monospace;
   font-size: 13px;
-  color: #8b8b92;
-}
-
-.cmd-path {
-  color: #ffffff;
-}
-
-.cmd-caret {
-  display: inline-block;
-  width: 8px;
-  height: 15px;
-  background: #26adf4;
-  animation: caret-blink 1s steps(2, start) infinite;
-}
-
-/* Form + preview grid */
-.contact-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: clamp(32px, 5vw, 64px);
-  padding: clamp(40px, 5vw, 60px) 0 clamp(56px, 7vw, 88px);
-}
-
-.tx-form {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  min-width: 0;
-}
-
-.tx-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.tx-field label {
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #8b8b92;
-}
-
-.tx-field input,
-.tx-field textarea {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 16px;
-  letter-spacing: 1px;
-  padding: 10px 2px;
-  transition: border-color 0.25s ease, background 0.25s ease;
-}
-
-.tx-field input {
-  height: 46px;
-}
-
-.tx-field textarea {
-  min-height: 168px;
-  line-height: 1.65;
-  resize: vertical;
-}
-
-.tx-field input::placeholder,
-.tx-field textarea::placeholder {
-  color: #6b6b74;
-}
-
-.tx-field input:focus,
-.tx-field textarea:focus {
-  outline: none;
-  border-bottom-color: #26adf4;
-  background: rgba(38, 173, 244, 0.06);
-}
-
-.tx-field .warning {
-  border-bottom-color: #ff5f57 !important;
-  background: rgba(255, 95, 87, 0.07) !important;
-}
-
-.tx-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 4px;
-}
-
-.tx-submit {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 14px;
   letter-spacing: 0.06em;
-  color: #04121c;
-  background: #26adf4;
-  border: none;
-  border-radius: 10px;
-  padding: 15px 26px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.tx-submit:hover {
-  background: #7ed1ff;
-  transform: translateY(-2px);
-}
-
-.tx-submit:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(38, 173, 244, 0.45);
-}
-
-.tx-hint {
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 12px;
-  color: #6b6b74;
-}
-
-/* Shown only when the mailto hand-off doesn't get picked up by a mail client */
-.tx-fallback {
-  margin-top: 4px;
-  padding: 16px 18px;
-  border: 1px solid rgba(214, 158, 46, 0.45);
-  border-left: 3px solid #d69e2e;
-  border-radius: 6px;
-  background: rgba(214, 158, 46, 0.07);
-}
-
-.tx-fallback-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: #b58119;
-  margin-bottom: 8px;
-}
-
-.tx-fallback-body {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #57565e;
-  margin-bottom: 14px;
-}
-
-.tx-fallback-body a {
-  color: #1d4ed8;
-  font-weight: 600;
-  word-break: break-all;
-}
-
-.tx-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: "Menlo", "Consolas", monospace;
-  font-size: 12px;
-  font-weight: 600;
-  color: #ffffff;
-  background: #1d4ed8;
-  border: 1px solid #1d4ed8;
-  padding: 9px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  min-height: 44px;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.tx-copy:hover {
-  background: #1a41bb;
-  border-color: #1a41bb;
-}
-
-.tx-copy:focus-visible {
-  outline: 2px solid #1d4ed8;
-  outline-offset: 2px;
-}
-
-/* Transmission preview */
-.tx-panel {
-  align-self: start;
-  min-width: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  background: #121216;
-  padding: 20px 22px 22px;
-  font-family: "Menlo", "Consolas", monospace;
-}
-
-.tx-panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.tx-panel-label {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6b6b74;
-}
-
-.tx-panel-cmd {
-  font-size: 12px;
-  color: #26adf4;
-}
-
-.tx-meta {
-  margin: 16px 0 0;
-  display: grid;
-  gap: 8px;
-}
-
-.tx-meta > div {
-  display: grid;
-  grid-template-columns: 68px minmax(0, 1fr);
-  gap: 10px;
-  align-items: baseline;
-}
-
-.tx-meta dt {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #6b6b74;
-}
-
-.tx-meta dd {
-  margin: 0;
-  font-size: 13px;
-  color: #e8e8ec;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tx-body {
-  margin: 16px 0 0;
-  padding: 14px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #c4c4ca;
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-height: 240px;
-  overflow: hidden;
-}
-
-.tx-panel-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b6b74;
-}
-
-.tx-state {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tx-state i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #6b6b74;
-}
-
-.tx-state.is-ready {
-  color: #c9c9d0;
-}
-
-.tx-state.is-ready i {
-  background: #26adf4;
-  box-shadow: 0 0 0 3px rgba(38, 173, 244, 0.18);
-}
-
-.tx-state.is-sent {
   color: #7ce38b;
 }
 
-.tx-state.is-sent i {
-  background: #7ce38b;
-  box-shadow: 0 0 0 3px rgba(124, 227, 139, 0.18);
-}
-
-/* whoami card */
-.whoami {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 22px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.whoami-avatar {
-  width: 64px;
-  height: 64px;
-  flex: 0 0 64px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.85);
-  object-fit: cover;
-}
-
-.whoami-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-.whoami-name {
-  font-family: "Hype", serif;
-  font-size: 19px;
-  color: #ffffff;
-}
-
-.whoami-role {
-  font-size: 12px;
-  color: #8b8b92;
-}
-
-.whoami-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 4px;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #7ce38b;
-}
-
-.whoami-status i {
-  width: 7px;
-  height: 7px;
+.contact-status i {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
   border-radius: 50%;
   background: #7ce38b;
   animation: whoami-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes whoami-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(124, 227, 139, 0.4);
-  }
-  50% {
-    opacity: 0.75;
-    box-shadow: 0 0 0 5px rgba(124, 227, 139, 0);
-  }
+.contact-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 24px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #8b8b92;
 }
 
-@media (max-width: 991px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .tx-body {
-    max-height: 200px;
-  }
+.contact-note i {
+  color: #26adf4;
 }
 
-@media (max-width: 1199px) {
-  .contact {
-    padding: 10px 0 60px;
-  }
+/* Email first, profiles second: the profiles are context, not the ask. */
+.contact-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 0;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  color: #6f6f78;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cmd-chip,
-  .tx-submit {
-    transition: none;
-  }
-
-  .cmd-caret,
-  .whoami-status i {
-    animation: none;
-  }
+.contact-links a {
+  color: #b9b9bf;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
+
+.contact-links a:hover {
+  color: #ffffff;
+}
+
+.contact-links a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(38, 173, 244, 0.45);
+}
+
+/* Kept as a static stub rather than a live mirror: it shows what the link will
+   open, and it cannot drift from reality because it never changes. */
+.tx-meta {
+  display: grid;
+  gap: 10px;
+  margin: 30px 0 0;
+  padding: 20px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 13px;
+}
+
+.tx-meta > div {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.tx-meta dt {
+  color: #6f6f78;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tx-meta dd {
+  margin: 0;
+  color: #e8e8ec;
+}
+
 
 /* ---------- Site footer: closes the dark work → contact → footer band ---------- */
 .site-footer {
