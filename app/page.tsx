@@ -440,6 +440,13 @@ function CaseStudiesPreview() {
 			    the sequence is conveyed by the markup rather than by CSS, and a
 			    screen reader gets the timeline in the order it reads. */}
 		<ol className="case-timeline">
+			{/* About leads the timeline: who this is, before the evidence. A
+			    full-width card in front of the alternating rail reads as a
+			    change of voice rather than as the first case study. */}
+			<li className="case-entry case-entry--wide">
+				<span className="case-entry-dot" aria-hidden="true" />
+				<AboutEntry />
+			</li>
 			{/* Featured studies as full-width, diagram-led showcase panels; the
 			    lighter builds sit back on the alternating rail as slim rows. */}
 			{featuredCaseStudies.map((study, index) => (
@@ -460,13 +467,6 @@ function CaseStudiesPreview() {
 					/>
 				</li>
 			))}
-
-				{/* Full width, and last of the delivered work: a change of voice
-				    rather than another entry. */}
-				<li className="case-entry case-entry--wide">
-					<span className="case-entry-dot" aria-hidden="true" />
-					<AboutEntry />
-				</li>
 
 				{/* In progress, so it has no metric to quote and a different
 				    border to say so. */}

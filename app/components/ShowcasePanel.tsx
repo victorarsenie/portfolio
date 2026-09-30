@@ -1,5 +1,6 @@
 import AmpText from "./AmpText";
 import PipelineDiagram from "./PipelineDiagram";
+import CaseLink from "./CaseLink";
 import type { CaseStudy } from "../lib/caseStudies";
 
 // A full-width showcase panel: the diagram leads (and each topology — chain,
@@ -65,11 +66,16 @@ export default function ShowcasePanel({
 						<span className="case-finding-text">{study.finding.text}</span>
 					</p>
 				)}
-				{onOpen && (
-					<button type="button" className="case-more" onClick={onOpen} aria-haspopup="dialog">
-						Read case study
-						<i className="fa fa-long-arrow-right" aria-hidden="true" />
-					</button>
+				{(onOpen || study.link) && (
+					<div className="case-actions">
+						{onOpen && (
+							<button type="button" className="case-more" onClick={onOpen} aria-haspopup="dialog">
+								Read case study
+								<i className="fa fa-long-arrow-right" aria-hidden="true" />
+							</button>
+						)}
+						{study.link ? <CaseLink href={study.link} /> : null}
+					</div>
 				)}
 			</div>
 		</article>

@@ -435,6 +435,50 @@
   transform: translateX(3px);
 }
 
+/* --- Secondary action: the public artifact ------------------------------- */
+/* Sits beside the read-more trigger rather than under it. The trigger opens
+   the full account in the drawer; the link leaves the page for the thing
+   itself - a client site, or the local-inference write-up. Wrapped together so
+   a card with no trigger, or no artifact, leaves no stray gap. */
+.case-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-top: auto;
+}
+
+.case-actions .case-more {
+  margin-top: 0;
+  align-self: center;
+}
+
+.case-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.85);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.case-link:hover {
+  color: #7dd3fc;
+}
+
+.case-link .fa {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.case-link:hover .fa {
+  transform: translateX(3px);
+}
+
 /* --- Slim row ------------------------------------------------------------
    The studies that are not featured. Same timeline slot and same drawer on the
    far side, but no diagram, chips or tech line - one compact strip that names
@@ -495,6 +539,12 @@
   align-self: center;
 }
 
+.case-row-actions {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-top: 0;
+}
+
 @media (max-width: 640px) {
   .case-row {
     flex-direction: column;
@@ -502,6 +552,9 @@
     gap: 12px;
   }
   .case-row-more {
+    align-self: flex-start;
+  }
+  .case-row-actions {
     align-self: flex-start;
   }
 }

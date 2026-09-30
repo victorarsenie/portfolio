@@ -1,4 +1,5 @@
 import AmpText from "./AmpText";
+import CaseLink from "./CaseLink";
 import type { CaseStudySummary } from "../lib/caseStudies";
 
 // A slim row, not a card. The studies that are not featured still earn a place
@@ -29,16 +30,21 @@ export default function CaseStudyRow({
 				</h3>
 				<p className="case-row-metric">{study.metric}</p>
 			</div>
-			{onOpen && (
-				<button
-					type="button"
-					className="case-more case-row-more"
-					onClick={onOpen}
-					aria-haspopup="dialog"
-				>
-					Read case study
-					<i className="fa fa-long-arrow-right" aria-hidden="true" />
-				</button>
+			{(onOpen || study.link) && (
+				<div className="case-actions case-row-actions">
+					{onOpen && (
+						<button
+							type="button"
+							className="case-more case-row-more"
+							onClick={onOpen}
+							aria-haspopup="dialog"
+						>
+							Read case study
+							<i className="fa fa-long-arrow-right" aria-hidden="true" />
+						</button>
+					)}
+					{study.link ? <CaseLink href={study.link} /> : null}
+				</div>
 			)}
 		</article>
 	);

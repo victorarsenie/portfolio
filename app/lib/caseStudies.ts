@@ -142,16 +142,15 @@ export const caseStudies: CaseStudy[] = [
 		},
 		chips: ["VRAM budgeting", "Throughput profiling", "Speculative decoding", "Reasoning budgets"],
 		tech: ["llama.cpp", "CUDA", "GGUF", "RTX 5070 Ti"],
-		// Deliberately empty for the same reason the Building entry has no
-		// link: the write-up exists as a set of research notes, not a public
-		// artifact, and a href pointing at nothing is the one thing a visitor
-		// could check and find wanting.
-		link: "",
+		// The write-up this study summarises now has a public home: the
+		// long-form account of the same measurements. Points at it rather than
+		// at an external site, so CaseLink reads it as the internal artifact.
+		link: "/notes/local-llm-inference-tuning",
 		details: {
 			problem:
 				"Hosted free tiers are rationed - roughly 200 requests a day, tool calls capped, models that rotate out from under you - and they train on what you send. The alternative is local, but a consumer GPU has a hard ceiling: 16 GB of VRAM, most of which Windows already takes, against models that want far more.",
 			pipeline:
-				"Every model was benchmarked at fixed context and token counts, then diagnosed down to the layer. Speculative decoding bought 57% more throughput at 64K, but only with 2.4 GB of headroom to stop CUDA graphs thrashing — so it paid in context. A 125B mixture-of-experts beat the 27B on all twelve shared benchmarks and was still rejected: 76 GB of weights do not fit through SATA into 32 GB of RAM. Vision runs on a CPU-resident encoder — 3% throughput, zero VRAM, full context.",
+				"Every model was benchmarked at fixed context and token counts, then diagnosed down to the layer. Speculative decoding bought 57% more throughput at 64K, but only with 2.4 GB of headroom to stop CUDA graphs thrashing — so it paid in context. A 125B mixture-of-experts beat the 27B on all twelve shared benchmarks and was still thrown out: it ran at 3 to 12 t/s, because 76 GB of weights cannot stream through a SATA disk into 32 GB of RAM. Vision runs on a CPU-resident encoder — 3% throughput, zero VRAM, full context.",
 			outcome:
 				"A 27B dense model does real multi-file edits at 54 t/s across 128K, vision checking its own work; a 35B MoE runs at 175 t/s across 256K. No rate limit, no training on the code, no model that disappears next quarter — and it works with the network off. The 3.6's hidden reasoning runs 3,000 to 15,000 tokens past the visible answer, 20 to 90 seconds of dead air, so every config caps thinking at 4,096 — verified, the cut lands mid-sentence. The 27B reworked this site's hero from a spec; this build continues from that output.",
 			stackGrouped: {
