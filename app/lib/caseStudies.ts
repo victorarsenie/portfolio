@@ -167,9 +167,10 @@ export const caseStudies: CaseStudy[] = [
 	{
 		// Core-team work, not a client build, so it sits outside the "two
 		// employers" frame the rest of the timeline runs on. Recent and senior
-		// but the least substantive entry, and it shipped nothing publicly, so
+		// but the least substantive entry, and the protocol never shipped, so
 		// the copy is about what was done - whitepaper, UI/UX, coordination -
-		// not what the protocol achieved.
+		// not what the protocol achieved. The product site is gone; the link is
+		// an Internet Archive snapshot.
 		slug: "xhumanity",
 		client: "xHumanity",
 		year: "2021–2023",
@@ -182,14 +183,14 @@ export const caseStudies: CaseStudy[] = [
 		topology: "chain",
 		chips: ["Technical writing", "UI/UX architecture", "Distributed team coordination", "System design"],
 		tech: ["Vue.js"],
-		link: "",
+		link: "https://web.archive.org/web/20230413050223/https://xhumanity.org/",
 		details: {
 			problem:
 				"The project was a decentralized identity protocol aimed at reputation, privacy and reducing disinformation - funded at $150k+ before anything was public. The gap was between a protocol that is hard to explain and a product people could trust: the whitepaper had to be right, and the interface had to make it feel obvious.",
 			pipeline:
 				"I was on the core team from early on and worked across the product rather than one slice: contributing to the technical whitepaper so the documented behaviour matched the protocol, designing the UI/UX flows against the cryptographic constraints it set, and coordinating the distributed development team - recruiting, onboarding and giving technical direction to developers working from overseas.",
 			outcome:
-				"The protocol reached a funded, staffed build - a whitepaper that documented the system, UI/UX flows that carried it to an interface, and a remote team moving against both. It never shipped publicly; the project ran into management problems, not engineering ones. So the work lives as the whitepaper and the design, and there is nothing to link to.",
+				"The protocol reached a funded, staffed build - a whitepaper that documented the system, UI/UX flows that carried it to an interface, and a remote team moving against both. It never shipped publicly; the project ran into management problems, not engineering ones. So the work lives as the whitepaper and the design; the product site is no longer live, and the link is an archived snapshot.",
 		},
 	},
 	{

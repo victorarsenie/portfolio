@@ -429,10 +429,6 @@ function CaseStudiesPreview() {
 				<header className="work-header">
 					<span className="work-kicker">{"// 02 — case studies"}</span>
 					<h1 className="work-title">Case studies</h1>
-					<p className="work-lede">
-						Ten case studies — the local LLM stack, the client builds across two employers,
-						the early protocol work, and the 2015 start. Problem, plumbing, result. Lead studies first.
-					</p>
 				</header>
 			</div>
 
@@ -853,9 +849,8 @@ export default function HomePage() {
 							<p className="lead">
 								Most of that work is invisible once it works. A property feed that ingests thousands of
 								listings a night without anyone opening a spreadsheet. A magazine generated from live
-								data instead of a designer. Support tickets that appear next to the server they belong
-								to. I spend my time on the plumbing — schema mismatches, duplicate records, providers
-								down at 3am — so nobody using it has to.
+								data instead of a designer. I spend my time on the plumbing — schema mismatches,
+								duplicate records, providers down at 3am — so nobody using it has to.
 							</p>
 
 							{/* The current chapter. The framing that matters here is that

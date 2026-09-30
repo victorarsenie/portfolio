@@ -84,7 +84,7 @@ export function RoadmapEntry() {
 
 // The competencies, grouped the same way the case-study stack lists are —
 // Core / Data / APIs / Output — so this card argues with the same vocabulary
-// the case studies above it use. Every entry is evidenced by a case study in
+// the case studies below it use. Every entry is evidenced by a case study in
 // the timeline rather than asserted here. The AI group leads because it is the
 // work everything else now runs through, and it is the one a reader cannot
 // get from a job title.
@@ -146,18 +146,19 @@ export function AboutEntry() {
 		<article className="case-card case-entry-card case-entry-about">
 			<header className="case-card-id">
 				<p className="case-card-meta">
-					<span>About me</span>
+					<span>Introduction</span>
 					<i className="case-card-sep" aria-hidden="true" />
-					<span>Throughout</span>
+					<span>Ten studies</span>
 				</p>
-				<h3 className="case-card-title">The space between systems</h3>
+				<h3 className="case-card-title">The same method, ten times</h3>
 			</header>
 
 			<div className="case-card-body">
 				<p className="case-about-copy">
-					I spend my time on the plumbing — schema mismatches, duplicate records, providers down
-					at 3am — so nobody using it has to. Then I run the models that help me move it, on
-					hardware I control.
+					The case studies below are the same problem in different clothes: systems that were
+					never built to talk to each other. Billing, backups, DNS, support desks — and, more
+					recently, the local models I run to move it all. Different clients, same method: find
+					where the data breaks, fix the plumbing, measure the result.
 				</p>
 
 				<div className="case-about-skills">
