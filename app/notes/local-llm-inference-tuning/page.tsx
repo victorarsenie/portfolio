@@ -235,7 +235,69 @@ export default function LocalLlmNotesPage() {
         </section>
 
         <section className="note-section">
-          <h2>6. The finding that isn&rsquo;t about hardware</h2>
+          <h2>6. The one that was fast instead of deep</h2>
+          <p>
+            The same question about a 74 KB research file, put to the 27B dense model and to a 20B
+            model that runs roughly five times faster per token.
+          </p>
+          <div className="note-table-wrap">
+            <table className="note-table">
+              <thead>
+                <tr>
+                  <th>Same task</th>
+                  <th>20B MoE</th>
+                  <th>27B dense</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Wall clock</td>
+                  <td>27.7 s</td>
+                  <td>318 s</td>
+                </tr>
+                <tr>
+                  <td>Decode speed</td>
+                  <td>118 t/s</td>
+                  <td>21 t/s</td>
+                </tr>
+                <tr>
+                  <td>Flash-Next size</td>
+                  <td>76 GB</td>
+                  <td>76 GB + 51B n-gram table</td>
+                </tr>
+                <tr>
+                  <td>Metadata bug</td>
+                  <td>not mentioned</td>
+                  <td>mechanism explained</td>
+                </tr>
+                <tr>
+                  <td>Open items</td>
+                  <td>generic filler</td>
+                  <td>PR numbers, file paths</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The 20B finished 11.5 times faster on the clock and produced about a third of the
+            substance. Its one concrete figure came out the wrong shape — it gave 76 GB as the
+            size of the model, when the point is 76 GB of weights on top of a 51-billion-entry
+            lookup table, which is the half of the problem that makes it unusable here. It never
+            mentioned the metadata bug. Its open questions were generic filler; the 27B&rsquo;s
+            were specific enough to check — pull-request numbers and file paths.
+          </p>
+          <p>
+            The 20B is not a bad model. For short lookups and simple file questions it is the
+            right tool, and it handles tool-calling well. But its speed carries a cost that tokens
+            per second does not show: it spends thousands of thinking tokens before a short
+            answer, and once a task needs depth, the depth is not there. On the work that ends up
+            in the research file, the slow model is the cheap one — it is the one whose output
+            does not have to be redone.
+          </p>
+        </section>
+
+        <section className="note-section">
+          <h2>7. The finding that isn&rsquo;t about hardware</h2>
           <p>The most useful thing I learned had nothing to do with VRAM.</p>
           <p>
             Both models are fast, and both are correct when they stop — and both have trouble
@@ -266,7 +328,7 @@ export default function LocalLlmNotesPage() {
         </section>
 
         <section className="note-section">
-          <h2>7. What local actually buys</h2>
+          <h2>8. What local actually buys</h2>
           <p>
             Local is not faster than a hosted model, and it would be dishonest to sell it that way.
             Against the free tier I was comparing, decode ran 24.5 to 57.8 tokens per second —
@@ -288,7 +350,7 @@ export default function LocalLlmNotesPage() {
         </section>
 
         <section className="note-section">
-          <h2>8. Method</h2>
+          <h2>9. Method</h2>
           <p>
             Every number here was taken the same way: fixed context length and fixed token counts,
             repeated runs, with <code>nvidia-smi</code> and the server&rsquo;s own load log for
