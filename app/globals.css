@@ -151,7 +151,12 @@ a:focus-visible:not(:focus-visible) {
 }
 
 html, body {
-  height: 100%;
+  /* `min-height: 100%`, not `height: 100%`. The shell must be able to grow
+     beyond the viewport for long-form pages (notes, case studies). A fixed
+     height on both html and body causes a flex item with `min-height: 100vh`
+     to still be capped to the viewport, and its tall content overflows on
+     top of the white page background. */
+  min-height: 100%;
   font-family: "GlacialIndifference-Regular", Arial, Helvetica, sans-serif;
   /* Justify is inherited by every descendant that doesn't override it, which
      quietly stretched any wrapped heading into word rivers. The narrow

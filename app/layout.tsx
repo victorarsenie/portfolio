@@ -46,7 +46,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-screen antialiased">
+    /* `min-h-screen`, not `h-screen`. A fixed 100vh on <html> stops the
+       document growing, and because <body> is a flex column, `main` is a flex
+       item and gets shrunk to one viewport while its content overflows. That was
+       invisible on the home page, where every section paints its own
+       background, but on a long note the single dark band behind the article
+       stopped at 900px and the rest of the text sat on the white body. */
+    <html lang="en" className="min-h-screen antialiased">
       <body className="flex flex-col">{children}</body>
     </html>
   );
