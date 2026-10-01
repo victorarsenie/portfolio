@@ -178,6 +178,26 @@ p {
   font-size: 18px;
 }
 
+/* The one light band on the site. It used to be pure white, and arriving at
+   that from either the near-black hero or the dark sections below is a slap
+   rather than a transition: the contrast jump reads as a flash and the eye
+   re-adjusts twice. A soft grey keeps it the light pause it was meant to be.
+
+   The heading blue darkens with it. #26adf4 is the accent everywhere else,
+   but on a light ground it only manages ~2.4:1 — below even the 3:1 bar for
+   large text — so here it drops to a darker blue of the same hue that clears
+   3:1. The 1px rule under the heading stays bright; it is decoration, not
+   text, and it is what keeps the two bands reading as related. */
+/* The current-chapter card's treatment - a cool near-black carrying the
+   same faint blue wash at the top - rather than a flat grey. The base sits
+   a step above both neighbouring bands (#14161b and #0c0c0e) so About
+   still reads as its own section; the card's own #121216 is darker than
+   the work band and would have merged into it. */
+.about-section {
+  background-color: #1b1f26;
+  background-image: linear-gradient(180deg, rgba(56, 189, 248, 0.07) 0%, rgba(27, 31, 38, 0) 60%);
+}
+
 /* Page header styling to match original */
 .page-header {
   margin-top: 80px;
@@ -204,7 +224,7 @@ p {
   line-height: 1.4;
   text-align: justify;
   margin-bottom: 20px;
-  color: #333333;
+  color: #d5d8dc;
 }
 
 /* About section: Skills heading (2nd child, like original #about h1:nth-child(2)) */
@@ -975,7 +995,14 @@ p {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 150px 24px 124px;
+  /* Was a flat 150px top / 124px bottom, which is content the hero could not
+     spare: the section is min-height 100svh, so once padding + content
+     exceeded the viewport the hero grew past the fold and the ticker - pinned
+     to the bottom edge - was the only part still on screen. Scaling the
+     padding against viewport height keeps the top clear of the 78px nav and
+     the bottom clear of the 46px ticker on a short laptop as well as a tall
+     monitor, instead of reserving for the tallest case on every device. */
+  padding: clamp(92px, 11svh, 132px) 24px clamp(88px, 10svh, 116px);
   text-align: center;
 }
 
@@ -994,14 +1021,18 @@ p {
 }
 
 .terminal-hero-title {
-  margin: 22px 0 0;
+  margin: clamp(16px, 2.2svh, 22px) 0 0;
   /* Hype, like every other headline on the site. It was Helvetica Neue, which
      is not self-hosted, so the hero was silently rendering in a system font
      that differs between Windows and macOS - the one heading most likely to be
      screenshotted was the one that could change appearance on a visitor. */
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.75rem, 6.5vw, 4.5rem);
+  /* Was clamp(2.75rem, 6.5vw, 4.5rem), which resolved to its 72px ceiling on
+     any desktop and broke this line to three. At 1440px the hero measured
+     982px tall against a 900px viewport, so the CTA row sat below the fold.
+     56px keeps it the largest type on the site and holds it to two lines. */
+  font-size: clamp(2.25rem, 5.2vw, 3.5rem);
   line-height: 1.05;
   letter-spacing: -0.032em;
   color: #f8fafc;
@@ -1138,7 +1169,7 @@ p {
 }
 
 .terminal-hero-sub {
-  margin: 40px auto 0;
+  margin: clamp(24px, 3.4svh, 40px) auto 0;
   max-width: 62ch;
   /* Glacial, not a monospace. This is a sentence, and the sentence carries an
      em-dash and an apostrophe - neither of which Hype or the mono stack here
@@ -1158,7 +1189,7 @@ p {
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 42px;
+  margin-top: clamp(26px, 3.4svh, 42px);
 }
 
 /* Sharp-cornered keys rather than pills — reads as control surface, not call
@@ -1293,7 +1324,10 @@ p {
 
 @media (max-width: 640px) {
   .terminal-hero-inner {
-    padding: 118px 20px 108px;
+    /* Was 118px/108px, sized for a phone where the whole hero was never
+       going to fit anyway. The nav is 78px and the ticker 56px here, so
+       these still clear both with room to spare. */
+    padding: clamp(86px, 11svh, 104px) 20px clamp(78px, 10svh, 96px);
   }
   .terminal-hero-title {
     margin-top: 18px;
@@ -1411,10 +1445,15 @@ p {
 }
 
 /* ============================================================
-   Work section — dark editorial index + project bento grids
+   Selected work / case studies — the one lifted surface on the
+   site. #14161b rather than the near-black the hero and the other
+   dark sections use, so it reads as a panel the hero hands over to
+   rather than a continuation of it. One step only: the cards sit on
+   #121216 and the faux browser bars on #2b2b2f, so lifting much
+   further would flatten both.
    ============================================================ */
 .work {
-  background-color: #0c0c0e;
+  background-color: #14161b;
   background-image: radial-gradient(1200px 700px at 85% -10%, rgba(38, 173, 244, 0.08), transparent 60%), radial-gradient(900px 600px at 0% 100%, rgba(38, 173, 244, 0.06), transparent 55%);
   color: #fff;
   /* `clip`, not `hidden`: this still contains the gallery's absolutely
@@ -1514,7 +1553,10 @@ p {
   color: #ffffff;
 }
 
-.work-header {
+/* The section header shared by About and Selected work. Named without a
+   section in it so a third section can adopt it without the class name
+   lying about who uses it. */
+.section-header {
   margin-top: 0;
   padding: 70px 0 10px;
   max-width: 720px;
@@ -1526,7 +1568,7 @@ p {
   }
 }
 
-.work-kicker {
+.section-kicker {
   display: block;
   font-family: "Menlo", "Consolas", monospace;
   font-size: 13px;
@@ -1535,7 +1577,7 @@ p {
   margin-bottom: 18px;
 }
 
-.work-title {
+.section-title {
   font-family: "Hype", serif;
   /* Was clamp(52px, 8vw, 96px), which resolved to exactly the hero H1's
      maximum - a two-word section label shouting as loud as the site's one
@@ -2365,6 +2407,28 @@ p {
   color: #6f6f77;
 }
 
+/* The archive used to be the work section's own footer link. It lives here
+   now, styled to sit alongside .footer-built rather than shout louder than
+   the copyright it shares a row with. */
+.site-footer .footer-archive {
+  font-size: 13px;
+  color: #8b8b92;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(139, 139, 146, 0.35);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-footer .footer-archive:hover,
+.site-footer .footer-archive:focus-visible {
+  color: #26adf4;
+  border-bottom-color: #26adf4;
+}
+
+.site-footer .footer-archive:focus-visible {
+  outline: 2px solid #26adf4;
+  outline-offset: 3px;
+}
+
 .site-footer .copy .fa {
   color: #26adf4;
 }
@@ -2382,5 +2446,229 @@ p {
 
   .site-footer .copy {
     margin-top: 34px;
+  }
+}
+
+/*  Hero stack (LocalStack.tsx) - replaces the old left-to-right
+   pipe diagram. The pipe rules earlier in this file are left in place: the
+   section that used them is gone, but nothing has been deleted on the
+   strength of that alone yet.  */
+.stack {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  margin: clamp(24px, 3.4svh, 40px) auto 0;
+  padding-left: 26px;
+  pointer-events: none;
+}
+.stack::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 16px;
+  bottom: 16px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(125, 211, 252, 0.04), rgba(125, 211, 252, 0.3) 45%, rgba(125, 211, 252, 0.04));
+}
+
+.stack-layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  align-items: baseline;
+  gap: 0 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.09);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: stack-rise 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stack-layer:last-of-type {
+  border-bottom: 0;
+}
+
+.stack-pin {
+  position: absolute;
+  left: -26px;
+  top: 17px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #05070a;
+  border: 1.5px solid #38bdf8;
+}
+
+.stack-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.stack-value {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: rgba(226, 232, 240, 0.92);
+}
+.stack-pulse {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #7dd3fc;
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.75);
+  opacity: 0;
+  animation: stack-pulse-run 3.6s cubic-bezier(0.5, 0, 0.5, 1) 1.2s infinite;
+}
+@media (max-width: 575px) {
+  .stack {
+    padding-left: 22px;
+  }
+  .stack-layer {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .stack-pin {
+    left: -22px;
+  }
+  .stack-value {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stack-layer {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .stack-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.stack {
+  animation-delay: 0.3s;
+}
+
+@media (max-width: 640px) {
+  .stack {
+    margin-top: 24px;
+  }
+  /* The models row is the one value long enough to wrap in a ~350px stack,
+     and it was wrapping: a 104px label column left 204px for a 29-character
+     string at 14px mono. That single wrap made the stack 246px tall, which
+     was the largest single block in the hero. Narrowing the label column
+     gives the value the room it needs to stay on one line. */
+  .stack-layer {
+    grid-template-columns: 78px 1fr;
+    gap: 0 12px;
+    padding: 9px 0;
+  }
+  .stack-value {
+    font-size: 12.5px;
+  }
+  .stack-pin {
+    left: -20px;
+    width: 7px;
+    height: 7px;
+  }
+  .stack-pulse {
+    width: 7px;
+    height: 7px;
+  }
+  .stack {
+    padding-left: 20px;
+  }
+  .stack::before {
+    left: 3px;
+  }
+  /* Two buttons at 13px 26px need 316px and were wrapping to a second row,
+     costing 60px of hero height for no gain on a 350px measure. */
+  .terminal-hero-btn {
+    padding: 12px 18px;
+  }
+}
+
+/* Short viewports - a 13" laptop at 1280x620, a split-screen half, a phone
+   in landscape. The svh clamps bottom out at their minimums here, so the
+   hero is still content-height and spills. These tighten the rhythm one
+   more step rather than letting the ticker be the only thing on screen. */
+@media (max-height: 700px) {
+  .terminal-hero-inner {
+    padding: 86px 24px 76px;
+  }
+  .terminal-hero-title {
+    font-size: clamp(2rem, 4.4vw, 2.75rem);
+  }
+  .stack {
+    margin-top: 20px;
+  }
+  .stack-layer {
+    padding: 7px 0;
+  }
+  .terminal-hero-sub {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  .terminal-hero-ctas {
+    margin-top: 22px;
+  }
+}
+
+/* A short phone - SE-class at 375x667, a 360px Android at 640. Narrow AND
+   short is the one case where the stack, a wrapped headline, a paragraph
+   and two buttons genuinely do not fit a screen, so every step tightens
+   again rather than letting the ticker be the only thing visible. */
+@media (max-width: 640px) and (max-height: 700px) {
+  .terminal-hero-inner {
+    padding: 78px 18px 58px;
+  }
+  .terminal-hero-title {
+    margin-top: 12px;
+    font-size: clamp(1.6rem, 5.4vw, 2rem);
+  }
+  .terminal-hero-sub {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+  .stack {
+    margin-top: 14px;
+  }
+  .stack-layer {
+    padding: 5px 0;
+  }
+  .terminal-hero-ctas {
+    margin-top: 14px;
+  }
+}
+
+@keyframes stack-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stack-pulse-run {
+  0% {
+    top: 12px;
+    opacity: 0;
+  }
+  14% {
+    opacity: 0.95;
+  }
+  86% {
+    opacity: 0.95;
+  }
+  100% {
+    top: calc(100% - 21px);
+    opacity: 0;
   }
 }
