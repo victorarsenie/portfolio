@@ -364,9 +364,9 @@ export default function LocalLlmNotesPage() {
 
         <footer className="note-foot">
           <p>
-            Measured on one machine: an RTX 5070 Ti, 16 GB VRAM, 32 GB of RAM, a SATA SSD. Models
-            served through llama.cpp; numbers from the server&rsquo;s load log and{" "}
-            <code>nvidia-smi</code>.
+            Measured on one machine: AMD Ryzen 7 5700X, 32 GB DDR4-3200 CL14 RAM, an RTX 5070 Ti
+            with 16 GB VRAM, and a SATA SSD. Models served through llama.cpp; numbers from the
+            server&rsquo;s load log and <code>nvidia-smi</code>.
           </p>
         </footer>
       </article>
