@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Fragment, useState, useEffect } from "react";
 import TerminalHero from "./components/TerminalHero";
-import { handleAnchorClick } from "./lib/scroll";
+import { handleAnchorClick, navCollapsedAt, navHeight } from "./lib/scroll";
 import SkillCard from "./components/SkillCard";
 import HappyChip from "./components/HappyChip";
 import ShowcasePanel from "./components/ShowcasePanel";
@@ -298,7 +298,7 @@ function CaseStudiesPreview() {
 					<div className="case-band-head">
 						<span className="case-band-kicker">{"// the rest"}</span>
 						<h2 className="case-band-title" id="case-ledger-title">
-							The other seven, by employer
+							The rest, by employer
 						</h2>
 					</div>
 					<CaseStudyLedger groups={ledgerGroups} onOpen={setOpenSlug} />
@@ -450,20 +450,31 @@ function Navigation() {
 		const handleScroll = () => {
 			const about = document.getElementById("about");
 			if (!about) return;
-			const aboutTop = about.getBoundingClientRect().top + window.scrollY;
-			setScrolled(window.scrollY > aboutTop - 90);
+			setScrolled(navCollapsedAt(window.scrollY));
 			const scrollPosition = window.scrollY;
 			setShowScrollTop(scrollPosition > 600);
 			let current = "";
-			for (const section of ["case-studies", "about", "skills", "contact"]) {
+			// A section's link underlines the moment the nav's bottom edge reaches
+			// the section's top — the same line a click parks the section on
+			// (deep enough that the nav dips into the section). Using the live nav
+			// height (not the landing gap) keeps the trigger pinned to the bar's
+			// actual bottom edge as it shrinks. One-sided with a small lead so
+			// fractional section tops and integer-clamped scroll positions can't
+			// strand a landing "in between" two ranges or keep the wrong section.
+			const anchorTolerance = 2;
+			let lastSection = "";
+			for (const section of ["about", "case-studies", "skills", "contact"]) {
 				const el = document.getElementById(section);
 				if (!el) continue;
-				const top = el.getBoundingClientRect().top + scrollPosition;
-				const positionTop = top - 30;
-				if (positionTop <= scrollPosition && positionTop + el.offsetHeight > scrollPosition) {
-					current = section;
-					break;
-				}
+				lastSection = section;
+				const projectedTop = el.getBoundingClientRect().top + scrollPosition - navHeight();
+				if (projectedTop - anchorTolerance <= scrollPosition) current = section;
+			}
+			// The bottom section can never reach its anchor line if the page ends
+			// before it does (contact clamps at max scroll), so at the page bottom
+			// the final section takes over rather than leaving the wrong underline.
+			if (current !== lastSection && scrollPosition >= document.documentElement.scrollHeight - window.innerHeight - 2) {
+				current = lastSection;
 			}
 			setActiveSection(current);
 		};
@@ -497,8 +508,8 @@ function Navigation() {
 					<div className={`navbar-collapse ${menuOpen ? "open" : ""}`} id="main-navbar-collapse">
 						<ul className="navbar-nav flex list-none">
 							{[
-								["case-studies", "Work"],
 								["about", "About"],
+								["case-studies", "Work"],
 								["skills", "Skills"],
 								["contact", "Contact"],
 							].map(([section, label]) => (

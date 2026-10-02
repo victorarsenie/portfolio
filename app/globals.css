@@ -658,21 +658,18 @@ p {
 /* Nav navbar default */
 .navbar-default {
   font-family: "Hype", serif;
-  padding: 0 0 13px;
+  padding: 6.5px 0;
   background: rgba(255, 255, 255, 0.2);
   border: none;
   -webkit-backdrop-filter: blur(10px) saturate(160%);
   backdrop-filter: blur(10px) saturate(160%);
 }
 
-.navbar-default .navbar-header {
-  padding-top: 15px;
-}
-
 .navbar-default .navbar-brand {
-  display: block;
+  display: flex;
+  align-items: center;
   height: 50px;
-  padding: 15px 0;
+  padding: 0;
   color: #fff;
 }
 
@@ -689,9 +686,15 @@ p {
   color: #fff;
 }
 
+.navbar-default .navbar-nav > li a {
+  flex: 1;
+}
+
 .navbar-default .navbar-nav > li {
-  padding: 15px;
-  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  height: 65px;
+  padding: 0 15px;
 }
 
 .navbar-default .navbar-nav > li a:hover {
@@ -822,6 +825,7 @@ p {
 
   .navbar-collapse .navbar-nav > li {
     display: block;
+    height: auto;
     padding: 15px 0 0;
   }
 
@@ -832,6 +836,7 @@ p {
 
   .scrolled .navbar-nav > li {
     display: block;
+    height: auto;
     padding: 15px 0 0;
   }
 
@@ -872,6 +877,7 @@ p {
 .scrolled .navbar-nav > li {
   display: flex;
   align-items: center;
+  height: auto;
   padding: 0 15px;
 }
 

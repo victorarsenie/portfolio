@@ -206,6 +206,7 @@ export const caseStudies: CaseStudy[] = [
 				"I was on the core team from early on and worked across the product rather than one slice: contributing to the technical whitepaper so the documented behaviour matched the protocol, designing the UI/UX flows against the cryptographic constraints it set, and coordinating the distributed development team - recruiting, onboarding and giving technical direction to developers working from overseas.",
 			outcome:
 				"The protocol reached a funded, staffed build - a whitepaper that documented the system, UI/UX flows that carried it to an interface, and a remote team moving against both. It never shipped publicly; the project ran into management problems, not engineering ones. So the work lives as the whitepaper and the design; the product site is no longer live, and the link is an archived snapshot.",
+			screenshot: "/images/xhumanity.webp",
 		},
 	},
 	{

@@ -68,20 +68,18 @@ export function AboutEntry() {
 	return (
 		<article className="case-card case-entry-about">
 			<header className="case-card-id">
-				<p className="case-card-meta">
-					<span>Introduction</span>
-					<i className="case-card-sep" aria-hidden="true" />
-					<span>Ten studies</span>
-				</p>
-				<h2 className="case-card-title">The same method, ten times</h2>
+				<p className="case-card-meta">Introduction</p>
+				<h2 className="case-card-title">Work that stops needing someone</h2>
 			</header>
 
 			<div className="case-card-body">
 				<p className="case-about-copy">
-					The case studies below are the same problem in different clothes: systems that were
-					never built to talk to each other. Billing, backups, DNS, support desks — and, more
-					recently, the local models I run to move it all. Different clients, same method: find
-					where the data breaks, fix the plumbing, measure the result.
+					None of these is the same job, and pretending otherwise would be a bad intro. The
+					practical difference between them is real — integrations, diagnosis, writing, builds.
+					What repeats is the reason: a thing was leaning on a person to do what it should do
+					itself. Billing and provisioning that had to move together, DNS typed after a service
+					was already live, backups invisible to the people answering tickets. Find the step,
+					remove it. Once one of them lands, it stops being a job at all.
 				</p>
 
 				<div className="case-about-skills">
