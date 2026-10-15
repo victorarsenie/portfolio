@@ -493,7 +493,7 @@ function Navigation() {
 				<div className="relative bootstrap-container flex items-center justify-between">
 					<div className="navbar-header">
 						<a href="#home" className="navbar-brand">
-							<Image src="/images/logo-text.png" alt="Victor Arsenie" width={208} height={36} priority />
+							<Image src="/images/logo-text-ai.png" alt="Victor Arsenie" width={208} height={36} priority />
 						</a>
 						<button
 							type="button"

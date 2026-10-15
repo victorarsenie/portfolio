@@ -23,3 +23,13 @@ Next.js (App Router) portfolio site (`app/`), ported from the live original at h
 - `smoothScrollTo` offsets the target by the fixed nav height + 12px, so anchor clicks no longer park a section top under the navbar.
 - Social icons are inline SVG in 44×44 `.footer-social a` buttons; the old `social-sprite.png` divs gave the anchors a 0×0 hit area.
 - Skip link (`.skip-link` → `#main-content`) plus a global `:focus-visible` cyan ring, so keyboard focus is consistent across light and dark bands.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
