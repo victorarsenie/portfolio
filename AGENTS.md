@@ -6,12 +6,13 @@ Next.js (App Router) portfolio site (`app/`), ported from the live original at h
 ## Status (new chapter)
 - The port to match the original is DONE: hero, about, skills, work, contact, footer, form validation + SweetAlerts, scroll-to-top, nav — all verified identical to the original.
 - NEW chapter starting now: **improving the site** beyond the original (the user explicitly asked to note this). Original-parity is the baseline; further changes are enhancements and no longer need to be justified against the original unless the user asks.
-- QA pass done (Lighthouse mobile emulation): Performance 88, A11y 96, Best-practices 100, SEO 100; `npm audit` 0 vulns; lint clean. Remaining known: color-contrast fails on the original's brand blue `#26adf4` headings — left as-is. The white-on-`#737373` footer contrast is resolved: the site footer is now dark (`#0c0c0e`) and joins the work → contact band.
-- Images converted to `next/image` (logo, work photos/screenshots, project images, eu.jpg, footer logo) with `sizes`; hero Image has `priority`. This cut total byte weight and raised LCP ~6.9s → 3.8s.
+- QA pass done (Lighthouse mobile emulation, production build): **Performance 95, A11y 96, Best-practices 100, SEO 100**; `npm audit` 0 vulns; lint clean. Remaining known: color-contrast fails on the original's brand blue `#26adf4` headings — left as-is. The white-on-`#737373` footer contrast is resolved: the site footer is now dark (`#0c0c0e`) and joins the work → contact band.
+- Images converted to `next/image` (logo, work photos/screenshots, project images, eu.jpg, footer logo) with `sizes`; hero Image has `priority`. This cut total byte weight and raised LCP ~6.9s → 3.8s → **2.8s**.
 
 ## Conventions
 - Keep the original's look-and-feel/layout unless an improvement intentionally changes it.
 - Verify changes: `npm run build`, plus **silent** headless Chrome CDP probes against `http://localhost:3000` (dev server job `cdpdev`, port 3000). Use the `silent-web-qa` skill (`C:\Users\victo\.config\opencode\skills\silent-web-qa\`): `node scripts/cdp.js <url> <probe.js> [shot.png] [w] [h]`. Never open a visible browser, never click links that leave the site, never trigger `mailto:`/`tel:`/external `target="_blank"` — drive React with in-page `el.click()` instead.
+- QA scores: `npm run lighthouse:prod` (builds, serves the production bundle on :3100, audits, tears down — the number to trust) or `npm run lighthouse` against a running dev server; the `nextjs-prod-qa` skill documents the method and the interpretation of failures. Reports land in `.lighthouse/` (gitignored). **Hit `localhost`, never `127.0.0.1`** — Next treats the latter as a cross-origin dev resource and blocks the HMR socket, which fakes a best-practices failure. Lighthouse 13.5.0 is installed globally; `CHROME_PATH` is auto-detected.
 - Commit style: plain conventional commits (`feat:`, `fix:`). Commit/push only when the user asks.
 - No code comments unless asked. Keep responses short.
 

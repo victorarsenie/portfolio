@@ -42,3 +42,6 @@ next-env.d.ts
 
 # dev
 dev-server.log
+
+# lighthouse reports
+/.lighthouse/
